@@ -108,7 +108,7 @@ class WaveSlot():
     UnitsInLabel = True
 
     def __init__(self, Signal, Units=None, Position=None, DispName=None,
-                 Color='k', Line='-', Alpha=1, Ylim=None, LineWidth=0.5):
+                 Color='k', Line='-', Alpha=1, Ylim=None, LineWidth=0.5,Ax=None,Fig=None):
         self.Signal = Signal
         self.signal = Signal.signal
 
@@ -119,8 +119,8 @@ class WaveSlot():
         else:
             self.DispName = DispName
 
-        self.Ax = None
-        self.Fig = None
+        self.Ax = Ax
+        self.Fig = Fig
 
         self.Color = Color
         self.Line = Line
@@ -165,7 +165,7 @@ class PlotSlots():
     LegFontSize = 'xx-small'
 
     def __init__(self, Slots, ShowNameOn='Axis', figsize=None,
-                 ShowAxis='All', AutoScale=True):
+                 ShowAxis='All', AutoScale=True,Fig=None):
         self.ShowNameOn = ShowNameOn  # 'Axis', 'Legend', None
         self.Slots = Slots
         self.ShowAxis = ShowAxis      # 'All', int, None
@@ -176,11 +176,11 @@ class PlotSlots():
             if sl.Position is None:
                 sl.Position = isl
             Pos.append(sl.Position)
-
+            
         self.Fig, A = plt.subplots(max(Pos) + 1, 2,
-                                   sharex=True,
-                                   figsize=figsize,
-                                   gridspec_kw={'width_ratios': (10, 1)})
+                               sharex=True,
+                               figsize=figsize,
+                               gridspec_kw={'width_ratios': (10, 1)})
         if len(A.shape) == 1:
             A = A[:, None].transpose()
         self.Axs = [a[0] for a in A]
