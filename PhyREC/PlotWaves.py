@@ -20,7 +20,7 @@ def DrawBarScale(Ax, Location='Bottom Left',
                  xsize=None, ysize=None, xoff=0.1, yoff=0.1,
                  xlabelpad=-0.04, ylabelpad=-0.04,
                  xunit='sec', yunit='mV', LineWidth=5, Color='k',
-                 FontSize=None):
+                 FontSize=None, ylabel=None, xlabel=None):
 
     # calculate length of the bars
     xmin, xmax, ymin, ymax = Ax.axis()
@@ -60,9 +60,12 @@ def DrawBarScale(Ax, Location='Bottom Left',
               transform=AxTrans,
               clip_on=False)
 
+    if xlabel is None:
+        xlabel = str(xsize) + ' ' + xunit
+
     Ax.text(xoff + xlen/2,
             yoff + xlabelpad,
-            str(xsize) + ' ' + xunit,
+            xlabel,
             horizontalalignment='center',
             verticalalignment='center',
             fontsize=FontSize,
@@ -74,9 +77,12 @@ def DrawBarScale(Ax, Location='Bottom Left',
               transform=AxTrans,
               clip_on=False)
 
+    if ylabel is None:
+        ylabel = str(xsize) + ' ' + xunit
+
     Ax.text(xoff + ylabelpad,
             yoff + ylen/2,
-            str(ysize) + ' ' + yunit,
+            ylabel,
             horizontalalignment='center',
             verticalalignment='center',
             rotation='vertical',
@@ -261,14 +267,15 @@ class WaveSlot():
 
             st = np.array(avsig.GetSignal((start, stop))[:nSamps])
             try:
-                avg = np.hstack([avg, st]) if avg.size else st
-                if PlotTrials:
-                    self.Ax.plot(t, st,
-                                 color=TrialsColor,
-                                 alpha=TrialsAlpha,
-                                 clip_on=self.clip_on)
+                avg = np.hstack([avg, st]) if avg.size else st               
             except:
                 print 'Error', nSamps, et, avg.shape, st.shape
+
+        if PlotTrials:
+            self.Ax.plot(t, avg,
+                         color=TrialsColor,
+                         alpha=TrialsAlpha,
+                         clip_on=self.clip_on)
 
         MeanT = np.mean(avg, axis=1)
 
