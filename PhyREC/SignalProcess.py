@@ -80,5 +80,8 @@ def sliding_window(sig,func,timewidth,step):
     elif func=='avg':    
          window_res = [ np.mean(sig[i:i+window_size]) for i in range(0, len(sig), stride)
                        if i+window_size <= len(sig) ]
+    elif func=='rms':    
+         window_res = [ np.sqrt(np.mean((sig[i:i+window_size])**2)) for i in range(0, len(sig), stride)
+                       if i+window_size <= len(sig) ]
          
     return window_res,stride
