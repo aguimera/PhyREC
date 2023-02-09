@@ -189,20 +189,17 @@ def DemAndStack(MyLock, BufferIndividual,ChunckSize):
     SigDem = np.abs(dem)
     return SigDem
 
-def LoadConditions(Route=None, Device=None, FileName=None):
+# def LoadConditions(Route,Device):
+def LoadConditions(Route):
 
     try:
-        if FileName is not None:
-            FileName_Cond = FileName
-        else:
-            FileName_Cond = Route + Device + "_Cond.plk"
-
+        FileName_Cond = Route + "_Cond.plk"
         with open(FileName_Cond, "rb") as f:
             Dic_Cond = pickle.load(f, encoding='latin1')
         Muestra = Dic_Cond['Muestra']
         DIC_R = Dic_Cond['DIC_R']
     except:
-        FileName_Cond = Route + Device + ".pkl"
+        FileName_Cond = Route + ".pkl"
         DIC_R = NewDIC_R(FileName_Cond)
         Muestra = "25x5_M"
 

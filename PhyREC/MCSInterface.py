@@ -49,7 +49,7 @@ def GetMCSChar(FileInput, Vds):
     return DevDCVals
 
 
-def LoadMCSFile(FileInput, DownFactor=1, AnaStrns=(1, )):
+def LoadMCSFile(FileInput, DownFactor=None, AnaStrns=(1, )):
 
     Dat = McsData.RawData(FileInput)
     Rec = Dat.recordings[0]
@@ -74,7 +74,9 @@ def LoadMCSFile(FileInput, DownFactor=1, AnaStrns=(1, )):
                                t_start=0*pq.s,
                                sampling_rate=Fs.magnitude*pq.Hz,
                                name=ChName)
-            sig = Spro.DownSampling(sig, Fact=DownFactor)
+            if DownFactor is None:
+                sig = Spro.DownSampling(sig, Fact=DownFactor)
+
             Sigs.append(sig)
     return Sigs
 

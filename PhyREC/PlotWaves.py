@@ -1156,7 +1156,7 @@ class ImgSlot():
         else:
             Tstart = Time[0]
 
-        if Time[0] > self.Signal.t_stop:
+        if Tstart > self.Signal.t_stop:
             Tstart = self.Signal.t_stop - 2*self.Signal.sampling_period
 
         return (Tstart, Tstart+ self.Signal.sampling_period)

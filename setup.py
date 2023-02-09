@@ -26,7 +26,7 @@ Created on Thu Dec 21 18:30:42 2017
 
 from setuptools import setup, find_packages
 
-_version = '0.6.0'
+_version = '0.6.1'
 
 long_description = "Library for electrphysiological analysis based on neo"
 
@@ -60,6 +60,9 @@ classifiers = ['Development Status :: 3 - Alpha',
                'Topic :: Scientific/Engineering',
                'Topic :: Software Development :: User Interfaces']
 
+Packges = find_packages()
+# Packges.append('PhyREC.FDM.Config')
+# print(Packges)
 setup(name="PhyREC",
       version=_version,
       description="Library for electrphysiological analysis based on neo",
@@ -71,9 +74,17 @@ setup(name="PhyREC",
       url="https://github.com/aguimera/PhyREC",
       download_url="https://github.com/aguimera/PhyREC",
       license="GPLv3",
-      packages=find_packages(),
+      packages=Packges,
       classifiers=classifiers,
       entry_points=entry_points,
+      # package_dir={'PhyREC.FDM.Config': 'PhyREC/FDM/Config/'},
+      # package_data={'PhyREC.FDM.Config': ['PhyREC/FDM/Config/*']},
+      data_files=[('config', ['PhyREC/FDM/Config/AS2_F5_M3RevB_7_IN16_CH32',
+                              'PhyREC/FDM/Config/AS3_F3_220128_C4',
+                              'PhyREC/FDM/Config/AS_REVB_211207_1',
+                              'PhyREC/FDM/Config/AS_REVB_211207_1_ELC',
+                              'PhyREC/FDM/Config/S0_AS3_T_220101_V1',
+                              ])],
       install_requires=install_requires,
       include_package_data=True,
       )
