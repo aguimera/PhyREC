@@ -474,6 +474,8 @@ class SpecSlot():
                              **self.imKwargs,
                              )
         self.img = img
+        self.current_time = (sig.t_start.rescale('s'),
+                             sig.t_stop.rescale('s'))
 
     def CalcAvarage(self, TimeAvg, TimesEvent, Units=None, **Kwargs):
 
