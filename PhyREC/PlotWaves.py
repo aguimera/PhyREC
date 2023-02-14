@@ -718,6 +718,8 @@ class ControlFigure():
 
         self.pltSL = pltSL
 
+        self.pltSLFigs = set([ax.get_figure() for ax in pltSL.Axs])
+
         self.MapSlots = []
         for sl in pltSL.Slots:
             if hasattr(sl, 'Map'):
@@ -858,7 +860,8 @@ class ControlFigure():
 
     def UpdateGraph(self, twind):
         self.pltSL.PlotChannels(twind)
-        self.pltSL.Fig.canvas.draw()
+        for f in self.pltSLFigs:
+            f.canvas.draw()
 
     def submit_start(self, text):
         try:
@@ -985,11 +988,6 @@ class PlotSlots():
 
         self.ScaleBarAx = ScaleBarAx
 
-        if LiveControl:
-            self.CtrFig = ControlFigure(self)
-        else:
-            self.CtrFig = None
-
         if Fig is None:
             self._GenerateFigure()
         else:
@@ -1004,11 +1002,22 @@ class PlotSlots():
 
         self.TimeAxis = TimeAxis
         if self.TimeAxis is not None:
-            sl = self.Slots[TimeAxis]
-            sl.UpdateAxKwargs(self.TimeAxisProp)
+            if hasattr(TimeAxis, '__iter__'):
+                for ti in TimeAxis:
+                    sl = self.Slots[TimeAxis]
+                    sl.UpdateAxKwargs(self.TimeAxisProp)            
+            else:
+                sl = self.Slots[TimeAxis]
+                sl.UpdateAxKwargs(self.TimeAxisProp)
 
         UpdateTreeDictProp(self.Fig, self.FigKwargs)
         self.SortSlotsAx()
+
+        if LiveControl:
+            self.CtrFig = ControlFigure(self)
+        else:
+            self.CtrFig = None
+
 
     def SortSlotsAx(self):
         self.SlotsInAxs = {}
