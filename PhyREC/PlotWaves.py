@@ -22,19 +22,20 @@ from copy import deepcopy
 
 
 class ImageSequence(pq.Quantity):
-   
+
     def __new__(cls, signal, sampling_rate,  t_start=0*pq.s, units=None, dtype=None, copy=True,
                 name=None, **kwargs):
-       
+
         signal = cls._rescale(cls, signal=signal, units=units)
-        obj = pq.Quantity(signal, units=units, dtype=dtype, copy=copy).view(cls)                                         
-        
+        obj = pq.Quantity(signal, units=units,
+                          dtype=dtype, copy=copy).view(cls)
+
         obj.sampling_rate = sampling_rate
         obj.t_start = t_start
         obj.name = name
         obj.annotations = {}
         return obj
-    
+
     def __array_finalize__(self, obj):
         if obj is None:
             return
@@ -44,23 +45,22 @@ class ImageSequence(pq.Quantity):
         self.name = getattr(obj, 'name', None)
         self.annotations = getattr(obj, 'annotations', {})
 
-    
     def __repr__(self):
         return("{cls} {frame} frames with {width} pixels of width and {height} pixels of height \n"
-                "units {units} \n"
-                "sampling_rate {sampling_rate} \n"
-                "Duration {t_start} --  {t_stop}\n"
-                "datatype {dtype} \n"
-                "name {name} ".format(cls=self.__class__.__name__,
-                                            frame=self.shape[0],
-                                            height=self.shape[1],
-                                            width=self.shape[2],
-                                            units=self.units,
-                                            dtype=self.dtype,
-                                            sampling_rate=self.sampling_rate,
-                                            t_start=self.t_start,
-                                            t_stop=self.t_stop,
-                                            name=self.name))
+               "units {units} \n"
+               "sampling_rate {sampling_rate} \n"
+               "Duration {t_start} --  {t_stop}\n"
+               "datatype {dtype} \n"
+               "name {name} ".format(cls=self.__class__.__name__,
+                                     frame=self.shape[0],
+                                     height=self.shape[1],
+                                     width=self.shape[2],
+                                     units=self.units,
+                                     dtype=self.dtype,
+                                     sampling_rate=self.sampling_rate,
+                                     t_start=self.t_start,
+                                     t_stop=self.t_stop,
+                                     name=self.name))
 
     def __deepcopy__(self, memo):
         """
@@ -73,8 +73,8 @@ class ImageSequence(pq.Quantity):
             :return: (DataObject) Deep copy of the input DataObject
         """
         cls = self.__class__
-        necessary_attrs = {'signal':self,
-                           'units':self.units,
+        necessary_attrs = {'signal': self,
+                           'units': self.units,
                            'sampling_rate': self.sampling_rate,
                            'name': self.name,
                            't_start': self.t_start}
@@ -107,9 +107,9 @@ class ImageSequence(pq.Quantity):
         obj.sampling_rate = self.sampling_rate
         obj.t_start = self.t_start
         obj.name = self.name
-        obj.annotations = self.annotations        
+        obj.annotations = self.annotations
         return obj.view(ImageSequence)
-    
+
     def time_index(self, t):
         """Return the array index corresponding to the time `t`"""
         i = (t - self.t_start) * self.sampling_rate
@@ -149,7 +149,7 @@ class ImageSequence(pq.Quantity):
         # Time slicing should create a deep copy of the object
         obj = deepcopy(self[i:j, :, :])
 
-        obj.t_start = self.t_start + i * self.sampling_period      
+        obj.t_start = self.t_start + i * self.sampling_period
 
         return obj
 
@@ -179,7 +179,7 @@ class ImageSequence(pq.Quantity):
         (:attr:`t_start` + arange(:attr:`shape`)/:attr:`sampling_rate`)
         '''
         return self.t_start + np.arange(self.shape[0]) / self.sampling_rate
-   
+
     @property
     def sampling_period(self):
         '''
@@ -188,7 +188,7 @@ class ImageSequence(pq.Quantity):
         (1/:attr:`sampling_rate`)
         '''
         return 1. / self.sampling_rate
-    
+
     def annotate(self, **annotations):
         """
         Add annotations (non-standardized metadata) to a Neo object.
@@ -198,9 +198,9 @@ class ImageSequence(pq.Quantity):
         >>> obj.annotate(key1=value0, key2=value1)
         >>> obj.key2
         value2
-        """        
+        """
         self.annotations.update(annotations)
-    
+
     def __array_ufunc__(self, ufunc, method, *inputs, out=None, **kwargs):
         args = []
         in_no = []
@@ -211,7 +211,8 @@ class ImageSequence(pq.Quantity):
             else:
                 args.append(input_)
 
-        results = super(ImageSequence, self).__array_ufunc__(ufunc, method, *args, **kwargs)
+        results = super(ImageSequence, self).__array_ufunc__(
+            ufunc, method, *args, **kwargs)
         if results is NotImplemented:
             return NotImplemented
 
@@ -220,9 +221,9 @@ class ImageSequence(pq.Quantity):
         results.t_start = inputs[0].t_start
         results.name = inputs[0].name
         results.annotations = inputs[0].annotations
-        
+
         return results
-        
+
         # if method == 'at':
         #     if isinstance(inputs[0], A):
         #         inputs[0].info = info
@@ -251,7 +252,7 @@ class ImageSequence(pq.Quantity):
 
         # signal is the new signal
         necessary_attrs = {'signal': signal,
-                           'units':self.units,
+                           'units': self.units,
                            'sampling_rate': self.sampling_rate,
                            'name': self.name,
                            't_start': self.t_start}
@@ -262,7 +263,6 @@ class ImageSequence(pq.Quantity):
         # when combined with another signal
         return new
 
-#from NeoInterface import NeoTrain
 
 def DrawBarScale(Ax, Location='Bottom Left',
                  xsize=None, ysize=None, xoff=0.1, yoff=0.1,
@@ -349,18 +349,100 @@ def UpdateTreeDictProp(obj, prop):
             UpdateTreeDictProp(obj2, prop[p])
 
 
-class SpecSlot():
-    """Comment"""
-    DefspecKwargs = {
-                  'Fmax': 100*pq.Hz,
-                  'Fmin': 0.5*pq.Hz,
-                  'Fres': 0.5*pq.Hz,
-                  'TimeRes': 0.1*pq.s,
-                  'Zscored': True,
-                 }
+class SlotBase():
+
+    def CheckTime(self, Time):
+        if Time is None:
+            return (self.Signal.t_start, self.Signal.t_stop)
+
+        if len(Time) == 1:
+            Time = (Time[0], Time[0] + self.Signal.sampling_period)
+
+        if Time[0] is None or Time[0] < self.Signal.t_start:
+            Tstart = self.Signal.t_start
+        else:
+            Tstart = Time[0]
+
+        if Time[1] is None or Time[1] > self.Signal.t_stop:
+            Tstop = self.Signal.t_stop
+        else:
+            Tstop = Time[1]
+
+        return (Tstart, Tstop)
+
+    def GetSignal(self, Time, Units=None):
+        if Units is None:
+            _Units = self.units
+        else:
+            _Units = Units
+        Time = self.CheckTime(Time)
+        sig = self.Signal.time_slice(Time[0], Time[1])
+        if _Units is not None:
+            sig = sig.rescale(_Units)
+        self.units = sig.units
+        return sig
+
+
+class WavesColorSlot(SlotBase):
+    DefImKwargs = {'cmap': 'viridis',
+                   'interpolation': 'none',
+                   }
     
-    DefAvgSpectKwargs = {'SpecArgs': {
-                                      'Fmax': 100*pq.Hz,
+    DefAxKwargs = {'ylabel': 'Freq [Hz]',
+                   'xaxis': {'visible': False,
+                             },
+                   'yaxis': {'visible': True,
+                             },
+                   }
+
+    def __init__(self, Signal, Units=None, Position=None,
+                 imKwargs=None, AxKwargs=None, Ax=None, MaxPoints=None):
+
+        self.AxKwargs = self.DefAxKwargs.copy()
+        self.imKwargs = self.DefImKwargs.copy()
+        self.Position = Position
+        self.MaxPoints = MaxPoints
+
+        self.Signal = Signal
+        self.name = self.Signal.name
+        self.units = Units
+
+        self.Ax = Ax
+        if AxKwargs is not None:
+            self.AxKwargs.update(AxKwargs)
+        if imKwargs is not None:
+            self.imKwargs.update(imKwargs)
+
+        if self.Ax is not None:
+            UpdateTreeDictProp(self.Ax, self.AxKwargs)
+
+    def PlotSignal(self, Time, Units=None):
+        sig = self.GetSignal(Time, Units)
+
+        if self.MaxPoints is not None:
+            sig = Spro.Resample(sig, MaxPoints=self.MaxPoints)
+            
+        img = self.Ax.imshow(np.array(sig).astype(np.float).transpose(),
+                             aspect='auto',
+                             extent=(sig.t_start, sig.t_stop,
+                                     0, sig.shape[1]),
+                             **self.imKwargs,
+                             )
+        self.img = img
+        self.current_time = (sig.t_start.rescale('s'),
+                             sig.t_stop.rescale('s'))
+
+
+class SpecSlot(SlotBase):
+    """Comment"""
+    DefspecKwargs = {'Fmax': 100*pq.Hz,
+                     'Fmin': 0.5*pq.Hz,
+                     'Fres': 0.5*pq.Hz,
+                     'TimeRes': 0.1*pq.s,
+                     'Zscored': True,
+                     }
+
+    DefAvgSpectKwargs = {'SpecArgs': {'Fmax': 100*pq.Hz,
                                       'Fmin': 0.5*pq.Hz,
                                       'Fres': 0.5*pq.Hz,
                                       'TimeRes': 0.1*pq.s,
@@ -370,8 +452,7 @@ class SpecSlot():
                          'AvgSpectNormTime': None,
                          }
 
-    DefAxKwargs = {
-                   'ylabel': 'Freq [Hz]',
+    DefAxKwargs = {'ylabel': 'Freq [Hz]',
                    'xaxis': {'visible': False,
                              },
                    'yaxis': {'visible': True,
@@ -379,10 +460,10 @@ class SpecSlot():
                    }
 
     DefImKwargs = {
-                    'norm': colors.Normalize(-3, 3),
-                    'cmap': 'seismic',
-                    'interpolation': 'bilinear',
-                    }
+        'norm': colors.Normalize(-3, 3),
+        'cmap': 'seismic',
+        'interpolation': 'bilinear',
+    }
 
     def UpdateLineKwargs(self, LineKwargs):
         pass
@@ -423,39 +504,6 @@ class SpecSlot():
         if self.Ax is not None:
             UpdateTreeDictProp(self.Ax, self.AxKwargs)
 
-    def CheckTime(self, Time):
-        if Time is None:
-            return (self.Signal.t_start, self.Signal.t_stop)
-
-        if len(Time) == 1:
-            Time = (Time[0], Time[0] + self.Signal.sampling_period)
-
-        if Time[0] is None or Time[0] < self.Signal.t_start:
-            Tstart = self.Signal.t_start
-        else:
-            Tstart = Time[0]
-
-        if Time[1] is None or Time[1] > self.Signal.t_stop:
-            Tstop = self.Signal.t_stop
-        else:
-            Tstop = Time[1]
-
-        return (Tstart, Tstop)
-
-    def GetSignal(self, Time, Units=None):
-        if Units is None:
-            _Units = self.units
-        else:
-            _Units = Units
-
-        Time = self.CheckTime(Time)
-        sig = self.Signal.time_slice(Time[0], Time[1])
-
-        if _Units is not None:
-            sig = sig.rescale(_Units)
-        self.units = sig.units
-        return sig
-
     def PlotSignal(self, Time, Units=None):
         sig = self.GetSignal(Time, Units)
 
@@ -481,7 +529,7 @@ class SpecSlot():
 
         sig = self.GetSignal((None, None), Units)
 
-        spect = Spro.AvgSpectrogram(sig, 
+        spect = Spro.AvgSpectrogram(sig,
                                     TimesEvent=TimesEvent,
                                     TimeAvg=TimeAvg,
                                     **self.AvgSpectKwargs)
@@ -498,7 +546,7 @@ class SpecSlot():
         return spect
 
 
-class SpikeSlot():
+class SpikeSlot(SlotBase):
     DefLineKwargs = {'color': 'r',
                      'linestyle': '-.',
                      'alpha': 0.5,
@@ -534,15 +582,6 @@ class SpikeSlot():
             UpdateTreeDictProp(self.Ax, self.AxKwargs)
         self.LineKwargs.update(LineKwargs)
 
-    def GetSignal(self, Time, Units=None):
-        if Units is None:
-            _Units = self.units
-        else:
-            _Units = Units
-        sig = self.Signal.GetSignal(Time, _Units)
-        self.units = sig.units
-        return sig
-
     def PlotSignal(self, Time, Units=None):
         if self.Ax is None:
             self.Fig, self.Ax = plt.subplots()
@@ -557,7 +596,7 @@ class SpikeSlot():
                                     )
 
 
-class WaveSlot():
+class WaveSlot(SlotBase):
 
     DefTrialLineKwargs = {'color': 'k',
                           'linestyle': '-',
@@ -589,7 +628,7 @@ class WaveSlot():
         self.TrialLineKwargs = self.DefTrialLineKwargs.copy()
         self.LineKwargs = self.DefLineKwargs.copy()
         self.AxKwargs = self.DefAxKwargs.copy()
-        
+
         self.TrialProcessChain = TrialProcessChain
 
         self.Signal = Signal
@@ -614,39 +653,8 @@ class WaveSlot():
             self.name = self.LineKwargs['label']
 
         self.TrialLineKwargs['color'] = self.LineKwargs['color']
-        
+
         self.current_time = None
-
-    def CheckTime(self, Time):
-        if Time is None:
-            return (self.Signal.t_start, self.Signal.t_stop)
-
-        if len(Time) == 1:
-            Time = (Time[0], Time[0] + self.Signal.sampling_period)
-
-        if Time[0] is None or Time[0] < self.Signal.t_start:
-            Tstart = self.Signal.t_start
-        else:
-            Tstart = Time[0]
-
-        if Time[1] is None or Time[1] > self.Signal.t_stop:
-            Tstop = self.Signal.t_stop
-        else:
-            Tstop = Time[1]
-
-        return (Tstart, Tstop)
-
-    def GetSignal(self, Time, Units=None):
-        if Units is None:
-            _Units = self.units
-        else:
-            _Units = Units
-        Time = self.CheckTime(Time)
-        sig = self.Signal.time_slice(Time[0], Time[1])
-        if _Units is not None:
-            sig = sig.rescale(_Units)
-        self.units = sig.units
-        return sig
 
     def PlotSignal(self, Time, Units=None):
         if self.Ax is None:
@@ -681,10 +689,10 @@ class WaveSlot():
 
         if TrialLineKwargs is not None:
             self.TrialLineKwargs.update(TrialLineKwargs)
-            
+
         if TrialProcessChain is not None:
             self.TrialProcessChain = TrialProcessChain
-        
+
         sig = self.GetSignal((None, None), Units)
         avg = Spro.TrigAveraging(sig,
                                  TimesEvent=TimesEvent,
@@ -712,6 +720,47 @@ class WaveSlot():
         return avg
 
 
+class ImgSlot(SlotBase):
+    DefAxKwargs = {}
+    DefImKwargs = {
+        'vmin': -10,
+        'vmax': 10,
+        'cmap': 'seismic',
+        'interpolation': 'bicubic',
+    }
+
+    def __init__(self, Signal, Ax=None,
+                 AxKwargs=None, Units=None, imKwargs=None,):
+
+        self.Signal = Signal
+        self.Ax = Ax
+
+        self.Map = True
+
+        self.current_time = None
+        self.units = Units
+
+        self.imKwargs = self.DefImKwargs.copy()
+        if imKwargs is not None:
+            self.imKwargs.update(imKwargs)
+
+        self.Img = self.Ax.imshow(np.array(self.Signal[0, :, :]),
+                                  **self.imKwargs,
+                                  )
+
+    def PlotSignal(self, Time, Units=None):
+        sig = self.GetSignal(Time, Units)
+
+        self.Img.set_array(np.array(sig[0, :, :]))
+        self.Ax.set_title('{0:.1f}'.format(sig.t_start))
+        self.current_time = (sig.t_start.rescale('s'),
+                             sig.t_stop.rescale('s'))
+        self.Ax.figure.canvas.draw()
+
+    def UpdateAxKwargs(self, AxKwargs):
+        pass
+
+
 class ControlFigure():
 
     def __init__(self, pltSL, figsize=(20*0.394, 5*0.394)):
@@ -724,14 +773,14 @@ class ControlFigure():
         for sl in pltSL.Slots:
             if hasattr(sl, 'Map'):
                 self.MapSlots.append(sl)
-        
+
         TMax = []
         TMin = []
         for sl in pltSL.Slots:
             if not hasattr(sl, 'Map'):
                 TMax.append(sl.Signal.t_stop.rescale('s'))
                 TMin.append(sl.Signal.t_start.rescale('s'))
-                
+
         TMax = np.max(TMax)
         TMin = np.min(TMin)
 
@@ -757,16 +806,16 @@ class ControlFigure():
         self.TextStart.on_submit(self.submit_start)
 
         self.TextStop = TextBox(ax[3],
-                                 'Stop time [s]',
-                                 initial='10')
+                                'Stop time [s]',
+                                initial='10')
         self.TextStop.on_submit(self.submit_stop)
-        
+
         self.Refresh = True
         self.OldStart = 0
         self.OldStop = 0
-        
+
         # self.bStart = Button(ax[4],
-        #                      label='Start')        
+        #                      label='Start')
         # self.bStart.on_clicked(self.StartAnimation)
         # self.Timer = None
         # self.TextInterval = TextBox(ax[5],
@@ -774,24 +823,24 @@ class ControlFigure():
         #                             initial='2000')
 
         self.bStartMapAni = Button(ax[6],
-                                   label='Annimate Maps START')    
+                                   label='Annimate Maps START')
         self.TextMapAniSpeed = TextBox(ax[7],
                                        'Map Speed [1x]',
-                                       initial='1')   
+                                       initial='1')
         self.TextMapAniPoints = TextBox(ax[8],
                                         'Map Points [n]',
-                                        initial='500') 
+                                        initial='500')
         self.bStartMapAni.on_clicked(self.StartMapAnimation)
         self.TimerMap = None
 
         self.bStartSetZero = Button(ax[9],
-                                   label='Set Zero at Start Time')
+                                    label='Set Zero at Start Time')
         self.bStartSetZero.on_clicked(self.BtSetZero)
-    
+
     def BtSetZero(self, val):
         Twind = (self.sTstart.val * pq.s,
-                 (self.sTstart.val+5) * pq.s)        
-           
+                 (self.sTstart.val+5) * pq.s)
+
         for sl in self.pltSL.Slots:
             if 'LiveZero' in sl.Signal.annotations:
                 if sl.Signal.annotations['LiveZero']:
@@ -815,8 +864,9 @@ class ControlFigure():
         self.MapCount = 0
         self.MapTimes = np.linspace(twind[0], twind[1], points)
         print('Start', interval)
-        
-        self.TimerMap = self.Fig.canvas.new_timer(interval=interval.rescale('ms'))
+
+        self.TimerMap = self.Fig.canvas.new_timer(
+            interval=interval.rescale('ms'))
         self.TimerMap.add_callback(self.UpdateMapAnimation)
         self.TimerMap.start()
         self.bStartMapAni.label.set_label('Annimate Maps STOP')
@@ -831,13 +881,13 @@ class ControlFigure():
         else:
             self.MapCount += 1
 
-    def StartAnimation(self, val):         
+    def StartAnimation(self, val):
         if self.Timer is not None:
             self.bStart.label.set_label('Start')
             self.Timer.stop()
             self.Timer = None
             return
-            
+
         try:
             interval = float(self.TextInterval.text)
         except:
@@ -848,8 +898,8 @@ class ControlFigure():
         self.Timer.start()
         self.bStart.label.set_label('Stop')
 
-    def UpdateAnimation(self):        
-        self.sTstart.set_val(self.sTstart.val + self.sTshow.val/2)        
+    def UpdateAnimation(self):
+        self.sTstart.set_val(self.sTstart.val + self.sTshow.val/2)
 
     def Update(self, val):
         twind = (self.sTstart.val * pq.s,
@@ -876,7 +926,7 @@ class ControlFigure():
         if val > self.OldStop:
             self.TextStart.set_val(str(self.sTstart.val))
             return
-    
+
         self.OldStart = val
         self.sTstart.set_val(float(text))
 
@@ -889,14 +939,14 @@ class ControlFigure():
 
         if self.OldStop == val:
             return
-        
+
         if val < self.sTstart.val:
             self.TextStop.set_val(str(self.sTstart.val + self.sTshow.val))
             return
-        
+
         self.OldStop = val
-    
-        show = val - self.sTstart.val 
+
+        show = val - self.sTstart.val
         self.sTshow.set_val(show)
 
     def SetTimes(self, twind):
@@ -922,11 +972,11 @@ class PlotSlots():
                       'FontSize': None}
 
     RcGeneralParams = {
-#                       'axes.spines.left': False,
-#                       'axes.spines.bottom': False,
-#                       'axes.spines.top': False,
-#                       'axes.spines.right': False,
-                       }
+        #                       'axes.spines.left': False,
+        #                       'axes.spines.bottom': False,
+        #                       'axes.spines.top': False,
+        #                       'axes.spines.right': False,
+    }
 
     FigKwargs = {}
 
@@ -1005,7 +1055,7 @@ class PlotSlots():
             if hasattr(TimeAxis, '__iter__'):
                 for ti in TimeAxis:
                     sl = self.Slots[TimeAxis]
-                    sl.UpdateAxKwargs(self.TimeAxisProp)            
+                    sl.UpdateAxKwargs(self.TimeAxisProp)
             else:
                 sl = self.Slots[TimeAxis]
                 sl.UpdateAxKwargs(self.TimeAxisProp)
@@ -1017,7 +1067,6 @@ class PlotSlots():
             self.CtrFig = ControlFigure(self)
         else:
             self.CtrFig = None
-
 
     def SortSlotsAx(self):
         self.SlotsInAxs = {}
@@ -1064,7 +1113,7 @@ class PlotSlots():
                 if not hasattr(sl, 'Map'):
                     self.current_time = sl.current_time
 
-        if self.CtrFig is not None:            
+        if self.CtrFig is not None:
             self.CtrFig.SetTimes(self.current_time)
 
     def PlotEvents(self, Times, Labels=None, lAx=0, fontsize='xx-small',
@@ -1081,7 +1130,8 @@ class PlotSlots():
                 for ax in self.Axs:
                     ylim = ax.get_ylim()
                     if duration is not None:
-                        ax.vspan(Times[ilbl],Times[ilbl]+duration,ylim[0], ylim[1], **kwargs )                        
+                        ax.vspan(Times[ilbl], Times[ilbl] +
+                                 duration, ylim[0], ylim[1], **kwargs)
                     else:
                         ax.vlines(Times[ilbl], ylim[0], ylim[1], **kwargs)
                 lax = self.Axs[lAx]
@@ -1097,7 +1147,8 @@ class PlotSlots():
         for ax in self.Axs:
             ylim = ax.get_ylim()
             if duration is not None:
-                lines= ax.axvspan(Times,Times+duration,ylim[0], ylim[1], **kwargs )                        
+                lines = ax.axvspan(Times, Times+duration,
+                                   ylim[0], ylim[1], **kwargs)
             else:
                 lines = ax.vlines(Times, ylim[0], ylim[1], **kwargs)
 #            EventLines.append(lines[0])
@@ -1124,78 +1175,3 @@ class PlotSlots():
 
         self.FormatFigure()
         return MeanSigs
-    
-    
-class ImgSlot():
-    DefAxKwargs = {}
-    DefImKwargs = {
-                    'vmin': -10,
-                    'vmax': 10,
-                    'cmap': 'seismic',
-                    'interpolation': 'bicubic',
-                    }
-    
-    def __init__(self, Signal, Ax=None,
-                 AxKwargs=None, Units=None, imKwargs=None,):
-        
-        self.Signal = Signal
-        self.Ax = Ax
-        
-        self.Map=True
-
-        self.current_time = None
-        self.units = Units
-        
-        self.imKwargs = self.DefImKwargs.copy()
-        if imKwargs is not None:
-            self.imKwargs.update(imKwargs)
-
-        self.Img = self.Ax.imshow(np.array(self.Signal[0,:,:]),
-                                  **self.imKwargs,
-                                  )
-
-    def CheckTime(self, Time):
-        if Time is None:
-            return (self.Signal.t_start,
-                    self.Signal.t_start + self.Signal.sampling_period)
-
-        if len(Time) == 1:
-            return (Time[0], Time[0] + self.Signal.sampling_period)
-
-        if Time[0] is None or Time[0] < self.Signal.t_start:
-            Tstart = self.Signal.t_start
-        else:
-            Tstart = Time[0]
-
-        if Tstart > self.Signal.t_stop:
-            Tstart = self.Signal.t_stop - 2*self.Signal.sampling_period
-
-        return (Tstart, Tstart+ self.Signal.sampling_period)
-
-    def GetSignal(self, Time, Units=None):
-        if Units is None:
-            _Units = self.units
-        else:
-            _Units = Units
-        Time = self.CheckTime(Time)
-        sig = self.Signal.time_slice(Time[0], Time[1])
-        if _Units is not None:
-            sig = sig.rescale(_Units)
-        self.units = sig.units
-        return sig
-
-        
-    def PlotSignal(self, Time, Units=None):
-        sig = self.GetSignal(Time, Units)
-    
-        self.Img.set_array(np.array(sig[0, :, :]))        
-        self.Ax.set_title('{0:.1f}'.format(sig.t_start))
-        self.current_time = (sig.t_start.rescale('s'),
-                             sig.t_stop.rescale('s'))
-        self.Ax.figure.canvas.draw()
-
-    def UpdateAxKwargs(self, AxKwargs):
-        pass
-  
-    
-    

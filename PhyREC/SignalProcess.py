@@ -161,7 +161,8 @@ def Derivative(sig):
         np.diff(sig.as_quantity(), axis=0) / sig.sampling_period,
         t_start=sig.t_start+sig.sampling_period/2,
         sampling_period=sig.sampling_period,
-        name=sig.name)
+        name=sig.name, **sig.annotations)
+
 
     return derivative_sig
 
@@ -292,7 +293,8 @@ def sliding_window(sig, timewidth, func=None, steptime=None, **kwargs):
                         units=sig.units,
                         t_start=sig.t_start + timewidth/2,
                         name=sig.name,
-                        sampling_rate=1/steptime)
+                        sampling_rate=1/steptime,
+                        **sig.annotations)
 
 
 def ThresholdTrianGen(sig, RelaxTime=0.4*pq.s, threshold=None, sign='below'):
