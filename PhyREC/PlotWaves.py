@@ -382,13 +382,18 @@ class SlotBase():
         self.units = sig.units
         return sig
 
+    def UpdateAxKwargs(self, AxKwargs):
+        # pass
+        self.AxKwargs.update(AxKwargs)
+        UpdateTreeDictProp(self.Ax, self.AxKwargs)
+
 
 class WavesColorSlot(SlotBase):
     DefImKwargs = {'cmap': 'viridis',
                    'interpolation': 'none',
                    }
     
-    DefAxKwargs = {'ylabel': 'Freq [Hz]',
+    DefAxKwargs = {'ylabel': 'Channels',
                    'xaxis': {'visible': False,
                              },
                    'yaxis': {'visible': True,
@@ -470,10 +475,6 @@ class SpecSlot(SlotBase):
 #        self.LineKwargs.update(LineKwargs)
 #        UpdateTreeDictProp(self.Line, self.LineKwargs)
 
-    def UpdateAxKwargs(self, AxKwargs):
-        # pass
-        self.AxKwargs.update(AxKwargs)
-        UpdateTreeDictProp(self.Ax, self.AxKwargs)
 
     def __init__(self, Signal, Units=None, Position=None, imKwargs=None,
                  specKwargs=None, AxKwargs=None, Ax=None, MaxPoints=10000,
@@ -558,9 +559,6 @@ class SpikeSlot(SlotBase):
         self.LineKwargs.update(LineKwargs)
         UpdateTreeDictProp(self.Line, self.LineKwargs)
 
-    def UpdateAxKwargs(self, AxKwargs):
-        self.AxKwargs.update(AxKwargs)
-        UpdateTreeDictProp(self.Ax, self.AxKwargs)
 
     def __init__(self, Signal, Units='s',
                  Position=None, Ax=None, AxKwargs=None,
@@ -616,10 +614,6 @@ class WaveSlot(SlotBase):
     def UpdateLineKwargs(self, LineKwargs):
         self.LineKwargs.update(LineKwargs)
         UpdateTreeDictProp(self.Line, self.LineKwargs)
-
-    def UpdateAxKwargs(self, AxKwargs):
-        self.AxKwargs.update(AxKwargs)
-        UpdateTreeDictProp(self.Ax, self.AxKwargs)
 
     def __init__(self, Signal, Units=None, UnitsInLabel=False,
                  Position=None, Ax=None, AxKwargs=None, TrialProcessChain=None,
@@ -763,7 +757,7 @@ class ImgSlot(SlotBase):
 
 class ControlFigure():
 
-    def __init__(self, pltSL, figsize=(20*0.394, 5*0.394)):
+    def __init__(self, pltSL, AxsAnimationLines=None, figsize=(20*0.394, 5*0.394)):
 
         self.pltSL = pltSL
 
@@ -836,6 +830,9 @@ class ControlFigure():
         self.bStartSetZero = Button(ax[9],
                                     label='Set Zero at Start Time')
         self.bStartSetZero.on_clicked(self.BtSetZero)
+        
+        
+        self.AxsAnimationLines = AxsAnimationLines
 
     def BtSetZero(self, val):
         Twind = (self.sTstart.val * pq.s,
@@ -863,19 +860,36 @@ class ControlFigure():
         interval = ((twind[1] - twind[0])/points)/speed
         self.MapCount = 0
         self.MapTimes = np.linspace(twind[0], twind[1], points)
-        print('Start', interval)
 
-        self.TimerMap = self.Fig.canvas.new_timer(
-            interval=interval.rescale('ms'))
+        if self.AxsAnimationLines is not None:
+            self.TimeLines = []
+            for ax in self.AxsAnimationLines:
+                ymin, ymax = ax.get_ylim()
+                self.TimeLines.append(ax.plot([self.MapTimes[0], self.MapTimes[0]],[ymin, ymax])[0])
+        else:
+            self.TimeLines = None
+
+        self.bStartMapAni.label.set_label('Annimate Maps STOP')        
+        self.TimerMap = self.Fig.canvas.new_timer(interval=interval.rescale('ms'))
         self.TimerMap.add_callback(self.UpdateMapAnimation)
+        print('Start', interval)
+        self.Fig.canvas.draw()
         self.TimerMap.start()
-        self.bStartMapAni.label.set_label('Annimate Maps STOP')
+
 
     def UpdateMapAnimation(self):
+        print('1',self.MapCount)
         for sl in self.MapSlots:
             sl.PlotSignal((self.MapTimes[self.MapCount],
                            self.MapTimes[self.MapCount]+1*pq.s))
 
+        print('2',self.MapCount)
+        if self.TimeLines is not None:
+            for tline in self.TimeLines:
+                tline.set_xdata([self.MapTimes[self.MapCount],self.MapTimes[self.MapCount]])
+                
+
+        print('3',self.MapCount)
         if self.MapCount >= (len(self.MapTimes)-1):
             self.MapCount = 0
         else:
@@ -1025,7 +1039,7 @@ class PlotSlots():
 
     def __init__(self, Slots, Fig=None, FigKwargs=None, RcGeneralParams=None,
                  AxKwargs=None, TimeAxis=-1,
-                 ScaleBarAx=None, LiveControl=False):
+                 ScaleBarAx=None, LiveControl=False, AxsAnimationLines=None):
 
         if RcGeneralParams is not None:
             self.RcGeneralParams.update(RcGeneralParams)
@@ -1064,7 +1078,7 @@ class PlotSlots():
         self.SortSlotsAx()
 
         if LiveControl:
-            self.CtrFig = ControlFigure(self)
+            self.CtrFig = ControlFigure(self, AxsAnimationLines)
         else:
             self.CtrFig = None
 
