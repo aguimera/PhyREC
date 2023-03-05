@@ -16,7 +16,7 @@ import scipy.stats as stats
 from scipy import interpolate
 import sys
 from scipy.stats.mstats import zscore
-from . import DbgFplt
+from PhyREC import DbgFplt
 from scipy.interpolate import UnivariateSpline
 from scipy.signal import medfilt
 import elephant
