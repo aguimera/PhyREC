@@ -19,6 +19,7 @@ import PhyREC.SignalProcess as Spro
 from PhyREC import SpectColBars
 from sklearn.impute import KNNImputer
 from copy import deepcopy
+import datetime
 
 
 class ImageSequence(pq.Quantity):
@@ -392,7 +393,7 @@ class WavesColorSlot(SlotBase):
     DefImKwargs = {'cmap': 'viridis',
                    'interpolation': 'none',
                    }
-    
+
     DefAxKwargs = {'ylabel': 'Channels',
                    'xaxis': {'visible': False,
                              },
@@ -426,7 +427,7 @@ class WavesColorSlot(SlotBase):
 
         if self.MaxPoints is not None:
             sig = Spro.Resample(sig, MaxPoints=self.MaxPoints)
-            
+
         img = self.Ax.imshow(np.array(sig).astype(np.float).transpose(),
                              aspect='auto',
                              extent=(sig.t_start, sig.t_stop,
@@ -474,7 +475,6 @@ class SpecSlot(SlotBase):
         pass
 #        self.LineKwargs.update(LineKwargs)
 #        UpdateTreeDictProp(self.Line, self.LineKwargs)
-
 
     def __init__(self, Signal, Units=None, Position=None, imKwargs=None,
                  specKwargs=None, AxKwargs=None, Ax=None, MaxPoints=10000,
@@ -558,7 +558,6 @@ class SpikeSlot(SlotBase):
     def UpdateLineKwargs(self, LineKwargs):
         self.LineKwargs.update(LineKwargs)
         UpdateTreeDictProp(self.Line, self.LineKwargs)
-
 
     def __init__(self, Signal, Units='s',
                  Position=None, Ax=None, AxKwargs=None,
@@ -818,20 +817,19 @@ class ControlFigure():
 
         self.bStartMapAni = Button(ax[6],
                                    label='Annimate Maps START')
-        self.TextMapAniSpeed = TextBox(ax[7],
-                                       'Map Speed [1x]',
-                                       initial='1')
-        self.TextMapAniPoints = TextBox(ax[8],
-                                        'Map Points [n]',
-                                        initial='500')
+        self.TextMapTimeInterval = TextBox(ax[7],
+                                           'Frame Interval [Seg]',
+                                           initial='0.01')
+        self.TextMapRefreshTime = TextBox(ax[8],
+                                          'Frame Refresh [Seg]',
+                                          initial='0.2')
         self.bStartMapAni.on_clicked(self.StartMapAnimation)
         self.TimerMap = None
 
         self.bStartSetZero = Button(ax[9],
                                     label='Set Zero at Start Time')
         self.bStartSetZero.on_clicked(self.BtSetZero)
-        
-        
+
         self.AxsAnimationLines = AxsAnimationLines
 
     def BtSetZero(self, val):
@@ -855,41 +853,45 @@ class ControlFigure():
         twind = (self.sTstart.val * pq.s,
                  self.sTstart.val * pq.s + self.sTshow.val * pq.s)
 
-        points = int(self.TextMapAniPoints.text)
-        speed = float(self.TextMapAniSpeed.text)
-        interval = ((twind[1] - twind[0])/points)/speed
+        interval = float(self.TextMapTimeInterval.text)*pq.s
+        refresh = float(self.TextMapRefreshTime.text)*pq.s
         self.MapCount = 0
-        self.MapTimes = np.linspace(twind[0], twind[1], points)
+        self.MapTimes = np.arange(twind[0], twind[1], interval)*pq.s
+        # print(interval)
+        # print(self.MapTimes)
 
         if self.AxsAnimationLines is not None:
             self.TimeLines = []
             for ax in self.AxsAnimationLines:
                 ymin, ymax = ax.get_ylim()
-                self.TimeLines.append(ax.plot([self.MapTimes[0], self.MapTimes[0]],[ymin, ymax])[0])
+                self.TimeLines.append(
+                    ax.plot([self.MapTimes[0], self.MapTimes[0]], [ymin, ymax])[0])
         else:
             self.TimeLines = None
 
-        self.bStartMapAni.label.set_label('Annimate Maps STOP')        
-        self.TimerMap = self.Fig.canvas.new_timer(interval=interval.rescale('ms'))
+        self.bStartMapAni.label.set_label('Annimate Maps STOP')
+        self.TimerMap = self.Fig.canvas.new_timer(
+            interval=refresh.rescale('ms'))
         self.TimerMap.add_callback(self.UpdateMapAnimation)
         print('Start', interval)
+        self.OldTime = datetime.datetime.now()
         self.Fig.canvas.draw()
         self.TimerMap.start()
 
-
     def UpdateMapAnimation(self):
-        print('1',self.MapCount)
+        t = datetime.datetime.now()
+        # print(t-self.OldTime)
+        # print(self.MapCount, self.MapTimes[self.MapCount])
+        self.OldTime = t
         for sl in self.MapSlots:
             sl.PlotSignal((self.MapTimes[self.MapCount],
                            self.MapTimes[self.MapCount]+1*pq.s))
 
-        print('2',self.MapCount)
         if self.TimeLines is not None:
             for tline in self.TimeLines:
-                tline.set_xdata([self.MapTimes[self.MapCount],self.MapTimes[self.MapCount]])
-                
+                tline.set_xdata([self.MapTimes[self.MapCount],
+                                self.MapTimes[self.MapCount]])
 
-        print('3',self.MapCount)
         if self.MapCount >= (len(self.MapTimes)-1):
             self.MapCount = 0
         else:
