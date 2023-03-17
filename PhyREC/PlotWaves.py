@@ -502,7 +502,7 @@ class ImgSlot(SlotBase):
         sig = self.GetSignal(Time, Units)
 
         self.Img.set_array(np.array(sig[0, :, :]))
-        self.Ax.set_title('{}\n{0:.3f}'.format(sig.name, sig.t_start))
+        self.Ax.set_title('{0}\n{1:.3f}'.format(sig.name, sig.t_start))
         self.current_time = (sig.t_start.rescale('s'),
                              sig.t_stop.rescale('s'))
         self.Ax.figure.canvas.draw()
