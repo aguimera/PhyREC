@@ -10,6 +10,7 @@ from scipy import signal
 from fractions import Fraction
 from neo.core import AnalogSignal, SpikeTrain
 import PhyREC.SignalAnalysis as Ran
+from PhyREC.ImageSequence import ImageSequence
 import quantities as pq
 import matplotlib.mlab as mlab
 import scipy.stats as stats
@@ -20,7 +21,7 @@ from PhyREC import DbgFplt
 from scipy.interpolate import UnivariateSpline
 from scipy.signal import medfilt
 import elephant
-
+from numpy.lib.stride_tricks import sliding_window_view
 
 def Spectrogram(sig, Fres=2*pq.Hz, TimeRes=0.01*pq.s,
                 Fmin=1*pq.Hz, Fmax=200*pq.Hz, Zscored=True, NormTime=None,
@@ -163,7 +164,6 @@ def Derivative(sig):
         sampling_period=sig.sampling_period,
         name=sig.name, **sig.annotations)
 
-
     return derivative_sig
 
 
@@ -251,17 +251,18 @@ def Filter(sig, Type, Order, Freqs):
 
     return sig.duplicate_with_new_data(signal=st*sig.units)
 
+def dbrms(x, axis=-1):
+    return 20*np.log10(np.sqrt(np.mean(x**2, axis=axis)))
 
-def rms(x, axis=None):
+def rms(x, axis=-1):
     return np.sqrt(np.mean(x**2, axis=axis))
 
 
-def power_sliding(x, axis=None):
+def power_sliding(x, axis=-1):
     return np.mean(x**2, axis=axis)
 
 
 def sliding_window(sig, timewidth, func=None, steptime=None, **kwargs):
-
     if steptime is None:
         steptime = timewidth/10
 
@@ -270,31 +271,70 @@ def sliding_window(sig, timewidth, func=None, steptime=None, **kwargs):
 
     window_size = int(timewidth.rescale(
         's') / sig.sampling_period.rescale('s'))
-    timewidth = sig.sampling_period.rescale('s')*window_size
+    timewidth = sig.sampling_period.rescale('s') * window_size
     step_size = int(steptime.rescale('s') / sig.sampling_period.rescale('s'))
     steptime = sig.sampling_period.rescale('s')*step_size
 
-    axis = 0
-    shape = list(sig.shape)
-    shape[axis] = np.floor(sig.shape[axis] / step_size -
-                           window_size / step_size + 1).astype(int)
-    shape.append(window_size)
+    if len(sig.shape) == 3:
+        strided = sliding_window_view(sig, window_size, 0)[::step_size, :, :, :]
+    elif len(sig.shape) == 2:
+        strided = sliding_window_view(sig, window_size, 0)[::step_size, :, :]
+    else:
+        print('Error in dimension')
 
-    strides = list(sig.strides)
-    strides[axis] *= step_size
-    strides.append(sig.strides[axis])
+    st = func(strided, axis=-1)
 
-    strided = np.lib.stride_tricks.as_strided(
-        sig, shape=shape, strides=strides)
+    if len(sig.shape) == 3:
+        ret = ImageSequence(st,
+                            units=sig.units,
+                            t_start=sig.t_start + timewidth/2,
+                            name=sig.name,
+                            sampling_rate=1/steptime,
+                            **sig.annotations)
+    else:
+        ret = AnalogSignal(signal=st,
+                           units=sig.units,
+                           t_start=sig.t_start + timewidth/2,
+                           name=sig.name,
+                           sampling_rate=1/steptime,
+                           **sig.annotations)
+    return ret
 
-    st = func(strided, axis=-1, **kwargs)
+# def sliding_window(sig, timewidth, func=None, steptime=None, **kwargs):
 
-    return AnalogSignal(signal=st,
-                        units=sig.units,
-                        t_start=sig.t_start + timewidth/2,
-                        name=sig.name,
-                        sampling_rate=1/steptime,
-                        **sig.annotations)
+#     if steptime is None:
+#         steptime = timewidth/10
+
+#     if func is None:
+#         func = rms
+
+#     window_size = int(timewidth.rescale(
+#         's') / sig.sampling_period.rescale('s'))
+#     timewidth = sig.sampling_period.rescale('s')*window_size
+#     step_size = int(steptime.rescale('s') / sig.sampling_period.rescale('s'))
+#     steptime = sig.sampling_period.rescale('s')*step_size
+
+#     axis = 0
+#     shape = list(sig.shape)
+#     shape[axis] = np.floor(sig.shape[axis] / step_size -
+#                            window_size / step_size + 1).astype(int)
+#     shape.append(window_size)
+
+#     strides = list(sig.strides)
+#     strides[axis] *= step_size
+#     strides.append(sig.strides[axis])
+
+#     strided = np.lib.stride_tricks.as_strided(
+#         sig, shape=shape, strides=strides)
+
+#     st = func(strided, axis=-1, **kwargs)
+
+#     return AnalogSignal(signal=st,
+#                         units=sig.units,
+#                         t_start=sig.t_start + timewidth/2,
+#                         name=sig.name,
+#                         sampling_rate=1/steptime,
+#                         **sig.annotations)
 
 
 def ThresholdTrianGen(sig, RelaxTime=0.4*pq.s, threshold=None, sign='below'):
@@ -315,8 +355,7 @@ def ThresholdTrianGen(sig, RelaxTime=0.4*pq.s, threshold=None, sign='below'):
 
 
 def ThresholdInstantRate(sig, RelaxTime=0.1*pq.s, threshold=None,
-                          OutSampling=0.01*pq.s,):
-
+                         OutSampling=0.01*pq.s,):
 
     return elephant.statistics.instantaneous_rate(ThresholdTrianGen(sig,
                                                                     RelaxTime,
@@ -329,15 +368,16 @@ def HilbertInstantFreq(sig, MaxFreq=20, MinFreq=0):
     insfreq = np.diff(np.angle(SigH)[:, 0]) / np.diff(SigH.times)
 
     return AnalogSignal(signal=np.clip(insfreq.magnitude, 0, 20),
-                      units='Hz',
-                      name=sig.name,
-                      sampling_rate=SigH.sampling_rate,
-                      t_start=SigH.t_start)
+                        units='Hz',
+                        name=sig.name,
+                        sampling_rate=SigH.sampling_rate,
+                        t_start=SigH.t_start)
+
 
 def HilbertAngle(sig):
     SigH = elephant.signal_processing.hilbert(sig)
     return sig.duplicate_with_new_data(signal=np.angle(SigH),
-                                        units=pq.radians)
+                                       units=pq.radians)
 
 
 def HilbertAmp(sig):
