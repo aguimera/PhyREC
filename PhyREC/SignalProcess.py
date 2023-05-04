@@ -735,6 +735,30 @@ def CalcVgeffNoInterp(Sig, Tchar, VgsExp=None, Regim='hole'):
     return CalSig
 
 
+def NoiseBlanking(sig, NoiseLimitRMS=20*pq.uV, MinNoiseFreeTime=5*pq.s, timewidth=1*pq.s ,Value=0):
+    sRMS = sliding_window(sig, timewidth)
+    
+    noisets = sRMS.times[np.where(sRMS>NoiseLimitRMS)[0]]
+
+    if len(noisets) == 0:
+        return sig
+
+    inds = np.where(np.diff(noisets)>MinNoiseFreeTime)[0]
+
+    NoiseBlocks = []
+    NoiseBlocks.append((noisets[0], noisets[inds[0]]))
+    for ic, ind in enumerate(inds[:-1]):
+        NoiseBlocks.append((noisets[ind+1], noisets[inds[ic+1]]))
+    NoiseBlocks.append((noisets[inds[-1]+1],noisets[-1]))
+
+    for ti, te in NoiseBlocks:
+        i1 = sig.time_index(ti)
+        i2 = sig.time_index(te)
+        sig[i1:i2] = np.ones((i2-i1,1))*Value*sig.units
+   
+    return sig
+
+
 def ApplyProcessChain(sig, ProcessChain):
     sl = sig.copy()
     for Proc in ProcessChain:
