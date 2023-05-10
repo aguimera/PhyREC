@@ -185,7 +185,7 @@ class WavesColorSlot(SlotBase):
         if self.MaxPoints is not None:
             sig = Spro.Resample(sig, MaxPoints=self.MaxPoints)
 
-        img = self.Ax.imshow(np.array(sig).astype(np.float).transpose(),
+        img = self.Ax.imshow(np.array(sig).astype(float).transpose(),
                              aspect='auto',
                              extent=(sig.t_start, sig.t_stop,
                                      0, sig.shape[1]),
@@ -272,7 +272,7 @@ class SpecSlot(SlotBase):
 
         f = spec.annotations['Freq']
         data = Spro.Resample(spec, MaxPoints=self.MaxPoints)
-        img = self.Ax.imshow(np.array(data).astype(np.float).transpose(),
+        img = self.Ax.imshow(np.array(data).astype(float).transpose(),
                              origin='lower',
                              aspect='auto',
                              extent=(spec.t_start, spec.t_stop,
