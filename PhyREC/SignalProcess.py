@@ -25,7 +25,7 @@ from numpy.lib.stride_tricks import sliding_window_view
 
 def Spectrogram(sig, Fres=2*pq.Hz, TimeRes=0.01*pq.s,
                 Fmin=1*pq.Hz, Fmax=200*pq.Hz, Zscored=True, NormTime=None,
-                dtype=np.float,
+                dtype=float,
                 **specKwarg):
 
     nFFT = int(2**(np.around(np.log2(sig.sampling_rate/Fres))+1))
