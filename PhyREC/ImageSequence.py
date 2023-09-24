@@ -241,7 +241,7 @@ class ImageSequence(pq.Quantity):
 
         # signal is the new signal
         necessary_attrs = {'signal': signal,
-                           'units': self.units,
+                           'units': units,
                            'sampling_rate': self.sampling_rate,
                            'name': self.name,
                            't_start': self.t_start}
