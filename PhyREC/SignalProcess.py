@@ -760,6 +760,9 @@ def NoiseBlanking(sig, NoiseLimitRMS=20*pq.uV, MinNoiseFreeTime=5*pq.s, timewidt
 
 
 def ApplyProcessChain(sig, ProcessChain):
+    if ProcessChain is None:
+        return sig
+    
     sl = sig.copy()
     for Proc in ProcessChain:
         sl = Proc['function'](sl, **Proc['args'])
