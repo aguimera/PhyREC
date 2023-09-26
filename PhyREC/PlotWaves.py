@@ -512,6 +512,10 @@ class ImgSlot(SlotBase):
 
 
 class ControlFigure():
+    TimeLineKwargs = {'color':'g',
+                      'linewidth': 2,
+                      'linestyle': '-.',
+                        }
 
     def __init__(self, pltSL, AxsAnimationLines=None, figsize=(20*0.394, 5*0.394)):
 
@@ -588,6 +592,7 @@ class ControlFigure():
         self.bStartSetZero.on_clicked(self.BtSetZero)
 
         self.AxsAnimationLines = AxsAnimationLines
+        self.TimeLines = None
 
     def BtSetZero(self, val):
         Twind = (self.sTstart.val * pq.s,
@@ -622,7 +627,7 @@ class ControlFigure():
             for ax in self.AxsAnimationLines:
                 ymin, ymax = ax.get_ylim()
                 self.TimeLines.append(
-                    ax.plot([self.MapTimes[0], self.MapTimes[0]], [ymin, ymax])[0])
+                    ax.plot([self.MapTimes[0], self.MapTimes[0]], [ymin, ymax], **self.TimeLineKwargs)[0])
         else:
             self.TimeLines = None
 
@@ -659,6 +664,10 @@ class ControlFigure():
             self.bStart.label.set_label('Start')
             self.Timer.stop()
             self.Timer = None
+            if self.TimeLines is not None:
+                for l in self.TimeLines:
+                    del l
+                self.TimeLines = None
             return
 
         try:
