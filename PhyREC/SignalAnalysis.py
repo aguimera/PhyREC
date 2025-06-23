@@ -10,9 +10,7 @@ import matplotlib.pyplot as plt
 import quantities as pq
 from scipy import signal
 from collections import OrderedDict
-import PhyREC.PlotWaves as Rplt
-import neo
-from PhyREC.NeoInterface import NeoSegment, NeoSignal
+
 
 
 def nFFTFMin(Fs, Fmin):
@@ -227,7 +225,7 @@ def PlotEventAvg(Signals, TimesEvent, TimeAvg, Time=None,
         if SpecSlot is not None:
             SpecSlot.Ax = Axs
             SpecSlot.CAx = Axc
-            SpecSlot.Signal = NeoSignal(Signal=st.duplicate_with_new_array(signal=MeanT*st.units))
+            SpecSlot.Signal = st.duplicate_with_new_array(signal=MeanT*st.units)
             SpecSlot.Signal.signal.t_start = t[0]
             SpecSlot.DispName = SpecSlot.Signal.Name
             SpecSlot.PlotSignal(None)
