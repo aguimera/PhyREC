@@ -14,6 +14,7 @@ from matplotlib.widgets import Slider, Button, TextBox
 from matplotlib.artist import ArtistInspector
 import PhyREC.SignalProcess as Spro
 from PhyREC import SpectColBars
+from tsdownsample import MinMaxLTTBDownsampler as DownSampler
 
 
 def UpdateTreeDictProp(obj, prop):
@@ -249,6 +250,7 @@ class WaveSlot():
                      'clip_on': True,
                      }
     DefAxKwargs = {}
+    MaxPlotPoints = int(1e5)
 
     def UpdateLineKwargs(self, LineKwargs):
         self.LineKwargs.update(LineKwargs)
@@ -260,8 +262,12 @@ class WaveSlot():
 
     def __init__(self, Signal, Units=None, UnitsInLabel=False,
                  Position=None, Ax=None, AxKwargs=None, TrialProcessChain=None,
+                 DownSampling=True, Sampler=None,
                  **LineKwargs):
 
+        self.DownSampling = DownSampling
+        if Sampler is None:
+            self.DownSampler = DownSampler()
         self.TrialLineKwargs = self.DefTrialLineKwargs.copy()
         self.LineKwargs = self.DefLineKwargs.copy()
         self.AxKwargs = self.DefAxKwargs.copy()
@@ -319,6 +325,7 @@ class WaveSlot():
             _Units = Units
         Time = self.CheckTime(Time)
         sig = self.Signal.time_slice(Time[0], Time[1])
+
         if _Units is not None:
             sig = sig.rescale(_Units)
         self.units = sig.units
@@ -340,10 +347,17 @@ class WaveSlot():
         self._PlotSignal(sig)
 
     def _PlotSignal(self, sig):
-        self.Lines = self.Ax.plot(sig.times.rescale('s'),
-                                  sig,
-                                  **self.LineKwargs
-                                  )
+        if sig.size > self.MaxPlotPoints:
+            idx = self.DownSampler.downsample(np.asarray(sig)[:,0], n_out=self.MaxPlotPoints)
+            self.Lines = self.Ax.plot(sig.times[idx].rescale('s'),
+                                      np.asarray(sig)[idx,0],
+                                      **self.LineKwargs
+                                      )
+        else:
+            self.Lines = self.Ax.plot(sig.times.rescale('s'),
+                                      sig,
+                                      **self.LineKwargs
+                                      )
         self.current_time = (sig.t_start.rescale('s'),
                              sig.t_stop.rescale('s'))
         self.Ax.set_xlim(left=self.current_time[0],
