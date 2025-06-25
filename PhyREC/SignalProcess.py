@@ -20,7 +20,6 @@ from scipy.stats.mstats import zscore
 from PhyREC import DbgFplt
 from scipy.interpolate import UnivariateSpline
 from scipy.signal import medfilt
-import elephant
 from numpy.lib.stride_tricks import sliding_window_view
 
 def Spectrogram(sig, Fres=2*pq.Hz, TimeRes=0.01*pq.s,
@@ -353,37 +352,37 @@ def ThresholdTrianGen(sig, RelaxTime=0.4*pq.s, threshold=None, sign='below'):
                       t_stop=sig.t_stop,
                       )
 
-
-def ThresholdInstantRate(sig, RelaxTime=0.1*pq.s, threshold=None,
-                         OutSampling=0.01*pq.s,):
-
-    return elephant.statistics.instantaneous_rate(ThresholdTrianGen(sig,
-                                                                    RelaxTime,
-                                                                    threshold),
-                                                  sampling_period=OutSampling)
-
-
-def HilbertInstantFreq(sig, MaxFreq=20, MinFreq=0):
-    SigH = elephant.signal_processing.hilbert(sig)
-    insfreq = np.diff(np.angle(SigH)[:, 0]) / np.diff(SigH.times)
-
-    return AnalogSignal(signal=np.clip(insfreq.magnitude, 0, 20),
-                        units='Hz',
-                        name=sig.name,
-                        sampling_rate=SigH.sampling_rate,
-                        t_start=SigH.t_start)
-
-
-def HilbertAngle(sig):
-    SigH = elephant.signal_processing.hilbert(sig)
-    return sig.duplicate_with_new_data(signal=np.angle(SigH),
-                                       units=pq.radians)
-
-
-def HilbertAmp(sig):
-    SigH = elephant.signal_processing.hilbert(sig)
-
-    return sig.duplicate_with_new_data(signal=np.array(np.abs(SigH))*sig.units)
+#
+# def ThresholdInstantRate(sig, RelaxTime=0.1*pq.s, threshold=None,
+#                          OutSampling=0.01*pq.s,):
+#
+#     return elephant.statistics.instantaneous_rate(ThresholdTrianGen(sig,
+#                                                                     RelaxTime,
+#                                                                     threshold),
+#                                                   sampling_period=OutSampling)
+#
+#
+# def HilbertInstantFreq(sig, MaxFreq=20, MinFreq=0):
+#     SigH = elephant.signal_processing.hilbert(sig)
+#     insfreq = np.diff(np.angle(SigH)[:, 0]) / np.diff(SigH.times)
+#
+#     return AnalogSignal(signal=np.clip(insfreq.magnitude, 0, 20),
+#                         units='Hz',
+#                         name=sig.name,
+#                         sampling_rate=SigH.sampling_rate,
+#                         t_start=SigH.t_start)
+#
+#
+# def HilbertAngle(sig):
+#     SigH = elephant.signal_processing.hilbert(sig)
+#     return sig.duplicate_with_new_data(signal=np.angle(SigH),
+#                                        units=pq.radians)
+#
+#
+# def HilbertAmp(sig):
+#     SigH = elephant.signal_processing.hilbert(sig)
+#
+#     return sig.duplicate_with_new_data(signal=np.array(np.abs(SigH))*sig.units)
 
 
 def SplineSmooth(sig, sFact=2, **kwargs):
