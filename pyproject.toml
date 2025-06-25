@@ -1,0 +1,38 @@
+[build-system]
+requires = [
+    "setuptools>=61.0,<77.0",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "PhyREC"
+dynamic = ["version", "dependencies"]
+description = "Library for electrophysiological analysis based on neo"
+readme = "README.md"
+requires-python = ">=3.7"
+license = { text = "GPL-3.0-or-later" }
+authors = [
+    { name = "Anton Guimerà Brunet", email = "anton.guimera@csic.es" }
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3.7",
+    "Topic :: Scientific/Engineering",
+]
+
+[project.urls]
+Homepage = "https://github.com/aguimera/PhyREC"
+
+[tool.setuptools.packages.find]
+include = ["PhyREC*"]
+exclude = ["Examples*"]
+
+
+[tool.setuptools.dynamic.version]
+# <-- this tells setuptools “for version, import PhyREC._version:__version__”
+attr = "PhyREC._version.__version__"
+
+[tool.setuptools.dynamic.dependencies]
+file = ["requirements.txt"]
