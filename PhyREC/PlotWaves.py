@@ -9,91 +9,13 @@ Created on Wed Jul 26 12:11:53 2017
 import numpy as np
 import matplotlib.pyplot as plt
 import quantities as pq
-from scipy import signal
 import matplotlib.colors as colors
-from collections import OrderedDict
-from scipy.interpolate import interp2d
 from matplotlib.widgets import Slider, Button, TextBox
 from matplotlib.artist import ArtistInspector
 import PhyREC.SignalProcess as Spro
 from PhyREC import SpectColBars
-from sklearn.impute import KNNImputer
-from copy import deepcopy
 import datetime
-from PhyREC.ImageSequence import ImageSequence
-
-def DrawBarScale(Ax, Location='Bottom Left',
-                 xsize=None, ysize=None, xoff=0.1, yoff=0.1,
-                 xlabelpad=-0.04, ylabelpad=-0.04,
-                 xunit='sec', yunit='mV', LineWidth=5, Color='k',
-                 FontSize=None, ylabel=None, xlabel=None):
-
-    # calculate length of the bars
-    xmin, xmax, ymin, ymax = Ax.axis()
-    AxTrans = Ax.transAxes
-    if xsize is None:
-        xsize = (xmax - xmin)/5
-        xsize = int(np.round(xsize, 0))
-    if ysize is None:
-        ysize = (ymax - ymin)/5
-        ysize = int(np.round(ysize, 0))
-    xlen = 1/((xmax - xmin)/xsize)  # length in axes coord
-    ylen = 1/((ymax - ymin)/ysize)
-
-    # calculate locations
-    if Location == 'Bottom Rigth':
-        xoff = 1 - xoff
-        ylabelpad = - ylabelpad
-        xlen = - xlen
-    elif Location == 'Top Left':
-        yoff = 1 - yoff
-        ylen = - ylen
-        xlabelpad = -xlabelpad
-    elif Location == 'Top Rigth':
-        xoff = 1 - xoff
-        ylabelpad = - ylabelpad
-        xlen = - xlen
-        yoff = 1 - yoff
-        ylen = - ylen
-        xlabelpad = -xlabelpad
-    xdraw = xoff + xlen
-    ydraw = yoff + ylen
-
-    # Draw lines
-    Ax.hlines(yoff, xoff, xdraw,
-              Color,
-              linewidth=LineWidth,
-              transform=AxTrans,
-              clip_on=False)
-
-    if xlabel is None:
-        xlabel = str(xsize) + ' ' + xunit
-
-    Ax.text(xoff + xlen/2,
-            yoff + xlabelpad,
-            xlabel,
-            horizontalalignment='center',
-            verticalalignment='center',
-            fontsize=FontSize,
-            transform=AxTrans)
-
-    Ax.vlines(xoff, yoff, ydraw,
-              Color,
-              linewidth=LineWidth,
-              transform=AxTrans,
-              clip_on=False)
-
-    if ylabel is None:
-        ylabel = str(ysize) + ' ' + yunit
-
-    Ax.text(xoff + ylabelpad,
-            yoff + ylen/2,
-            ylabel,
-            horizontalalignment='center',
-            verticalalignment='center',
-            rotation='vertical',
-            fontsize=FontSize,
-            transform=AxTrans)
+from tsdownsample import MinMaxLTTBDownsampler as DownSampler
 
 
 def UpdateTreeDictProp(obj, prop):
@@ -198,17 +120,17 @@ class WavesColorSlot(SlotBase):
 
 class SpecSlot(SlotBase):
     """Comment"""
-    DefspecKwargs = {'Fmax': 100*pq.Hz,
-                     'Fmin': 0.5*pq.Hz,
-                     'Fres': 0.5*pq.Hz,
-                     'TimeRes': 0.1*pq.s,
+    DefspecKwargs = {'Fmax': 100 * pq.Hz,
+                     'Fmin': 0.5 * pq.Hz,
+                     'Fres': 0.5 * pq.Hz,
+                     'TimeRes': 0.1 * pq.s,
                      'Zscored': True,
                      }
 
-    DefAvgSpectKwargs = {'SpecArgs': {'Fmax': 100*pq.Hz,
-                                      'Fmin': 0.5*pq.Hz,
-                                      'Fres': 0.5*pq.Hz,
-                                      'TimeRes': 0.1*pq.s,
+    DefAvgSpectKwargs = {'SpecArgs': {'Fmax': 100 * pq.Hz,
+                                      'Fmin': 0.5 * pq.Hz,
+                                      'Fres': 0.5 * pq.Hz,
+                                      'TimeRes': 0.1 * pq.s,
                                       'Zscored': False,
                                       },
                          'AvgSpectNorm': 'Zscore',
@@ -230,8 +152,9 @@ class SpecSlot(SlotBase):
 
     def UpdateLineKwargs(self, LineKwargs):
         pass
-#        self.LineKwargs.update(LineKwargs)
-#        UpdateTreeDictProp(self.Line, self.LineKwargs)
+
+    #        self.LineKwargs.update(LineKwargs)
+    #        UpdateTreeDictProp(self.Line, self.LineKwargs)
 
     def __init__(self, Signal, Units=None, Position=None, imKwargs=None,
                  specKwargs=None, AxKwargs=None, Ax=None, MaxPoints=10000,
@@ -323,7 +246,7 @@ class SpikeSlot(SlotBase):
         self.LineKwargs = self.DefLineKwargs.copy()
         self.AxKwargs = self.DefAxKwargs.copy()
         self.Signal = Signal
-#        self.Signal.__class__ = NeoTrain
+        #        self.Signal.__class__ = NeoTrain
         self.name = self.Signal.name
         self.Position = Position
         self.Ax = Ax
@@ -351,7 +274,6 @@ class SpikeSlot(SlotBase):
 
 
 class WaveSlot(SlotBase):
-
     DefTrialLineKwargs = {'color': 'k',
                           'linestyle': '-',
                           'alpha': 0.05,
@@ -366,6 +288,7 @@ class WaveSlot(SlotBase):
                      'clip_on': True,
                      }
     DefAxKwargs = {}
+    MaxPlotPoints = int(1e5)
 
     def UpdateLineKwargs(self, LineKwargs):
         self.LineKwargs.update(LineKwargs)
@@ -373,7 +296,14 @@ class WaveSlot(SlotBase):
 
     def __init__(self, Signal, Units=None, UnitsInLabel=False,
                  Position=None, Ax=None, AxKwargs=None, TrialProcessChain=None,
+                 DownSampling=True, Sampler=None,
                  **LineKwargs):
+
+        self.DownSampling = DownSampling
+        if Sampler is None:
+            self.DownSampler = DownSampler()
+        else:
+            self.DownSampler = Sampler
 
         self.TrialLineKwargs = self.DefTrialLineKwargs.copy()
         self.LineKwargs = self.DefLineKwargs.copy()
@@ -422,10 +352,17 @@ class WaveSlot(SlotBase):
         self._PlotSignal(sig)
 
     def _PlotSignal(self, sig):
-        self.Lines = self.Ax.plot(sig.times.rescale('s'),
-                                  sig,
-                                  **self.LineKwargs
-                                  )
+        if sig.size > self.MaxPlotPoints:
+            idx = self.DownSampler.downsample(np.asarray(sig)[:, 0], n_out=self.MaxPlotPoints)
+            self.Lines = self.Ax.plot(sig.times[idx].rescale('s'),
+                                      np.asarray(sig)[idx, 0],
+                                      **self.LineKwargs
+                                      )
+        else:
+            self.Lines = self.Ax.plot(sig.times.rescale('s'),
+                                      sig,
+                                      **self.LineKwargs
+                                      )
         self.current_time = (sig.t_start.rescale('s'),
                              sig.t_stop.rescale('s'))
         self.Ax.set_xlim(left=self.current_time[0],
@@ -461,8 +398,8 @@ class WaveSlot(SlotBase):
         if PlotStd:
             std = avg.annotations['std']
             self.Ax.fill_between(std.times,
-                                 np.array(avg+std).flatten(),
-                                 np.array(avg-std).flatten(),
+                                 np.array(avg + std).flatten(),
+                                 np.array(avg - std).flatten(),
                                  alpha=StdAlpha,
                                  facecolor=self.LineKwargs['color'],
                                  edgecolor=None,
@@ -480,8 +417,7 @@ class ImgSlot(SlotBase):
     }
 
     def __init__(self, Signal, Ax=None,
-                 AxKwargs=None, Units=None, imKwargs=None,):
-
+                 AxKwargs=None, Units=None, imKwargs=None, ):
         self.Signal = Signal
         self.Ax = Ax
 
@@ -512,12 +448,12 @@ class ImgSlot(SlotBase):
 
 
 class ControlFigure():
-    TimeLineKwargs = {'color':'g',
+    TimeLineKwargs = {'color': 'g',
                       'linewidth': 2,
                       'linestyle': '-.',
-                        }
+                      }
 
-    def __init__(self, pltSL, AxsAnimationLines=None, figsize=(20*0.394, 5*0.394)):
+    def __init__(self, pltSL, AxsAnimationLines=None, figsize=(20 * 0.394, 5 * 0.394)):
 
         self.pltSL = pltSL
 
@@ -547,9 +483,9 @@ class ControlFigure():
 
         self.sTshow = Slider(ax[1],
                              label='TShow [s]',
-                             valmax=TMax-TMin,
+                             valmax=TMax - TMin,
                              valmin=0,
-                             valinit=(TMax-TMin)/10)
+                             valinit=(TMax - TMin) / 10)
 
         self.sTshow.on_changed(self.Update)
         self.sTstart.on_changed(self.Update)
@@ -596,7 +532,7 @@ class ControlFigure():
 
     def BtSetZero(self, val):
         Twind = (self.sTstart.val * pq.s,
-                 (self.sTstart.val+5) * pq.s)
+                 (self.sTstart.val + 5) * pq.s)
 
         for sl in self.pltSL.Slots:
             if 'LiveZero' in sl.Signal.annotations:
@@ -615,10 +551,10 @@ class ControlFigure():
         twind = (self.sTstart.val * pq.s,
                  self.sTstart.val * pq.s + self.sTshow.val * pq.s)
 
-        interval = float(self.TextMapTimeInterval.text)*pq.s
-        refresh = float(self.TextMapRefreshTime.text)*pq.s
+        interval = float(self.TextMapTimeInterval.text) * pq.s
+        refresh = float(self.TextMapRefreshTime.text) * pq.s
         self.MapCount = 0
-        self.MapTimes = np.arange(twind[0], twind[1], interval)*pq.s
+        self.MapTimes = np.arange(twind[0], twind[1], interval) * pq.s
         # print(interval)
         # print(self.MapTimes)
 
@@ -647,14 +583,14 @@ class ControlFigure():
         self.OldTime = t
         for sl in self.MapSlots:
             sl.PlotSignal((self.MapTimes[self.MapCount],
-                           self.MapTimes[self.MapCount]+1*pq.s))
+                           self.MapTimes[self.MapCount] + 1 * pq.s))
 
         if self.TimeLines is not None:
             for tline in self.TimeLines:
                 tline.set_xdata([self.MapTimes[self.MapCount],
-                                self.MapTimes[self.MapCount]])
+                                 self.MapTimes[self.MapCount]])
 
-        if self.MapCount >= (len(self.MapTimes)-1):
+        if self.MapCount >= (len(self.MapTimes) - 1):
             self.MapCount = 0
         else:
             self.MapCount += 1
@@ -681,7 +617,7 @@ class ControlFigure():
         self.bStart.label.set_label('Stop')
 
     def UpdateAnimation(self):
-        self.sTstart.set_val(self.sTstart.val + self.sTshow.val/2)
+        self.sTstart.set_val(self.sTstart.val + self.sTshow.val / 2)
 
     def Update(self, val):
         twind = (self.sTstart.val * pq.s,
@@ -886,11 +822,11 @@ class PlotSlots():
             sl.PlotSignal(Time, Units=Units)
             if hasattr(sl, 'img'):
                 SpectColBars.ImgDicts.update({isl: sl.img})
-#        if Time is not None:
-#            if Time[0] is not None:
-#                sl.Ax.set_xlim(left=Time[0].magnitude)
-#            if Time[1] is not None:
-#                sl.Ax.set_xlim(right=Time[1].magnitude)
+            #        if Time is not None:
+            #            if Time[0] is not None:
+            #                sl.Ax.set_xlim(left=Time[0].magnitude)
+            #            if Time[1] is not None:
+            #                sl.Ax.set_xlim(right=Time[1].magnitude)
             if sl.current_time is not None:
                 if not hasattr(sl, 'Map'):
                     self.current_time = sl.current_time
@@ -929,11 +865,11 @@ class PlotSlots():
         for ax in self.Axs:
             ylim = ax.get_ylim()
             if duration is not None:
-                lines = ax.axvspan(Times, Times+duration,
+                lines = ax.axvspan(Times, Times + duration,
                                    ylim[0], ylim[1], **kwargs)
             else:
                 lines = ax.vlines(Times, ylim[0], ylim[1], **kwargs)
-#            EventLines.append(lines[0])
+        #            EventLines.append(lines[0])
         # return EventLines
         self.Axs[0].set_xlim(xlim)
 
