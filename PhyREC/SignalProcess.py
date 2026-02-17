@@ -28,7 +28,7 @@ def Spectrogram(sig, Fres=2 * pq.Hz, TimeRes=0.01 * pq.s,
     noverlap = int((Ts * nFFT - TimeRes) / Ts)
 
     f, t, Sxx = signal.spectrogram(sig,
-                                   fs=sig.sampling_rate,
+                                   fs=int(sig.sampling_rate),
                                    nperseg=nFFT,
                                    noverlap=noverlap,
                                    axis=0,
@@ -231,8 +231,8 @@ def power(sig):  # to solve units
 
 def Filter(sig, Type, Order, Freqs):
     st = np.array(sig)
-    Fs = sig.sampling_rate
-    freqs = Freqs / (0.5 * Fs)
+    Fs = int(sig.sampling_rate)
+    freqs = np.array(Freqs) / (0.5 * Fs)
 
     # b, a = signal.butter(Order, freqs, Type)
     # st = signal.filtfilt(b, a, st, axis=0)
