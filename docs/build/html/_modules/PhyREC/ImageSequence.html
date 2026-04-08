@@ -1,0 +1,484 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhyREC.ImageSequence &mdash; PhyREC  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            PhyREC
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PhyREC</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">PhyREC.ImageSequence</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for PhyREC.ImageSequence</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Fri Mar 17 18:42:32 2023</span>
+
+<span class="sd">@author: aguimera</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">quantities</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pq</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+
+<div class="viewcode-block" id="ImageSequence">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.ImageSequence.ImageSequence">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ImageSequence</span><span class="p">(</span><span class="n">pq</span><span class="o">.</span><span class="n">Quantity</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span>  <span class="n">t_start</span><span class="o">=</span><span class="mi">0</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+
+                <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="n">signal</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_rescale</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">signal</span><span class="o">=</span><span class="n">signal</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">)</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">pq</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">,</span>
+                          <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+
+        <span class="n">obj</span><span class="o">.</span><span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">sampling_rate</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">t_start</span> <span class="o">=</span> <span class="n">t_start</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__array_finalize__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Finalize the array creation, copying attributes from the original object.</span>
+
+
+
+<span class="sd">        Parameters</span>
+
+<span class="sd">        ----------</span>
+
+<span class="sd">        obj : object</span>
+
+<span class="sd">            The object from which to copy attributes.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+            <span class="k">return</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ImageSequence</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__array_finalize__</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;sampling_rate&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;t_start&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;annotations&#39;</span><span class="p">,</span> <span class="p">{})</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{cls}</span><span class="s2"> </span><span class="si">{frame}</span><span class="s2"> frames with </span><span class="si">{width}</span><span class="s2"> pixels of width and </span><span class="si">{height}</span><span class="s2"> pixels of height </span><span class="se">\n</span><span class="s2">&quot;</span>
+               <span class="s2">&quot;units </span><span class="si">{units}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span>
+               <span class="s2">&quot;sampling_rate </span><span class="si">{sampling_rate}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span>
+               <span class="s2">&quot;Duration </span><span class="si">{t_start}</span><span class="s2"> --  </span><span class="si">{t_stop}</span><span class="se">\n</span><span class="s2">&quot;</span>
+               <span class="s2">&quot;datatype </span><span class="si">{dtype}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span>
+               <span class="s2">&quot;name </span><span class="si">{name}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+                                     <span class="n">frame</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                     <span class="n">height</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                     <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                                     <span class="n">units</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">,</span>
+                                     <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                                     <span class="n">sampling_rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">,</span>
+                                     <span class="n">t_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_start</span><span class="p">,</span>
+                                     <span class="n">t_stop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_stop</span><span class="p">,</span>
+                                     <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memo</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Create a deep copy of the data object.</span>
+<span class="sd">            All attributes and annotations are also deep copied.</span>
+<span class="sd">            References to parent objects are not kept, they are set to None.</span>
+
+
+<span class="sd">            :param memo: (dict) Objects that have been deep copied already</span>
+<span class="sd">            :return: (DataObject) Deep copy of the input DataObject</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">cls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="n">necessary_attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;signal&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="p">,</span>
+                           <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">,</span>
+                           <span class="s1">&#39;sampling_rate&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">,</span>
+                           <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                           <span class="s1">&#39;t_start&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span><span class="p">}</span>
+        <span class="c1"># Create object using constructor with necessary attributes</span>
+        <span class="n">new_obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">necessary_attrs</span><span class="p">)</span>
+        <span class="c1"># Add all attributes</span>
+
+        <span class="k">return</span> <span class="n">new_obj</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_rescale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Check that units are present, and rescale the signal if necessary.</span>
+<span class="sd">        This is called whenever a new signal is</span>
+<span class="sd">        created from the constructor. See :meth:`__new__&#39; in</span>
+<span class="sd">        :class:`AnalogSignal` and :class:`IrregularlySampledSignal`</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">units</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Units must be specified&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">pq</span><span class="o">.</span><span class="n">Quantity</span><span class="p">):</span>
+            <span class="c1"># This test always returns True, i.e. rescaling is always executed if one of the units</span>
+            <span class="c1"># is a pq.CompoundUnit. This is fine because rescaling is correct anyway.</span>
+            <span class="k">if</span> <span class="n">pq</span><span class="o">.</span><span class="n">quantity</span><span class="o">.</span><span class="n">validate_dimensionality</span><span class="p">(</span><span class="n">units</span><span class="p">)</span> <span class="o">!=</span> <span class="n">signal</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">:</span>
+                <span class="n">signal</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">signal</span>
+
+<div class="viewcode-block" id="ImageSequence.rescale">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.ImageSequence.ImageSequence.rescale">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rescale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Rescale the signal to new units.</span>
+
+
+
+<span class="sd">        Parameters</span>
+
+<span class="sd">        ----------</span>
+
+<span class="sd">        units : str or quantity</span>
+
+<span class="sd">            The new units to rescale to.</span>
+
+
+
+<span class="sd">        Returns</span>
+
+<span class="sd">        -------</span>
+
+<span class="sd">        ImageSequence</span>
+
+<span class="sd">            The rescaled ImageSequence.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">ImageSequence</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">units</span><span class="p">)</span>
+
+        <span class="n">obj</span><span class="o">.</span><span class="n">sampling_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">t_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">ImageSequence</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ImageSequence.time_index">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.ImageSequence.ImageSequence.time_index">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">time_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the array index corresponding to the time `t`&quot;&quot;&quot;</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">simplified</span><span class="o">.</span><span class="n">magnitude</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">i</span></div>
+
+
+<div class="viewcode-block" id="ImageSequence.time_slice">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.ImageSequence.ImageSequence.time_slice">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">time_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_start</span><span class="p">,</span> <span class="n">t_stop</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Creates a new AnalogSignal corresponding to the time slice of the</span>
+<span class="sd">        original AnalogSignal between times t_start, t_stop. Note, that for</span>
+<span class="sd">        numerical stability reasons if t_start does not fall exactly on</span>
+<span class="sd">        the time bins defined by the sampling_period it will be rounded to</span>
+<span class="sd">        the nearest sampling bin. The time bin for t_stop will be chosen to</span>
+<span class="sd">        make the duration of the resultant signal as close as possible to</span>
+<span class="sd">        t_stop - t_start. This means that for a given duration, the size</span>
+<span class="sd">        of the slice will always be the same.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># checking start time and transforming to start index</span>
+        <span class="k">if</span> <span class="n">t_start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">t_start</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">s</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_index</span><span class="p">(</span><span class="n">t_start</span><span class="p">)</span>
+
+        <span class="c1"># checking stop time and transforming to stop index</span>
+        <span class="k">if</span> <span class="n">t_stop</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="p">(</span><span class="n">t_stop</span> <span class="o">-</span> <span class="n">t_start</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">delta</span><span class="o">.</span><span class="n">simplified</span><span class="o">.</span><span class="n">magnitude</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;t_start, t_stop have to be within the analog </span><span class="se">\</span>
+<span class="s1">                              signal duration&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Time slicing should create a deep copy of the object</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">j</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
+
+        <span class="n">obj</span><span class="o">.</span><span class="n">t_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_period</span>
+
+        <span class="k">return</span> <span class="n">obj</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Signal duration</span>
+
+<span class="sd">        (:attr:`size` * :attr:`sampling_period`)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">t_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Time when the signal ends.</span>
+
+
+
+<span class="sd">        Returns</span>
+
+<span class="sd">        -------</span>
+
+<span class="sd">        quantity</span>
+
+<span class="sd">            t_start + duration.</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">times</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        The time points of each sample of the signal</span>
+
+<span class="sd">        (:attr:`t_start` + arange(:attr:`shape`)/:attr:`sampling_rate`)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sampling_period</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        Interval between two samples.</span>
+
+
+
+<span class="sd">        Returns</span>
+
+<span class="sd">        -------</span>
+
+<span class="sd">        quantity</span>
+
+<span class="sd">            1 / sampling_rate.</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="mf">1.</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span>
+
+<div class="viewcode-block" id="ImageSequence.annotate">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.ImageSequence.ImageSequence.annotate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">annotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">annotations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add annotations (non-standardized metadata) to a Neo object.</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">        &gt;&gt;&gt; obj.annotate(key1=value0, key2=value1)</span>
+<span class="sd">        &gt;&gt;&gt; obj.key2</span>
+<span class="sd">        value2</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">annotations</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__array_ufunc__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ufunc</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Handle universal functions applied to the array.</span>
+
+
+
+<span class="sd">        This method ensures that operations on ImageSequence preserve the metadata.</span>
+
+
+
+<span class="sd">        Parameters</span>
+
+<span class="sd">        ----------</span>
+
+<span class="sd">        ufunc : callable</span>
+
+<span class="sd">            The universal function.</span>
+
+<span class="sd">        method : str</span>
+
+<span class="sd">            The method.</span>
+
+<span class="sd">        *inputs</span>
+
+<span class="sd">            Input arrays.</span>
+
+<span class="sd">        out : array, optional</span>
+
+<span class="sd">            Output array.</span>
+
+<span class="sd">        **kwargs</span>
+
+<span class="sd">            Additional arguments.</span>
+
+
+
+<span class="sd">        Returns</span>
+
+<span class="sd">        -------</span>
+
+<span class="sd">        ImageSequence or NotImplemented</span>
+
+<span class="sd">            The result or NotImplemented.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">in_no</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">input_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inputs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_</span><span class="p">,</span> <span class="n">ImageSequence</span><span class="p">):</span>
+                <span class="n">in_no</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">pq</span><span class="o">.</span><span class="n">Quantity</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_</span><span class="p">)</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">ImageSequence</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__array_ufunc__</span><span class="p">(</span>
+            <span class="n">ufunc</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">results</span> <span class="ow">is</span> <span class="bp">NotImplemented</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">ImageSequence</span><span class="p">)</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sampling_rate</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">t_start</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">t_start</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">annotations</span>
+
+        <span class="k">return</span> <span class="n">results</span>
+
+        <span class="c1"># if method == &#39;at&#39;:</span>
+        <span class="c1">#     if isinstance(inputs[0], A):</span>
+        <span class="c1">#         inputs[0].info = info</span>
+        <span class="c1">#     return</span>
+
+        <span class="c1"># if ufunc.nout == 1:</span>
+        <span class="c1">#     results = (results,)</span>
+
+        <span class="c1"># results = tuple((np.asarray(result).view(A)</span>
+        <span class="c1">#                  if output is None else output)</span>
+        <span class="c1">#                 for result, output in zip(results, outputs))</span>
+        <span class="c1"># if results and isinstance(results[0], A):</span>
+        <span class="c1">#     results[0].info = info</span>
+
+        <span class="c1"># return results[0] if len(results) == 1 else results</span>
+<div class="viewcode-block" id="ImageSequence.duplicate_with_new_data">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.ImageSequence.ImageSequence.duplicate_with_new_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">duplicate_with_new_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new signal with the same metadata but different data.</span>
+<span class="sd">        Required attributes of the signal are used.</span>
+<span class="sd">        Note: Array annotations can not be copied here because length of data can change</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">units</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">units</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     units = pq.quantity.validate_dimensionality(units)</span>
+
+        <span class="c1"># signal is the new signal</span>
+        <span class="n">necessary_attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;signal&#39;</span><span class="p">:</span> <span class="n">signal</span><span class="p">,</span>
+                           <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="n">units</span><span class="p">,</span>
+                           <span class="s1">&#39;sampling_rate&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">,</span>
+                           <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                           <span class="s1">&#39;t_start&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span><span class="p">}</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="o">**</span><span class="n">necessary_attrs</span><span class="p">)</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">annotations</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annotations</span><span class="p">)</span>
+        <span class="c1"># Note: Array annotations are not copied here, because it is not ensured</span>
+        <span class="c1"># that the same number of signals is used and they would possibly make no sense</span>
+        <span class="c1"># when combined with another signal</span>
+        <span class="k">return</span> <span class="n">new</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Anton Guimerà Brunet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,682 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhyREC.SignalAnalysis &mdash; PhyREC  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            PhyREC
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PhyREC</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">PhyREC.SignalAnalysis</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for PhyREC.SignalAnalysis</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python2</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Wed Apr 11 11:12:23 2018</span>
+
+<span class="sd">@author: aguimera</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">quantities</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pq</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">PhyREC.PlotWaves</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">Rplt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">neo</span>
+
+
+<div class="viewcode-block" id="nFFTFMin">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SignalAnalysis.nFFTFMin">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">nFFTFMin</span><span class="p">(</span><span class="n">Fs</span><span class="p">,</span> <span class="n">Fmin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the minimum FFT size for a given sampling rate and minimum frequency.</span>
+
+<span class="sd">    This function computes the smallest power-of-two FFT size that ensures the frequency resolution is sufficient for the specified minimum frequency.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Fs (float or quantity): Sampling frequency.</span>
+<span class="sd">        Fmin (float or quantity): Minimum frequency of interest.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: Minimum FFT size (power of 2).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">Fs</span><span class="o">/</span><span class="n">Fmin</span><span class="p">))</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="threshold_detection">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SignalAnalysis.threshold_detection">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">threshold_detection</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">mV</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="s1">&#39;above&#39;</span><span class="p">,</span>
+                        <span class="n">RelaxTime</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the times when the analog signal crosses a threshold.</span>
+<span class="sd">    Usually used for extracting spike times from a membrane potential.</span>
+<span class="sd">    Adapted from version in NeuroTools.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    signal : neo AnalogSignal object</span>
+<span class="sd">        &#39;signal&#39; is an analog signal.</span>
+<span class="sd">    threshold : A quantity, e.g. in mV</span>
+<span class="sd">        &#39;threshold&#39; contains a value that must be reached</span>
+<span class="sd">        for an event to be detected. Default: 0.0 * mV.</span>
+<span class="sd">    sign : &#39;above&#39; or &#39;below&#39;</span>
+<span class="sd">        &#39;sign&#39; determines whether to count thresholding crossings</span>
+<span class="sd">        that cross above or below the threshold.</span>
+<span class="sd">    format : None or &#39;raw&#39;</span>
+<span class="sd">        Whether to return as SpikeTrain (None)</span>
+<span class="sd">        or as a plain array of times (&#39;raw&#39;).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    result_st : neo SpikeTrain object</span>
+<span class="sd">        &#39;result_st&#39; contains the spike times of each of the events (spikes)</span>
+<span class="sd">        extracted from the signal.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">assert</span> <span class="n">threshold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;A threshold must be provided&quot;</span>
+
+    <span class="k">if</span> <span class="n">sign</span> <span class="o">==</span> <span class="s1">&#39;above&#39;</span><span class="p">:</span>
+        <span class="n">cutout</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">signal</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">sign</span> <span class="o">==</span> <span class="s1">&#39;below&#39;</span><span class="p">:</span>
+        <span class="n">cutout</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">signal</span> <span class="o">&lt;</span> <span class="n">threshold</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cutout</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">take</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">cutout</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">take</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">take</span><span class="p">)</span>
+
+        <span class="n">time</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="n">time</span><span class="p">[</span><span class="n">cutout</span><span class="p">][</span><span class="n">take</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">RelaxTime</span><span class="p">:</span>
+        <span class="n">outevents</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">told</span> <span class="o">=</span> <span class="mi">0</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">s</span>
+        <span class="k">for</span> <span class="n">te</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">te</span><span class="o">-</span><span class="n">told</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">RelaxTime</span><span class="p">:</span>
+                <span class="n">outevents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">te</span><span class="p">)</span>
+                <span class="n">told</span> <span class="o">=</span> <span class="n">te</span>
+        <span class="n">outevents</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">outevents</span><span class="p">)</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">s</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">outevents</span> <span class="o">=</span> <span class="n">events</span>
+
+    <span class="k">return</span> <span class="n">outevents</span></div>
+
+
+
+<div class="viewcode-block" id="PlotSpectralCoherence">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SignalAnalysis.PlotSpectralCoherence">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">PlotSpectralCoherence</span><span class="p">(</span><span class="n">RefSig</span><span class="p">,</span> <span class="n">Signals</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nFFT</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">17</span><span class="p">,</span> <span class="n">FMin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                          <span class="n">scaling</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="n">Units</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Noverlap</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">LineKwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot spectral coherence between a reference signal and multiple signals.</span>
+
+<span class="sd">    Computes and plots the magnitude-squared coherence between the reference signal and each signal in the list, using Welch&#39;s method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        RefSig (neo.AnalogSignal): Reference signal for coherence calculation.</span>
+<span class="sd">        Signals (list): List of signal objects with GetSignal method.</span>
+<span class="sd">        Time (tuple, optional): Time range to analyze.</span>
+<span class="sd">        nFFT (int): Number of FFT points. Default 2**17.</span>
+<span class="sd">        FMin (float, optional): Minimum frequency for FFT size calculation.</span>
+<span class="sd">        Ax (matplotlib.axes.Axes, optional): Axes to plot on. If None, creates new figure.</span>
+<span class="sd">        scaling (str): Scaling for coherence (&#39;density&#39; or &#39;spectrum&#39;). Default &#39;density&#39;.</span>
+<span class="sd">        Units (quantities.Quantity, optional): Units for signals.</span>
+<span class="sd">        Noverlap (int): Overlap factor for FFT. Default 2.</span>
+<span class="sd">        **LineKwargs: Additional keyword arguments for plotting lines.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: (frequencies, list of coherence arrays)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">Ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">Fig</span><span class="p">,</span> <span class="n">Ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">FMin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">nFFT</span> <span class="o">=</span> <span class="n">nFFTFMin</span><span class="p">(</span><span class="n">RefSig</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">FMin</span><span class="p">)</span>
+
+    <span class="n">noverlap</span> <span class="o">=</span> <span class="n">nFFT</span><span class="o">/</span><span class="n">Noverlap</span>
+
+    <span class="n">csACC</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">sl</span> <span class="ow">in</span> <span class="n">Signals</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sl</span><span class="p">,</span> <span class="s1">&#39;GetSignal&#39;</span><span class="p">):</span>
+            <span class="k">continue</span>
+        
+        <span class="n">f</span><span class="p">,</span> <span class="n">cs</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">coherence</span><span class="p">(</span><span class="n">RefSig</span><span class="p">,</span>
+                                 <span class="n">sl</span><span class="o">.</span><span class="n">GetSignal</span><span class="p">(</span><span class="n">Time</span><span class="p">,</span> <span class="n">Units</span><span class="o">=</span><span class="n">Units</span><span class="p">),</span>
+                                 <span class="n">fs</span><span class="o">=</span><span class="n">RefSig</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">,</span>
+                                 <span class="n">nperseg</span><span class="o">=</span><span class="n">nFFT</span><span class="p">,</span>
+                                 <span class="n">noverlap</span><span class="o">=</span><span class="n">noverlap</span><span class="p">,</span>
+                                 <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sl</span><span class="p">,</span> <span class="s1">&#39;LineKwargs&#39;</span><span class="p">):</span>
+            <span class="n">lkwargs</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">LineKwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">lkwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">LineKwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lkwargs</span> <span class="o">=</span> <span class="n">LineKwargs</span>
+
+        <span class="k">if</span> <span class="s1">&#39;label&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lkwargs</span><span class="p">:</span>
+            <span class="n">lkwargs</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="n">Ax</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">cs</span><span class="p">,</span> <span class="o">**</span><span class="n">lkwargs</span><span class="p">)</span>        
+        <span class="n">csACC</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">csACC</span></div>
+
+
+
+<div class="viewcode-block" id="PlotPSD">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SignalAnalysis.PlotPSD">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">PlotPSD</span><span class="p">(</span><span class="n">Signals</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nFFT</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">17</span><span class="p">,</span> <span class="n">FMin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">scaling</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="n">Units</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Noverlap</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">LineKwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot power spectral density (PSD) for multiple signals.</span>
+
+<span class="sd">    Computes and plots the PSD for each signal in the list using Welch&#39;s method, with options for scaling and units.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Signals (list): List of signal objects.</span>
+<span class="sd">        Time (tuple, optional): Time range to analyze.</span>
+<span class="sd">        nFFT (int): Number of FFT points. Default 2**17.</span>
+<span class="sd">        FMin (float, optional): Minimum frequency for FFT size calculation.</span>
+<span class="sd">        Ax (matplotlib.axes.Axes, optional): Axes to plot on. If None, creates new figure.</span>
+<span class="sd">        scaling (str): Scaling for PSD (&#39;density&#39; or &#39;spectrum&#39;). Default &#39;density&#39;.</span>
+<span class="sd">        Units (quantities.Quantity, optional): Units for signals.</span>
+<span class="sd">        Noverlap (int): Overlap factor for FFT. Default 2.</span>
+<span class="sd">        **LineKwargs: Additional keyword arguments for plotting lines.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: Dictionary with signal names as keys, containing &#39;psd&#39; and &#39;ff&#39; arrays.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">Ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">Fig</span><span class="p">,</span> <span class="n">Ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+    <span class="n">PSD</span> <span class="o">=</span> <span class="p">{}</span>        
+    <span class="k">for</span> <span class="n">sl</span> <span class="ow">in</span> <span class="n">Signals</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sl</span><span class="p">,</span> <span class="s1">&#39;GetSignal&#39;</span><span class="p">):</span>            
+            <span class="n">sig</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">GetSignal</span><span class="p">(</span><span class="n">Time</span><span class="p">,</span> <span class="n">Units</span><span class="o">=</span><span class="n">Units</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sig</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">time_slice</span><span class="p">(</span><span class="o">*</span><span class="n">Time</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">FMin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nFFT</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">sampling_rate</span><span class="o">.</span><span class="n">magnitude</span><span class="o">/</span><span class="n">FMin</span><span class="p">))</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="n">noverlap</span> <span class="o">=</span> <span class="n">nFFT</span><span class="o">/</span><span class="n">Noverlap</span>
+
+        <span class="n">ff</span><span class="p">,</span> <span class="n">psd</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">welch</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">sig</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sig</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                <span class="c1"># window=&#39;hamming&#39;,</span>
+                               <span class="n">nperseg</span><span class="o">=</span><span class="n">nFFT</span><span class="p">,</span>
+                               <span class="n">noverlap</span><span class="o">=</span><span class="n">noverlap</span><span class="p">,</span>
+                               <span class="n">scaling</span><span class="o">=</span><span class="n">scaling</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">scaling</span> <span class="o">==</span> <span class="s1">&#39;density&#39;</span><span class="p">:</span>
+            <span class="n">units</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">units</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">pq</span><span class="o">.</span><span class="n">Hz</span>
+        <span class="k">elif</span> <span class="n">scaling</span> <span class="o">==</span> <span class="s1">&#39;spectrum&#39;</span><span class="p">:</span>
+            <span class="n">units</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">units</span><span class="o">**</span><span class="mi">2</span>
+
+        <span class="n">slN</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">PSD</span><span class="p">[</span><span class="n">slN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">PSD</span><span class="p">[</span><span class="n">slN</span><span class="p">][</span><span class="s1">&#39;psd&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">psd</span> <span class="o">*</span> <span class="n">units</span>
+        <span class="n">PSD</span><span class="p">[</span><span class="n">slN</span><span class="p">][</span><span class="s1">&#39;ff&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ff</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sl</span><span class="p">,</span> <span class="s1">&#39;LineKwargs&#39;</span><span class="p">):</span>
+            <span class="n">lkwargs</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">LineKwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">lkwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">LineKwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lkwargs</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">lkwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">LineKwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;label&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lkwargs</span><span class="p">:</span>
+            <span class="n">lkwargs</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">slN</span>
+        
+        <span class="n">Ax</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">ff</span><span class="p">,</span> <span class="n">psd</span><span class="p">,</span> <span class="o">**</span><span class="n">lkwargs</span><span class="p">)</span>
+
+    <span class="n">Ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+    <span class="n">Ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">units</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="p">)</span>
+
+    <span class="n">handles</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">Ax</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
+    <span class="n">by_label</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">handles</span><span class="p">))</span>
+
+<span class="c1">#    nLines = len(by_label)</span>
+<span class="c1">#    nlc = 4</span>
+<span class="c1">#    if nLines &gt; nlc:</span>
+<span class="c1">#        ncol = (nLines / nlc) + ((nLines % nlc) &gt; 0)</span>
+<span class="c1">#    else:</span>
+<span class="c1">#        ncol = 1</span>
+    <span class="n">Ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">by_label</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">by_label</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>
+              <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">,</span>
+<span class="c1">#              ncol=1,</span>
+              <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;x-small&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">PSD</span></div>
+
+
+
+<div class="viewcode-block" id="PlotEventAvg">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SignalAnalysis.PlotEventAvg">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">PlotEventAvg</span><span class="p">(</span><span class="n">Signals</span><span class="p">,</span> <span class="n">TimesEvent</span><span class="p">,</span> <span class="n">TimeAvg</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">OverLap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">Std</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">Units</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">FileOutPrefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">SpecSlot</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot event-averaged signals with optional spectrogram.</span>
+
+<span class="sd">    Computes and plots the average signal across multiple events for each signal in the list, with options for overlapping traces, standard deviation, and spectrogram display.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Signals (list): List of signal objects.</span>
+<span class="sd">        TimesEvent (array-like): Times of events to average around.</span>
+<span class="sd">        TimeAvg (tuple): Time window around each event (start, stop).</span>
+<span class="sd">        Time (tuple, optional): Overall time range.</span>
+<span class="sd">        OverLap (bool): Whether to plot individual traces. Default True.</span>
+<span class="sd">        Std (bool): Whether to plot standard deviation. Default True.</span>
+<span class="sd">        Units (quantities.Quantity, optional): Units for signals.</span>
+<span class="sd">        FileOutPrefix (str, optional): Prefix for saving figures.</span>
+<span class="sd">        SpecSlot (object, optional): Spectrogram slot for additional plotting.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Signals</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">ft</span><span class="p">,</span> <span class="n">Axt</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ft</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">Axt</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">for</span> <span class="n">sl</span> <span class="ow">in</span> <span class="n">Signals</span><span class="p">:</span>
+        <span class="n">avg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="k">if</span> <span class="n">SpecSlot</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">Ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+            <span class="n">Ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time [s]&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="p">((</span><span class="n">Ax</span><span class="p">,</span> <span class="n">ac</span><span class="p">),(</span><span class="n">Axs</span><span class="p">,</span> <span class="n">Axc</span><span class="p">))</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span>
+                                          <span class="mi">2</span><span class="p">,</span>
+                                          <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                          <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;width_ratios&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)})</span>    
+            <span class="n">ac</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+            <span class="n">Axc</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+            <span class="n">Axs</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time [s]&#39;</span><span class="p">)</span>
+            <span class="n">Axs</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+            
+        <span class="n">Ts</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">Signal</span><span class="o">.</span><span class="n">sampling_period</span>
+        <span class="n">nSamps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">TimeAvg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">TimeAvg</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">Ts</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nSamps</span><span class="p">)</span><span class="o">*</span><span class="n">Ts</span> <span class="o">+</span> <span class="n">TimeAvg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">et</span> <span class="ow">in</span> <span class="n">TimesEvent</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">et</span><span class="o">+</span><span class="n">TimeAvg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">stop</span> <span class="o">=</span> <span class="n">et</span><span class="o">+</span><span class="n">TimeAvg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">st</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">GetSignal</span><span class="p">((</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">),</span> <span class="n">Units</span><span class="o">=</span><span class="n">Units</span><span class="p">)[:</span><span class="n">nSamps</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">avg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">avg</span><span class="p">,</span> <span class="n">st</span><span class="p">])</span> <span class="k">if</span> <span class="n">avg</span><span class="o">.</span><span class="n">size</span> <span class="k">else</span> <span class="n">st</span>
+                <span class="k">if</span> <span class="n">OverLap</span><span class="p">:</span>
+                    <span class="n">Ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">st</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="n">nSamps</span><span class="p">,</span> <span class="n">et</span><span class="p">,</span> <span class="n">avg</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="n">MeanT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">avg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">SpecSlot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">SpecSlot</span><span class="o">.</span><span class="n">Ax</span> <span class="o">=</span> <span class="n">Axs</span>
+            <span class="n">SpecSlot</span><span class="o">.</span><span class="n">CAx</span> <span class="o">=</span> <span class="n">Axc</span>
+            <span class="n">SpecSlot</span><span class="o">.</span><span class="n">Signal</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">duplicate_with_new_array</span><span class="p">(</span><span class="n">signal</span><span class="o">=</span><span class="n">MeanT</span><span class="o">*</span><span class="n">st</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
+            <span class="n">SpecSlot</span><span class="o">.</span><span class="n">Signal</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">t_start</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">SpecSlot</span><span class="o">.</span><span class="n">DispName</span> <span class="o">=</span> <span class="n">SpecSlot</span><span class="o">.</span><span class="n">Signal</span><span class="o">.</span><span class="n">Name</span>
+            <span class="n">SpecSlot</span><span class="o">.</span><span class="n">PlotSignal</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">Ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">MeanT</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Std</span><span class="p">:</span>
+            <span class="n">StdT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">avg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">Ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">MeanT</span><span class="o">+</span><span class="n">StdT</span><span class="p">,</span> <span class="n">MeanT</span><span class="o">-</span><span class="n">StdT</span><span class="p">,</span>
+                            <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="n">ylim</span> <span class="o">=</span> <span class="n">Ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+        <span class="n">Ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                  <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dashdot&#39;</span><span class="p">,</span>
+                  <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+                  <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+        <span class="n">Ax</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;sci&#39;</span><span class="p">,</span> <span class="n">scilimits</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="c1">#        plt.title(sl.Name)</span>
+        
+        <span class="n">su</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">units</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="c1">#        Ax.set_ylabel(sl.Name + &#39; [&#39; + su + &#39;]&#39;)</span>
+        <span class="n">Ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">sl</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">Axt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">Axt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">MeanT</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">sl</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">FileOutPrefix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FileOutPrefix</span> <span class="o">+</span> <span class="n">sl</span><span class="o">.</span><span class="n">Name</span> <span class="o">+</span> <span class="s1">&#39;.png&#39;</span><span class="p">)</span>
+        
+
+    <span class="k">if</span> <span class="n">Axt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ylim</span> <span class="o">=</span> <span class="n">Axt</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+        <span class="n">Axt</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                   <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dashdot&#39;</span><span class="p">,</span>
+                   <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+                   <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+        <span class="n">Axt</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="n">su</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="p">)</span>
+        <span class="n">Axt</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time [s]&#39;</span><span class="p">)</span>
+        <span class="n">Axt</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;sci&#39;</span><span class="p">,</span> <span class="n">scilimits</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">Axt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">FileOutPrefix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ft</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FileOutPrefix</span> <span class="o">+</span> <span class="s1">&#39;.png&#39;</span><span class="p">)</span></div>
+
+
+
+<span class="c1">#        if Spect:</span>
+<span class="c1">#            nFFT = int(2**(np.around(np.log2(Fs/sl.SpecFmin))+1))</span>
+<span class="c1">#            noverlap = int((Ts*nFFT - sl.SpecTimeRes)/Ts)</span>
+<span class="c1">#            TWindOff = (nFFT * Ts)/8</span>
+<span class="c1">#</span>
+<span class="c1">#            f, tsp, Sxx = signal.spectrogram(MeanT, Fs,</span>
+<span class="c1">#                                             window=&#39;hanning&#39;,</span>
+<span class="c1">#                                             nperseg=nFFT,</span>
+<span class="c1">#                                             noverlap=noverlap,</span>
+<span class="c1">#                                             scaling=&#39;density&#39;,</span>
+<span class="c1">#                                             axis=0)</span>
+<span class="c1">#</span>
+<span class="c1">#            finds = np.where(f &lt; sl.SpecFmax)[0][1:]</span>
+<span class="c1">#            print Sxx.shape</span>
+<span class="c1">#            r, c = Sxx.shape</span>
+<span class="c1">#            S = Sxx.reshape((r, c))[finds][:]</span>
+<span class="c1">#            pcol = AxS.pcolormesh(tsp + TimeWindow[0].magnitude + TWindOff,</span>
+<span class="c1">#                                  f[finds],</span>
+<span class="c1">#                                  np.log10(S),</span>
+<span class="c1">#                                  vmin=np.log10(np.max(S))+sl.SpecMinPSD,</span>
+<span class="c1">#                                  vmax=np.log10(np.max(S)),</span>
+<span class="c1">#                                  cmap=sl.SpecCmap)</span>
+<span class="c1">#            f, a = plt.subplots(1, 1)</span>
+<span class="c1">#            f.colorbar(pcol)</span>
+<span class="c1">#</span>
+<span class="c1">#        Axt.plot(t, np.mean(avg, axis=1), label=sl.DispName)</span>
+<span class="c1">#        ft.canvas.draw()</span>
+<span class="c1">#</span>
+<span class="c1">#    Axt.ticklabel_format(axis=&#39;y&#39;, style=&#39;sci&#39;, scilimits=(-2, 2))</span>
+<span class="c1">#    Axt.legend()</span>
+<span class="c1">#    ft.canvas.draw()</span>
+<span class="c1">#    plt.show()</span>
+
+<span class="c1">#</span>
+<span class="c1">#    def PlotHist(self, Time, Resamp=False, Binds=250):</span>
+<span class="c1">#        fig, Ax = plt.subplots()</span>
+<span class="c1">#</span>
+<span class="c1">#        for sl in self.Slots:</span>
+<span class="c1">#            Ax.hist(sl.GetSignal(Time, Resamp=Resamp),</span>
+<span class="c1">#                    Binds,</span>
+<span class="c1">#                    alpha=0.5)</span>
+<span class="c1">#            Ax.set_yscale(&#39;log&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#    def PlotPSD(self, Time, nFFT=2**17, FMin=None, Resamp=False):</span>
+<span class="c1">#</span>
+<span class="c1">#        if not self.FigFFT or not plt.fignum_exists(self.FigFFT.number):</span>
+<span class="c1">#            self.FigFFT, self.AxFFT = plt.subplots()</span>
+<span class="c1">#</span>
+<span class="c1">#        PSD = {}</span>
+<span class="c1">#        for sl in self.Slots:</span>
+<span class="c1">#            sig = sl.GetSignal(Time, Resamp=Resamp)</span>
+<span class="c1">#            if FMin:</span>
+<span class="c1">#                nFFT = int(2**(np.around(np.log2(sig.sampling_rate.magnitude/FMin))+1)) </span>
+<span class="c1">#</span>
+<span class="c1">#            ff, psd = signal.welch(x=sig, fs=sig.sampling_rate,</span>
+<span class="c1">#                                   window=&#39;hanning&#39;,</span>
+<span class="c1">#                                   nperseg=nFFT, scaling=&#39;density&#39;, axis=0)</span>
+<span class="c1">#            slN = sl.SigName</span>
+<span class="c1">#            PSD[slN] = {}</span>
+<span class="c1">#            PSD[slN][&#39;psd&#39;] = psd</span>
+<span class="c1">#            PSD[slN][&#39;ff&#39;] = ff</span>
+<span class="c1">#            self.AxFFT.loglog(ff, psd, label=sl.DispName)</span>
+<span class="c1">#</span>
+<span class="c1">#        self.AxFFT.set_xlabel(&#39;Frequency [Hz]&#39;)</span>
+<span class="c1">#        self.AxFFT.set_ylabel(&#39;PSD [V^2/Hz]&#39;)</span>
+<span class="c1">#        self.AxFFT.legend()</span>
+<span class="c1">#        return PSD</span>
+
+
+
+<span class="c1">#</span>
+<span class="c1">#    def PlotPSDSNR(self, (EventRec, EventName), TDelay, TEval, DevDCVals,</span>
+<span class="c1">#                   Time=None, nFFT=2**17):</span>
+<span class="c1">#</span>
+<span class="c1">#        etimes = EventRec.GetEventTimes(EventName, Time)</span>
+<span class="c1">#</span>
+<span class="c1">#        DevACVals = {}</span>
+<span class="c1">#</span>
+<span class="c1">#        for sl in self.Slots:</span>
+<span class="c1">#            fig, (ax1, ax2)  = plt.subplots(1,2)</span>
+<span class="c1">#            psd = np.array([])</span>
+<span class="c1">#            DCVals = DevDCVals[sl.SigName]</span>
+<span class="c1">#            for ne, et in enumerate(etimes):</span>
+<span class="c1">#                start = et+TDelay</span>
+<span class="c1">#                stop = et+TDelay+TEval</span>
+<span class="c1">#</span>
+<span class="c1">#                sig = sl.GetSignal((start, stop), Resamp=False)</span>
+<span class="c1">#                fpsd, npsd = signal.welch(x=sig, fs=sig.sampling_rate,</span>
+<span class="c1">#                                          window=&#39;hanning&#39;,</span>
+<span class="c1">#                                          nperseg=nFFT, scaling=&#39;density&#39;, axis=0)                </span>
+<span class="c1">#                psd = np.hstack([psd, npsd]) if psd.size else npsd</span>
+<span class="c1">#</span>
+<span class="c1">##                Flin = fpsd[1:].magnitude</span>
+<span class="c1">##                Flog = np.logspace(np.log10(Flin[0]),</span>
+<span class="c1">##                                   np.log10(Flin[-1]), 100)</span>
+<span class="c1">##                Flog = np.round(Flog, 9)</span>
+<span class="c1">##                Flin = np.round(Flin, 9)</span>
+<span class="c1">##                intpsd = interpolate.interp1d(Flin, npsd[1:].transpose())(Flog)</span>
+<span class="c1">##                a, b, _ = FETAna.noise.FitNoise(Flog,</span>
+<span class="c1">##                                                intpsd, Fmin=150, Fmax=5e3)</span>
+<span class="c1">#</span>
+<span class="c1">#                ax1.loglog(fpsd, npsd)</span>
+<span class="c1">##                ax2.loglog(Flog, intpsd/FETAna.noise(Flog, a, b))</span>
+<span class="c1">#</span>
+<span class="c1">#            psdD = {&#39;Vd0&#39;: psd.transpose()}</span>
+<span class="c1">#            ACVals = {&#39;PSD&#39;: psdD,</span>
+<span class="c1">#                      &#39;gm&#39;: None,</span>
+<span class="c1">#                      &#39;Vgs&#39;: DCVals[&#39;Vgs&#39;],</span>
+<span class="c1">#                      &#39;Vds&#39;: DCVals[&#39;Vds&#39;],</span>
+<span class="c1">#                      &#39;Fpsd&#39;: fpsd.magnitude,</span>
+<span class="c1">#                      &#39;Fgm&#39;: None,</span>
+<span class="c1">#                      &#39;ChName&#39;: sl.SigName,</span>
+<span class="c1">#                      &#39;Name&#39;: sl.DispName,</span>
+<span class="c1">#                      &#39;GMPoly&#39;: DCVals[&#39;GMPoly&#39;],</span>
+<span class="c1">#                      &#39;IdsPoly&#39;: DCVals[&#39;IdsPoly&#39;],</span>
+<span class="c1">#                      &#39;Ud0&#39;: DCVals[&#39;Ud0&#39;],</span>
+<span class="c1">#                      &#39;IsOK&#39;: DCVals[&#39;IsOK&#39;],</span>
+<span class="c1">#                      &#39;DateTime&#39;: DCVals[&#39;DateTime&#39;]}</span>
+<span class="c1">#            DevACVals[sl.DispName] = ACVals</span>
+<span class="c1">#            fig.canvas.draw()</span>
+<span class="c1">#            plt.show()</span>
+<span class="c1">#</span>
+<span class="c1">#        FETAna.InterpolatePSD(DevACVals)</span>
+<span class="c1">#        FETAna.FitACNoise(DevACVals, Fmin=150, Fmax=5e3, IsOkFilt=False)</span>
+<span class="c1">#        pltPSD = FETplt.PyFETPlot()</span>
+<span class="c1">#        pltPSD.AddAxes((&#39;PSD&#39;, &#39;NoA&#39;, &#39;NoB&#39;))</span>
+<span class="c1">#        pltPSD.AddLegend()</span>
+<span class="c1">#        pltPSD.PlotDataCh(DevACVals)</span>
+<span class="c1">#</span>
+<span class="c1">#        pickle.dump(DevACVals, open(&#39;test.pkl&#39;, &#39;wb&#39;))</span>
+<span class="c1">#</span>
+<span class="c1">#        return DevACVals</span>
+
+
+
+<div class="viewcode-block" id="PlotPSD_SNR">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SignalAnalysis.PlotPSD_SNR">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">PlotPSD_SNR</span><span class="p">(</span><span class="n">Signals</span><span class="p">,</span> <span class="n">TimeSig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">TimeNoise</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nFFT</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">17</span><span class="p">,</span> <span class="n">FMin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">scaling</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="n">Units</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">LineKwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot signal-to-noise ratio (SNR) based on PSD for multiple signals.</span>
+
+<span class="sd">    Computes and plots the SNR as the ratio of signal PSD to noise PSD for each signal in the list, using Welch&#39;s method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Signals (list): List of signal objects with GetSignal method.</span>
+<span class="sd">        TimeSig (tuple, optional): Time range for signal.</span>
+<span class="sd">        TimeNoise (tuple, optional): Time range for noise.</span>
+<span class="sd">        nFFT (int): Number of FFT points. Default 2**17.</span>
+<span class="sd">        FMin (float, optional): Minimum frequency for FFT size calculation.</span>
+<span class="sd">        Ax (matplotlib.axes.Axes, optional): Axes to plot on. If None, creates new figure.</span>
+<span class="sd">        scaling (str): Scaling for PSD (&#39;density&#39; or &#39;spectrum&#39;). Default &#39;density&#39;.</span>
+<span class="sd">        Units (quantities.Quantity, optional): Units for signals.</span>
+<span class="sd">        **LineKwargs: Additional keyword arguments for plotting lines.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: Dictionary with signal names as keys, containing &#39;SNR&#39; and &#39;ff&#39; arrays.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">Ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">Fig</span><span class="p">,</span> <span class="n">Ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+    <span class="n">PSD</span> <span class="o">=</span> <span class="p">{}</span>        
+    <span class="k">for</span> <span class="n">sl</span> <span class="ow">in</span> <span class="n">Signals</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sl</span><span class="p">,</span> <span class="s1">&#39;GetSignal&#39;</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">sig</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">GetSignal</span><span class="p">(</span><span class="n">TimeSig</span><span class="p">,</span> <span class="n">Units</span><span class="o">=</span><span class="n">Units</span><span class="p">)</span>
+        <span class="n">noise</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">GetSignal</span><span class="p">(</span><span class="n">TimeNoise</span><span class="p">,</span> <span class="n">Units</span><span class="o">=</span><span class="n">Units</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">FMin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nFFTsig</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">sampling_rate</span><span class="o">.</span><span class="n">magnitude</span><span class="o">/</span><span class="n">FMin</span><span class="p">))</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">nFFTnoise</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">noise</span><span class="o">.</span><span class="n">sampling_rate</span><span class="o">.</span><span class="n">magnitude</span><span class="o">/</span><span class="n">FMin</span><span class="p">))</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="n">ff</span><span class="p">,</span> <span class="n">psdsig</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">welch</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">sig</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sig</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                               <span class="n">window</span><span class="o">=</span><span class="s1">&#39;hanning&#39;</span><span class="p">,</span>
+                               <span class="n">nperseg</span><span class="o">=</span><span class="n">nFFTsig</span><span class="p">,</span>
+                               <span class="n">scaling</span><span class="o">=</span><span class="n">scaling</span><span class="p">)</span>
+        
+        <span class="n">ff</span><span class="p">,</span> <span class="n">psdnoise</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">welch</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">noise</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">noise</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                               <span class="n">window</span><span class="o">=</span><span class="s1">&#39;hanning&#39;</span><span class="p">,</span>
+                               <span class="n">nperseg</span><span class="o">=</span><span class="n">nFFTnoise</span><span class="p">,</span>
+                               <span class="n">scaling</span><span class="o">=</span><span class="n">scaling</span><span class="p">)</span>
+        
+        <span class="n">SNR</span><span class="o">=</span><span class="n">psdsig</span><span class="o">/</span><span class="n">psdnoise</span>
+<span class="c1">#        if scaling == &#39;density&#39;:</span>
+<span class="c1">#            units = sig.units**2/pq.Hz</span>
+<span class="c1">#        elif scaling == &#39;spectrum&#39;:</span>
+<span class="c1">#            units = sig.units**2</span>
+
+        <span class="n">slN</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">PSD</span><span class="p">[</span><span class="n">slN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">PSD</span><span class="p">[</span><span class="n">slN</span><span class="p">][</span><span class="s1">&#39;SNR&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">SNR</span> 
+        <span class="n">PSD</span><span class="p">[</span><span class="n">slN</span><span class="p">][</span><span class="s1">&#39;ff&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ff</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sl</span><span class="p">,</span> <span class="s1">&#39;LineKwargs&#39;</span><span class="p">):</span>
+            <span class="n">lkwargs</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">LineKwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">lkwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">LineKwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lkwargs</span> <span class="o">=</span> <span class="n">LineKwargs</span>
+
+        <span class="k">if</span> <span class="s1">&#39;label&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lkwargs</span><span class="p">:</span>
+            <span class="n">lkwargs</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">slN</span>
+        
+        <span class="n">Ax</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">ff</span><span class="p">,</span> <span class="n">SNR</span><span class="p">,</span> <span class="o">**</span><span class="n">lkwargs</span><span class="p">)</span>
+
+    <span class="n">Ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency [Hz]&#39;</span><span class="p">)</span>
+    <span class="n">Ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;SNR&#39;</span><span class="p">)</span>
+
+    <span class="n">handles</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">Ax</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
+    <span class="n">by_label</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">handles</span><span class="p">))</span>
+
+<span class="c1">#    nLines = len(by_label)</span>
+<span class="c1">#    nlc = 4</span>
+<span class="c1">#    if nLines &gt; nlc:</span>
+<span class="c1">#        ncol = (nLines / nlc) + ((nLines % nlc) &gt; 0)</span>
+<span class="c1">#    else:</span>
+<span class="c1">#        ncol = 1</span>
+    <span class="n">Ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">by_label</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">by_label</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>
+              <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">,</span>
+<span class="c1">#              ncol=1,</span>
+              <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;x-small&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">PSD</span></div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Anton Guimerà Brunet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
