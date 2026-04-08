@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhyREC.SupportFunctions &mdash; PhyREC  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            PhyREC
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PhyREC</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">PhyREC.SupportFunctions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for PhyREC.SupportFunctions</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Fri Jan 17 20:23:10 2020</span>
+
+<span class="sd">@author: aguimera</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+
+<div class="viewcode-block" id="DebugFilterPlot">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SupportFunctions.DebugFilterPlot">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DebugFilterPlot</span><span class="p">():</span>
+    <span class="n">nFFT</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">15</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Fig</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="DebugFilterPlot.InitFigure">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SupportFunctions.DebugFilterPlot.InitFigure">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">InitFigure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Fig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">AxM</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">AxP</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">twinx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AxM</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DebugFilterPlot.PlotResponse">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SupportFunctions.DebugFilterPlot.PlotResponse">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">PlotResponse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sos</span><span class="p">,</span> <span class="n">Fs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">InitFigure</span><span class="p">()</span>
+
+        <span class="c1"># w, h = signal.freqz(b, a,</span>
+        <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">sosfreqz</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span>
+                               <span class="n">worN</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nFFT</span><span class="p">,</span>
+                               <span class="n">fs</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">Fs</span><span class="p">)</span>
+        <span class="n">ff</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">AxM</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">ff</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">AxP</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">ff</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">h</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]),</span> <span class="s1">&#39;--&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ColorBarPlot">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SupportFunctions.ColorBarPlot">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ColorBarPlot</span><span class="p">():</span>
+    <span class="n">ImgDicts</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Fig</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="ColorBarPlot.GenColorBars">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SupportFunctions.ColorBarPlot.GenColorBars">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">GenColorBars</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Fig</span><span class="p">,</span> <span class="n">Ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ImgDicts</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">Ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">Ax</span> <span class="o">=</span> <span class="p">[</span><span class="n">Ax</span><span class="p">,</span> <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">iax</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ImgDicts</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">Ax</span><span class="p">[</span><span class="n">iax</span><span class="p">])</span>
+            <span class="n">Ax</span><span class="p">[</span><span class="n">iax</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="DrawBarScale">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SupportFunctions.DrawBarScale">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">DrawBarScale</span><span class="p">(</span><span class="n">Ax</span><span class="p">,</span> <span class="n">Location</span><span class="o">=</span><span class="s1">&#39;Bottom Left&#39;</span><span class="p">,</span>
+                 <span class="n">xsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ysize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xoff</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                 <span class="n">xlabelpad</span><span class="o">=-</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">ylabelpad</span><span class="o">=-</span><span class="mf">0.04</span><span class="p">,</span>
+                 <span class="n">xunit</span><span class="o">=</span><span class="s1">&#39;sec&#39;</span><span class="p">,</span> <span class="n">yunit</span><span class="o">=</span><span class="s1">&#39;mV&#39;</span><span class="p">,</span> <span class="n">LineWidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">Color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                 <span class="n">FontSize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+    <span class="c1"># calculate length of the bars</span>
+    <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">Ax</span><span class="o">.</span><span class="n">axis</span><span class="p">()</span>
+    <span class="n">AxTrans</span> <span class="o">=</span> <span class="n">Ax</span><span class="o">.</span><span class="n">transAxes</span>
+    <span class="k">if</span> <span class="n">xsize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">xsize</span> <span class="o">=</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span><span class="o">/</span><span class="mi">5</span>
+        <span class="n">xsize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">xsize</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">ysize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ysize</span> <span class="o">=</span> <span class="p">(</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">)</span><span class="o">/</span><span class="mi">5</span>
+        <span class="n">ysize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">ysize</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">xlen</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">((</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span><span class="o">/</span><span class="n">xsize</span><span class="p">)</span>  <span class="c1"># length in axes coord</span>
+    <span class="n">ylen</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">((</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">)</span><span class="o">/</span><span class="n">ysize</span><span class="p">)</span>
+
+    <span class="c1"># calculate locations</span>
+    <span class="k">if</span> <span class="n">Location</span> <span class="o">==</span> <span class="s1">&#39;Bottom Rigth&#39;</span><span class="p">:</span>
+        <span class="n">xoff</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">xoff</span>
+        <span class="n">ylabelpad</span> <span class="o">=</span> <span class="o">-</span> <span class="n">ylabelpad</span>
+        <span class="n">xlen</span> <span class="o">=</span> <span class="o">-</span> <span class="n">xlen</span>
+    <span class="k">elif</span> <span class="n">Location</span> <span class="o">==</span> <span class="s1">&#39;Top Left&#39;</span><span class="p">:</span>
+        <span class="n">yoff</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">yoff</span>
+        <span class="n">ylen</span> <span class="o">=</span> <span class="o">-</span> <span class="n">ylen</span>
+        <span class="n">xlabelpad</span> <span class="o">=</span> <span class="o">-</span><span class="n">xlabelpad</span>
+    <span class="k">elif</span> <span class="n">Location</span> <span class="o">==</span> <span class="s1">&#39;Top Rigth&#39;</span><span class="p">:</span>
+        <span class="n">xoff</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">xoff</span>
+        <span class="n">ylabelpad</span> <span class="o">=</span> <span class="o">-</span> <span class="n">ylabelpad</span>
+        <span class="n">xlen</span> <span class="o">=</span> <span class="o">-</span> <span class="n">xlen</span>
+        <span class="n">yoff</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">yoff</span>
+        <span class="n">ylen</span> <span class="o">=</span> <span class="o">-</span> <span class="n">ylen</span>
+        <span class="n">xlabelpad</span> <span class="o">=</span> <span class="o">-</span><span class="n">xlabelpad</span>
+    <span class="n">xdraw</span> <span class="o">=</span> <span class="n">xoff</span> <span class="o">+</span> <span class="n">xlen</span>
+    <span class="n">ydraw</span> <span class="o">=</span> <span class="n">yoff</span> <span class="o">+</span> <span class="n">ylen</span>
+
+    <span class="c1"># Draw lines</span>
+    <span class="n">Ax</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="n">yoff</span><span class="p">,</span> <span class="n">xoff</span><span class="p">,</span> <span class="n">xdraw</span><span class="p">,</span>
+              <span class="n">Color</span><span class="p">,</span>
+              <span class="n">linewidth</span><span class="o">=</span><span class="n">LineWidth</span><span class="p">,</span>
+              <span class="n">transform</span><span class="o">=</span><span class="n">AxTrans</span><span class="p">,</span>
+              <span class="n">clip_on</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">xlabel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">xlabel</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">xsize</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">xunit</span>
+
+    <span class="n">Ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">xoff</span> <span class="o">+</span> <span class="n">xlen</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">yoff</span> <span class="o">+</span> <span class="n">xlabelpad</span><span class="p">,</span>
+            <span class="n">xlabel</span><span class="p">,</span>
+            <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+            <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="n">FontSize</span><span class="p">,</span>
+            <span class="n">transform</span><span class="o">=</span><span class="n">AxTrans</span><span class="p">)</span>
+
+    <span class="n">Ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="n">xoff</span><span class="p">,</span> <span class="n">yoff</span><span class="p">,</span> <span class="n">ydraw</span><span class="p">,</span>
+              <span class="n">Color</span><span class="p">,</span>
+              <span class="n">linewidth</span><span class="o">=</span><span class="n">LineWidth</span><span class="p">,</span>
+              <span class="n">transform</span><span class="o">=</span><span class="n">AxTrans</span><span class="p">,</span>
+              <span class="n">clip_on</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ylabel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ylabel</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ysize</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">yunit</span>
+
+    <span class="n">Ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">xoff</span> <span class="o">+</span> <span class="n">ylabelpad</span><span class="p">,</span>
+            <span class="n">yoff</span> <span class="o">+</span> <span class="n">ylen</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">ylabel</span><span class="p">,</span>
+            <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+            <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+            <span class="n">rotation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="n">FontSize</span><span class="p">,</span>
+            <span class="n">transform</span><span class="o">=</span><span class="n">AxTrans</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Anton Guimerà Brunet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,296 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhyREC.Calibration_old &mdash; PhyREC  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            PhyREC
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PhyREC</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">PhyREC.Calibration_old</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for PhyREC.Calibration_old</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neo.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnalogSignal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">quantities</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pq</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">interpolate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PhyREC.SignalProcess</span><span class="w"> </span><span class="kn">import</span> <span class="n">sliding_window</span>
+
+<div class="viewcode-block" id="CalcVgeff">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.Calibration_old.CalcVgeff">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">CalcVgeff</span><span class="p">(</span><span class="n">Sig</span><span class="p">,</span> <span class="n">Tchar</span><span class="p">,</span> <span class="n">VgsExp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Regim</span><span class="o">=</span><span class="s1">&#39;hole&#39;</span><span class="p">,</span> <span class="n">CalType</span><span class="o">=</span><span class="s1">&#39;interp&#39;</span><span class="p">):</span>
+    <span class="n">Vgs</span> <span class="o">=</span> <span class="n">Tchar</span><span class="o">.</span><span class="n">GetVgs</span><span class="p">()</span>
+    <span class="n">vgs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Vgs</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Vgs</span><span class="p">),</span> <span class="mi">10000</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">Regim</span> <span class="o">==</span> <span class="s1">&#39;hole&#39;</span><span class="p">:</span>
+        <span class="n">Inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">vgs</span> <span class="o">&lt;</span> <span class="n">Tchar</span><span class="o">.</span><span class="n">GetUd0</span><span class="p">())[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">Inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">vgs</span> <span class="o">&gt;</span> <span class="n">Tchar</span><span class="o">.</span><span class="n">GetUd0</span><span class="p">())[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">Ids</span> <span class="o">=</span> <span class="n">Tchar</span><span class="o">.</span><span class="n">GetIds</span><span class="p">(</span><span class="n">Vgs</span><span class="o">=</span><span class="n">vgs</span><span class="p">[</span><span class="n">Inds</span><span class="p">])</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">A</span>
+    <span class="n">GM</span> <span class="o">=</span> <span class="n">Tchar</span><span class="o">.</span><span class="n">GetGM</span><span class="p">(</span><span class="n">Vgs</span><span class="o">=</span><span class="n">VgsExp</span><span class="p">)</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">S</span>
+
+    <span class="n">IdsExp</span> <span class="o">=</span> <span class="n">Tchar</span><span class="o">.</span><span class="n">GetIds</span><span class="p">(</span><span class="n">Vgs</span><span class="o">=</span><span class="n">VgsExp</span><span class="p">)</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">A</span>
+    <span class="n">IdsOff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Sig</span><span class="p">)</span> <span class="o">-</span> <span class="n">IdsExp</span>
+    <span class="n">IdsBias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Sig</span><span class="p">)</span>
+
+    <span class="n">Calibrated</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="kc">True</span><span class="p">,))</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">CalType</span> <span class="o">==</span> <span class="s1">&#39;interp&#39;</span><span class="p">:</span>
+            <span class="n">fgm</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="n">Ids</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">vgs</span><span class="p">[</span><span class="n">Inds</span><span class="p">])</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">fgm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">Sig</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Ids</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Ids</span><span class="p">)))</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">V</span>
+        <span class="k">elif</span> <span class="n">CalType</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span><span class="p">:</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">Sig</span> <span class="o">/</span> <span class="n">GM</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Calibration Not defined&#39;</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">Sig</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;Calibration error:&quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Sig</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">Calibrated</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="kc">False</span><span class="p">,))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Sig</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="s1">&#39;-&gt; &#39;</span><span class="p">,</span>
+          <span class="s1">&#39;IdsBias&#39;</span><span class="p">,</span> <span class="n">IdsBias</span><span class="p">,</span>
+          <span class="s1">&#39;IdsOff&#39;</span><span class="p">,</span> <span class="n">IdsOff</span><span class="p">,</span>
+          <span class="s1">&#39;Vgs&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">st</span><span class="p">),</span>
+          <span class="n">Tchar</span><span class="o">.</span><span class="n">IsOK</span><span class="p">)</span>
+
+    <span class="n">annotations</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Calibrated&#39;</span><span class="p">:</span> <span class="n">Calibrated</span><span class="p">,</span>
+                   <span class="s1">&#39;Working&#39;</span><span class="p">:</span> <span class="n">Calibrated</span><span class="p">,</span>
+                   <span class="s1">&#39;IdsOff&#39;</span><span class="p">:</span> <span class="n">IdsOff</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
+                   <span class="s1">&#39;VgsCal&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">st</span><span class="p">),</span>
+                   <span class="s1">&#39;IdsBias&#39;</span><span class="p">:</span> <span class="n">IdsBias</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
+                   <span class="s1">&#39;IsOK&#39;</span><span class="p">:</span> <span class="n">Tchar</span><span class="o">.</span><span class="n">IsOK</span><span class="p">,</span>
+                   <span class="s1">&#39;Iname&#39;</span><span class="p">:</span> <span class="n">Sig</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                   <span class="s1">&#39;GM&#39;</span><span class="p">:</span> <span class="n">GM</span><span class="p">,</span>
+                   <span class="p">}</span>
+
+    <span class="n">CalSig</span> <span class="o">=</span> <span class="n">AnalogSignal</span><span class="p">(</span><span class="n">st</span><span class="p">,</span>
+                          <span class="n">units</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">,</span>
+                          <span class="n">t_start</span><span class="o">=</span><span class="n">Sig</span><span class="o">.</span><span class="n">t_start</span><span class="p">,</span>
+                          <span class="n">sampling_rate</span><span class="o">=</span><span class="n">Sig</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">,</span>
+                          <span class="n">name</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">Sig</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                          <span class="n">file_origin</span><span class="o">=</span><span class="n">Sig</span><span class="o">.</span><span class="n">file_origin</span><span class="p">)</span>
+
+    <span class="c1">#    CalSig.annotate(**annotations)</span>
+    <span class="n">CalSig</span><span class="o">.</span><span class="n">array_annotate</span><span class="p">(</span><span class="o">**</span><span class="n">annotations</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">CalSig</span></div>
+
+
+
+<div class="viewcode-block" id="CalcVgeff2">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.Calibration_old.CalcVgeff2">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">CalcVgeff2</span><span class="p">(</span><span class="n">Sig</span><span class="p">,</span> <span class="n">Tchar</span><span class="p">,</span> <span class="n">VgsExp</span><span class="p">,</span> <span class="n">Regim</span><span class="o">=</span><span class="s1">&#39;hole&#39;</span><span class="p">,</span> <span class="n">CalType</span><span class="o">=</span><span class="s1">&#39;interp&#39;</span><span class="p">):</span>
+    <span class="n">Vgs</span> <span class="o">=</span> <span class="n">Tchar</span><span class="o">.</span><span class="n">GetVgs</span><span class="p">()</span>
+    <span class="n">vgs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Vgs</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Vgs</span><span class="p">),</span> <span class="mi">10000</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">Regim</span> <span class="o">==</span> <span class="s1">&#39;hole&#39;</span><span class="p">:</span>
+        <span class="n">Inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">vgs</span> <span class="o">&lt;</span> <span class="n">Tchar</span><span class="o">.</span><span class="n">GetUd0</span><span class="p">())[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">Inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">vgs</span> <span class="o">&gt;</span> <span class="n">Tchar</span><span class="o">.</span><span class="n">GetUd0</span><span class="p">())[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">IdsBias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,))</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">A</span>
+    <span class="n">IdsOff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,))</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">A</span>
+    <span class="n">GM</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">S</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">Ids</span> <span class="o">=</span> <span class="n">Tchar</span><span class="o">.</span><span class="n">GetIds</span><span class="p">(</span><span class="n">Vgs</span><span class="o">=</span><span class="n">vgs</span><span class="p">[</span><span class="n">Inds</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">GM</span> <span class="o">=</span> <span class="n">Tchar</span><span class="o">.</span><span class="n">GetGM</span><span class="p">(</span><span class="n">Vgs</span><span class="o">=</span><span class="n">VgsExp</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+        <span class="n">IdsExp</span> <span class="o">=</span> <span class="n">Tchar</span><span class="o">.</span><span class="n">GetIds</span><span class="p">(</span><span class="n">Vgs</span><span class="o">=</span><span class="n">VgsExp</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">IdsOff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Sig</span><span class="p">)</span> <span class="o">-</span> <span class="n">IdsExp</span>
+        <span class="n">IdsBias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Sig</span><span class="p">)</span>
+
+        <span class="n">Calibrated</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="kc">True</span><span class="p">,))</span>
+
+        <span class="k">if</span> <span class="n">CalType</span> <span class="o">==</span> <span class="s1">&#39;interp&#39;</span><span class="p">:</span>
+            <span class="n">fgm</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="n">Ids</span><span class="p">,</span> <span class="n">vgs</span><span class="p">[</span><span class="n">Inds</span><span class="p">])</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">fgm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">Sig</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Ids</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Ids</span><span class="p">)))</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">V</span>
+        <span class="k">elif</span> <span class="n">CalType</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span><span class="p">:</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">Sig</span> <span class="o">/</span> <span class="n">GM</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Calibration Not defined&#39;</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">Sig</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;Calibration error:&quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Sig</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">V</span>
+        <span class="n">Calibrated</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="kc">False</span><span class="p">,))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Sig</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="s1">&#39;-&gt; &#39;</span><span class="p">,</span>
+          <span class="s1">&#39;IdsBias&#39;</span><span class="p">,</span> <span class="n">IdsBias</span><span class="p">,</span>
+          <span class="s1">&#39;IdsOff&#39;</span><span class="p">,</span> <span class="n">IdsOff</span><span class="p">,</span>
+          <span class="s1">&#39;Vgs&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">st</span><span class="p">),</span>
+          <span class="s1">&#39;GM&#39;</span><span class="p">,</span> <span class="n">GM</span><span class="p">,</span>
+          <span class="n">Tchar</span><span class="o">.</span><span class="n">IsOK</span><span class="p">)</span>
+
+    <span class="n">annotations</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Calibrated&#39;</span><span class="p">:</span> <span class="n">Calibrated</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                   <span class="s1">&#39;Working&#39;</span><span class="p">:</span> <span class="n">Calibrated</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                   <span class="s1">&#39;IdsOff&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">IdsOff</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span><span class="p">),</span>
+                   <span class="s1">&#39;VgsCal&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">st</span><span class="p">)</span><span class="o">.</span><span class="n">magnitude</span><span class="p">),</span>
+                   <span class="s1">&#39;IdsBias&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">IdsBias</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span><span class="p">),</span>
+                   <span class="s1">&#39;IsOK&#39;</span><span class="p">:</span> <span class="n">Tchar</span><span class="o">.</span><span class="n">IsOK</span><span class="p">,</span>
+                   <span class="s1">&#39;Iname&#39;</span><span class="p">:</span> <span class="n">Sig</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                   <span class="s1">&#39;GM&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">GM</span><span class="o">.</span><span class="n">magnitude</span><span class="p">),</span>
+                   <span class="p">}</span>
+
+    <span class="n">CalSig</span> <span class="o">=</span> <span class="n">AnalogSignal</span><span class="p">(</span><span class="n">st</span><span class="p">,</span>
+                          <span class="n">units</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">,</span>
+                          <span class="n">t_start</span><span class="o">=</span><span class="n">Sig</span><span class="o">.</span><span class="n">t_start</span><span class="p">,</span>
+                          <span class="n">sampling_rate</span><span class="o">=</span><span class="n">Sig</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">,</span>
+                          <span class="n">name</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">Sig</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                          <span class="n">file_origin</span><span class="o">=</span><span class="n">Sig</span><span class="o">.</span><span class="n">file_origin</span><span class="p">)</span>
+
+    <span class="n">CalSig</span><span class="o">.</span><span class="n">array_annotate</span><span class="p">(</span><span class="o">**</span><span class="n">annotations</span><span class="p">)</span>
+    <span class="c1"># CalSig.array_annotate(**annotations)</span>
+
+    <span class="k">return</span> <span class="n">CalSig</span></div>
+
+
+
+<div class="viewcode-block" id="CalcVgeffNoInterp">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.Calibration_old.CalcVgeffNoInterp">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">CalcVgeffNoInterp</span><span class="p">(</span><span class="n">Sig</span><span class="p">,</span> <span class="n">Tchar</span><span class="p">,</span> <span class="n">VgsExp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Regim</span><span class="o">=</span><span class="s1">&#39;hole&#39;</span><span class="p">):</span>
+    <span class="n">gm</span> <span class="o">=</span> <span class="n">Tchar</span><span class="o">.</span><span class="n">GetGM</span><span class="p">(</span><span class="n">Vgs</span><span class="o">=</span><span class="n">VgsExp</span><span class="p">)</span>
+
+    <span class="n">Calibrated</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="kc">True</span><span class="p">,))</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">Sig</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">/</span> <span class="n">gm</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">Sig</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;Calibration error:&quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Sig</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">Calibrated</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="kc">False</span><span class="p">,))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Sig</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="s1">&#39;-&gt; &#39;</span><span class="p">,</span> <span class="s1">&#39;GM&#39;</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="s1">&#39;Vgs&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">st</span><span class="p">),</span> <span class="n">Tchar</span><span class="o">.</span><span class="n">IsOK</span><span class="p">)</span>
+    <span class="n">annotations</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Calibrated&#39;</span><span class="p">:</span> <span class="n">Calibrated</span><span class="p">,</span>
+                   <span class="s1">&#39;Working&#39;</span><span class="p">:</span> <span class="n">Calibrated</span><span class="p">,</span>
+                   <span class="c1"># &#39;IdsOff&#39;: IdsOff.flatten(),</span>
+                   <span class="s1">&#39;VgsCal&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">st</span><span class="p">),)),</span>
+                   <span class="s1">&#39;IsOK&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">Tchar</span><span class="o">.</span><span class="n">IsOK</span><span class="p">,)),</span>
+                   <span class="s1">&#39;Iname&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">Sig</span><span class="o">.</span><span class="n">name</span><span class="p">,)),</span>
+                   <span class="p">}</span>
+
+    <span class="n">CalSig</span> <span class="o">=</span> <span class="n">AnalogSignal</span><span class="p">(</span><span class="n">st</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">V</span><span class="p">,</span>
+                          <span class="n">units</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">,</span>
+                          <span class="n">t_start</span><span class="o">=</span><span class="n">Sig</span><span class="o">.</span><span class="n">t_start</span><span class="p">,</span>
+                          <span class="n">sampling_rate</span><span class="o">=</span><span class="n">Sig</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">,</span>
+                          <span class="n">name</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">Sig</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                          <span class="n">file_origin</span><span class="o">=</span><span class="n">Sig</span><span class="o">.</span><span class="n">file_origin</span><span class="p">)</span>
+
+    <span class="c1">#    CalSig.annotate(**annotations)</span>
+    <span class="n">CalSig</span><span class="o">.</span><span class="n">array_annotate</span><span class="p">(</span><span class="o">**</span><span class="n">annotations</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">CalSig</span></div>
+
+
+
+<div class="viewcode-block" id="NoiseBlanking">
+<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.Calibration_old.NoiseBlanking">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">NoiseBlanking</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">NoiseLimitRMS</span><span class="o">=</span><span class="mi">20</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">uV</span><span class="p">,</span> <span class="n">MinNoiseFreeTime</span><span class="o">=</span><span class="mi">5</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="n">timewidth</span><span class="o">=</span><span class="mi">1</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="n">Value</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">sRMS</span> <span class="o">=</span> <span class="n">sliding_window</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">timewidth</span><span class="p">)</span>
+
+    <span class="n">noisets</span> <span class="o">=</span> <span class="n">sRMS</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">sRMS</span> <span class="o">&gt;</span> <span class="n">NoiseLimitRMS</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">noisets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">sig</span>
+
+    <span class="n">inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">noisets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">MinNoiseFreeTime</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">NoiseBlocks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">NoiseBlocks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">noisets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">noisets</span><span class="p">[</span><span class="n">inds</span><span class="p">[</span><span class="mi">0</span><span class="p">]]))</span>
+    <span class="k">for</span> <span class="n">ic</span><span class="p">,</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inds</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">NoiseBlocks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">noisets</span><span class="p">[</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">noisets</span><span class="p">[</span><span class="n">inds</span><span class="p">[</span><span class="n">ic</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]))</span>
+    <span class="n">NoiseBlocks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">noisets</span><span class="p">[</span><span class="n">inds</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">noisets</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="k">for</span> <span class="n">ti</span><span class="p">,</span> <span class="n">te</span> <span class="ow">in</span> <span class="n">NoiseBlocks</span><span class="p">:</span>
+        <span class="n">i1</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">time_index</span><span class="p">(</span><span class="n">ti</span><span class="p">)</span>
+        <span class="n">i2</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">time_index</span><span class="p">(</span><span class="n">te</span><span class="p">)</span>
+        <span class="n">sig</span><span class="p">[</span><span class="n">i1</span><span class="p">:</span><span class="n">i2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">i2</span> <span class="o">-</span> <span class="n">i1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">Value</span> <span class="o">*</span> <span class="n">sig</span><span class="o">.</span><span class="n">units</span>
+
+    <span class="k">return</span> <span class="n">sig</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Anton Guimerà Brunet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
