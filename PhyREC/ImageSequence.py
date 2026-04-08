@@ -13,6 +13,7 @@ from copy import deepcopy
 class ImageSequence(pq.Quantity):
 
     def __new__(cls, signal, sampling_rate,  t_start=0*pq.s, units=None, dtype=None, copy=True,
+
                 name=None, **kwargs):
 
         signal = cls._rescale(cls, signal=signal, units=units)
@@ -26,7 +27,25 @@ class ImageSequence(pq.Quantity):
         return obj
 
     def __array_finalize__(self, obj):
+
+        """
+
+        Finalize the array creation, copying attributes from the original object.
+
+
+
+        Parameters
+
+        ----------
+
+        obj : object
+
+            The object from which to copy attributes.
+
+        """
+
         if obj is None:
+
             return
         super(ImageSequence, self).__array_finalize__(obj)
         self.sampling_rate = getattr(obj, 'sampling_rate', None)
@@ -91,6 +110,33 @@ class ImageSequence(pq.Quantity):
         return signal
 
     def rescale(self, units):
+
+        """
+
+        Rescale the signal to new units.
+
+
+
+        Parameters
+
+        ----------
+
+        units : str or quantity
+
+            The new units to rescale to.
+
+
+
+        Returns
+
+        -------
+
+        ImageSequence
+
+            The rescaled ImageSequence.
+
+        """
+
         obj = super(ImageSequence, self).rescale(units)
 
         obj.sampling_rate = self.sampling_rate
@@ -154,10 +200,21 @@ class ImageSequence(pq.Quantity):
     @property
     def t_stop(self):
         '''
-        Time when signal ends.
 
-        (:attr:`t_start` + :attr:`duration`)
+        Time when the signal ends.
+
+
+
+        Returns
+
+        -------
+
+        quantity
+
+            t_start + duration.
+
         '''
+
         return self.t_start + self.duration
 
     @property
@@ -172,10 +229,21 @@ class ImageSequence(pq.Quantity):
     @property
     def sampling_period(self):
         '''
+
         Interval between two samples.
 
-        (1/:attr:`sampling_rate`)
+
+
+        Returns
+
+        -------
+
+        quantity
+
+            1 / sampling_rate.
+
         '''
+
         return 1. / self.sampling_rate
 
     def annotate(self, **annotations):
@@ -191,6 +259,53 @@ class ImageSequence(pq.Quantity):
         self.annotations.update(annotations)
 
     def __array_ufunc__(self, ufunc, method, *inputs, out=None, **kwargs):
+
+        """
+
+        Handle universal functions applied to the array.
+
+
+
+        This method ensures that operations on ImageSequence preserve the metadata.
+
+
+
+        Parameters
+
+        ----------
+
+        ufunc : callable
+
+            The universal function.
+
+        method : str
+
+            The method.
+
+        *inputs
+
+            Input arrays.
+
+        out : array, optional
+
+            Output array.
+
+        **kwargs
+
+            Additional arguments.
+
+
+
+        Returns
+
+        -------
+
+        ImageSequence or NotImplemented
+
+            The result or NotImplemented.
+
+        """
+
         args = []
         in_no = []
         for i, input_ in enumerate(inputs):
