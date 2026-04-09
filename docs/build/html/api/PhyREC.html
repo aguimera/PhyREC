@@ -18,7 +18,8 @@
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="PhyREC documentation" href="../index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -40,190 +41,190 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">PhyREC package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-PhyREC.Calibration_old">PhyREC.Calibration_old module</a><ul>
-<li><a class="reference internal" href="#PhyREC.Calibration_old.CalcVgeff"><code class="docutils literal notranslate"><span class="pre">CalcVgeff()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.Calibration_old.CalcVgeff2"><code class="docutils literal notranslate"><span class="pre">CalcVgeff2()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.Calibration_old.CalcVgeffNoInterp"><code class="docutils literal notranslate"><span class="pre">CalcVgeffNoInterp()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.Calibration_old.NoiseBlanking"><code class="docutils literal notranslate"><span class="pre">NoiseBlanking()</span></code></a></li>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">PhyREC package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-PhyREC.Calibration_old">PhyREC.Calibration_old module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.Calibration_old.CalcVgeff"><code class="docutils literal notranslate"><span class="pre">CalcVgeff()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.Calibration_old.CalcVgeff2"><code class="docutils literal notranslate"><span class="pre">CalcVgeff2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.Calibration_old.CalcVgeffNoInterp"><code class="docutils literal notranslate"><span class="pre">CalcVgeffNoInterp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.Calibration_old.NoiseBlanking"><code class="docutils literal notranslate"><span class="pre">NoiseBlanking()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-PhyREC.ImageSequence">PhyREC.ImageSequence module</a><ul>
-<li><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence"><code class="docutils literal notranslate"><span class="pre">ImageSequence</span></code></a><ul>
-<li><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.annotate"><code class="docutils literal notranslate"><span class="pre">ImageSequence.annotate()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.duplicate_with_new_data"><code class="docutils literal notranslate"><span class="pre">ImageSequence.duplicate_with_new_data()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.duration"><code class="docutils literal notranslate"><span class="pre">ImageSequence.duration</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.rescale"><code class="docutils literal notranslate"><span class="pre">ImageSequence.rescale()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.sampling_period"><code class="docutils literal notranslate"><span class="pre">ImageSequence.sampling_period</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.t_stop"><code class="docutils literal notranslate"><span class="pre">ImageSequence.t_stop</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.time_index"><code class="docutils literal notranslate"><span class="pre">ImageSequence.time_index()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.time_slice"><code class="docutils literal notranslate"><span class="pre">ImageSequence.time_slice()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.times"><code class="docutils literal notranslate"><span class="pre">ImageSequence.times</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-PhyREC.PlotWaves">PhyREC.PlotWaves module</a><ul>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure"><code class="docutils literal notranslate"><span class="pre">ControlFigure</span></code></a><ul>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.TimeLineKwargs"><code class="docutils literal notranslate"><span class="pre">ControlFigure.TimeLineKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.BtSetZero"><code class="docutils literal notranslate"><span class="pre">ControlFigure.BtSetZero()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.SetTimes"><code class="docutils literal notranslate"><span class="pre">ControlFigure.SetTimes()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.StartAnimation"><code class="docutils literal notranslate"><span class="pre">ControlFigure.StartAnimation()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.StartMapAnimation"><code class="docutils literal notranslate"><span class="pre">ControlFigure.StartMapAnimation()</span></code></a></li>
-<li><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">ControlFigure.TimeLineKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.Update"><code class="docutils literal notranslate"><span class="pre">ControlFigure.Update()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.UpdateAnimation"><code class="docutils literal notranslate"><span class="pre">ControlFigure.UpdateAnimation()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.UpdateGraph"><code class="docutils literal notranslate"><span class="pre">ControlFigure.UpdateGraph()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.UpdateMapAnimation"><code class="docutils literal notranslate"><span class="pre">ControlFigure.UpdateMapAnimation()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.submit_start"><code class="docutils literal notranslate"><span class="pre">ControlFigure.submit_start()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.submit_stop"><code class="docutils literal notranslate"><span class="pre">ControlFigure.submit_stop()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.ImgSlot"><code class="docutils literal notranslate"><span class="pre">ImgSlot</span></code></a><ul>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.ImgSlot.DefAxKwargs"><code class="docutils literal notranslate"><span class="pre">ImgSlot.DefAxKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.ImgSlot.DefImKwargs"><code class="docutils literal notranslate"><span class="pre">ImgSlot.DefImKwargs</span></code></a></li>
-<li><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">ImgSlot.DefAxKwargs</span></code></a></li>
-<li><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">ImgSlot.DefImKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.ImgSlot.PlotSignal"><code class="docutils literal notranslate"><span class="pre">ImgSlot.PlotSignal()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.ImgSlot.UpdateAxKwargs"><code class="docutils literal notranslate"><span class="pre">ImgSlot.UpdateAxKwargs()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots"><code class="docutils literal notranslate"><span class="pre">PlotSlots</span></code></a><ul>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.ScaleBarKwargs"><code class="docutils literal notranslate"><span class="pre">PlotSlots.ScaleBarKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.RcGeneralParams"><code class="docutils literal notranslate"><span class="pre">PlotSlots.RcGeneralParams</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.FigKwargs"><code class="docutils literal notranslate"><span class="pre">PlotSlots.FigKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.gridspec_Kwargs"><code class="docutils literal notranslate"><span class="pre">PlotSlots.gridspec_Kwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.TimeAxisProp"><code class="docutils literal notranslate"><span class="pre">PlotSlots.TimeAxisProp</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.LegendKwargs"><code class="docutils literal notranslate"><span class="pre">PlotSlots.LegendKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.AddLegend"><code class="docutils literal notranslate"><span class="pre">PlotSlots.AddLegend()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.ClearAxes"><code class="docutils literal notranslate"><span class="pre">PlotSlots.ClearAxes()</span></code></a></li>
-<li><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">PlotSlots.FigKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.FormatFigure"><code class="docutils literal notranslate"><span class="pre">PlotSlots.FormatFigure()</span></code></a></li>
-<li><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">PlotSlots.LegendKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.PlotChannels"><code class="docutils literal notranslate"><span class="pre">PlotSlots.PlotChannels()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.PlotEventAvarage"><code class="docutils literal notranslate"><span class="pre">PlotSlots.PlotEventAvarage()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.PlotEvents"><code class="docutils literal notranslate"><span class="pre">PlotSlots.PlotEvents()</span></code></a></li>
-<li><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">PlotSlots.RcGeneralParams</span></code></a></li>
-<li><a class="reference internal" href="#id6"><code class="docutils literal notranslate"><span class="pre">PlotSlots.ScaleBarKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.SortSlotsAx"><code class="docutils literal notranslate"><span class="pre">PlotSlots.SortSlotsAx()</span></code></a></li>
-<li><a class="reference internal" href="#id7"><code class="docutils literal notranslate"><span class="pre">PlotSlots.TimeAxisProp</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.UpdateFigKwargs"><code class="docutils literal notranslate"><span class="pre">PlotSlots.UpdateFigKwargs()</span></code></a></li>
-<li><a class="reference internal" href="#id8"><code class="docutils literal notranslate"><span class="pre">PlotSlots.gridspec_Kwargs</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.SlotBase"><code class="docutils literal notranslate"><span class="pre">SlotBase</span></code></a><ul>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.SlotBase.CheckTime"><code class="docutils literal notranslate"><span class="pre">SlotBase.CheckTime()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.SlotBase.GetSignal"><code class="docutils literal notranslate"><span class="pre">SlotBase.GetSignal()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.SlotBase.UpdateAxKwargs"><code class="docutils literal notranslate"><span class="pre">SlotBase.UpdateAxKwargs()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.SpecSlot"><code class="docutils literal notranslate"><span class="pre">SpecSlot</span></code></a><ul>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.SpecSlot.DefspecKwargs"><code class="docutils literal notranslate"><span class="pre">SpecSlot.DefspecKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.SpecSlot.DefAvgSpectKwargs"><code class="docutils literal notranslate"><span class="pre">SpecSlot.DefAvgSpectKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.SpecSlot.DefAxKwargs"><code class="docutils literal notranslate"><span class="pre">SpecSlot.DefAxKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.SpecSlot.DefImKwargs"><code class="docutils literal notranslate"><span class="pre">SpecSlot.DefImKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.SpecSlot.CalcAvarage"><code class="docutils literal notranslate"><span class="pre">SpecSlot.CalcAvarage()</span></code></a></li>
-<li><a class="reference internal" href="#id9"><code class="docutils literal notranslate"><span class="pre">SpecSlot.DefAvgSpectKwargs</span></code></a></li>
-<li><a class="reference internal" href="#id10"><code class="docutils literal notranslate"><span class="pre">SpecSlot.DefAxKwargs</span></code></a></li>
-<li><a class="reference internal" href="#id11"><code class="docutils literal notranslate"><span class="pre">SpecSlot.DefImKwargs</span></code></a></li>
-<li><a class="reference internal" href="#id12"><code class="docutils literal notranslate"><span class="pre">SpecSlot.DefspecKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.SpecSlot.PlotSignal"><code class="docutils literal notranslate"><span class="pre">SpecSlot.PlotSignal()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.SpecSlot.UpdateLineKwargs"><code class="docutils literal notranslate"><span class="pre">SpecSlot.UpdateLineKwargs()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.SpikeSlot"><code class="docutils literal notranslate"><span class="pre">SpikeSlot</span></code></a><ul>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.SpikeSlot.DefLineKwargs"><code class="docutils literal notranslate"><span class="pre">SpikeSlot.DefLineKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.SpikeSlot.DefAxKwargs"><code class="docutils literal notranslate"><span class="pre">SpikeSlot.DefAxKwargs</span></code></a></li>
-<li><a class="reference internal" href="#id13"><code class="docutils literal notranslate"><span class="pre">SpikeSlot.DefAxKwargs</span></code></a></li>
-<li><a class="reference internal" href="#id14"><code class="docutils literal notranslate"><span class="pre">SpikeSlot.DefLineKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.SpikeSlot.PlotSignal"><code class="docutils literal notranslate"><span class="pre">SpikeSlot.PlotSignal()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.SpikeSlot.UpdateLineKwargs"><code class="docutils literal notranslate"><span class="pre">SpikeSlot.UpdateLineKwargs()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.UpdateTreeDictProp"><code class="docutils literal notranslate"><span class="pre">UpdateTreeDictProp()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot"><code class="docutils literal notranslate"><span class="pre">WaveSlot</span></code></a><ul>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.DefTrialLineKwargs"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefTrialLineKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.DefLineKwargs"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefLineKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.DefAxKwargs"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefAxKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.MaxPlotPoints"><code class="docutils literal notranslate"><span class="pre">WaveSlot.MaxPlotPoints</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.CalcAvarage"><code class="docutils literal notranslate"><span class="pre">WaveSlot.CalcAvarage()</span></code></a></li>
-<li><a class="reference internal" href="#id15"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefAxKwargs</span></code></a></li>
-<li><a class="reference internal" href="#id16"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefLineKwargs</span></code></a></li>
-<li><a class="reference internal" href="#id17"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefTrialLineKwargs</span></code></a></li>
-<li><a class="reference internal" href="#id18"><code class="docutils literal notranslate"><span class="pre">WaveSlot.MaxPlotPoints</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.PlotSignal"><code class="docutils literal notranslate"><span class="pre">WaveSlot.PlotSignal()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.UpdateLineKwargs"><code class="docutils literal notranslate"><span class="pre">WaveSlot.UpdateLineKwargs()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.WavesColorSlot"><code class="docutils literal notranslate"><span class="pre">WavesColorSlot</span></code></a><ul>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.WavesColorSlot.DefImKwargs"><code class="docutils literal notranslate"><span class="pre">WavesColorSlot.DefImKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.WavesColorSlot.DefAxKwargs"><code class="docutils literal notranslate"><span class="pre">WavesColorSlot.DefAxKwargs</span></code></a></li>
-<li><a class="reference internal" href="#id19"><code class="docutils literal notranslate"><span class="pre">WavesColorSlot.DefAxKwargs</span></code></a></li>
-<li><a class="reference internal" href="#id20"><code class="docutils literal notranslate"><span class="pre">WavesColorSlot.DefImKwargs</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.PlotWaves.WavesColorSlot.PlotSignal"><code class="docutils literal notranslate"><span class="pre">WavesColorSlot.PlotSignal()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-PhyREC.ImageSequence">PhyREC.ImageSequence module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence"><code class="docutils literal notranslate"><span class="pre">ImageSequence</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.annotate"><code class="docutils literal notranslate"><span class="pre">ImageSequence.annotate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.duplicate_with_new_data"><code class="docutils literal notranslate"><span class="pre">ImageSequence.duplicate_with_new_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.duration"><code class="docutils literal notranslate"><span class="pre">ImageSequence.duration</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.rescale"><code class="docutils literal notranslate"><span class="pre">ImageSequence.rescale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.sampling_period"><code class="docutils literal notranslate"><span class="pre">ImageSequence.sampling_period</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.t_stop"><code class="docutils literal notranslate"><span class="pre">ImageSequence.t_stop</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.time_index"><code class="docutils literal notranslate"><span class="pre">ImageSequence.time_index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.time_slice"><code class="docutils literal notranslate"><span class="pre">ImageSequence.time_slice()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.ImageSequence.ImageSequence.times"><code class="docutils literal notranslate"><span class="pre">ImageSequence.times</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-PhyREC.SignalAnalysis">PhyREC.SignalAnalysis module</a><ul>
-<li><a class="reference internal" href="#PhyREC.SignalAnalysis.PlotEventAvg"><code class="docutils literal notranslate"><span class="pre">PlotEventAvg()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalAnalysis.PlotPSD"><code class="docutils literal notranslate"><span class="pre">PlotPSD()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalAnalysis.PlotPSD_SNR"><code class="docutils literal notranslate"><span class="pre">PlotPSD_SNR()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalAnalysis.PlotSpectralCoherence"><code class="docutils literal notranslate"><span class="pre">PlotSpectralCoherence()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalAnalysis.nFFTFMin"><code class="docutils literal notranslate"><span class="pre">nFFTFMin()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalAnalysis.threshold_detection"><code class="docutils literal notranslate"><span class="pre">threshold_detection()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-PhyREC.PlotWaves">PhyREC.PlotWaves module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure"><code class="docutils literal notranslate"><span class="pre">ControlFigure</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.TimeLineKwargs"><code class="docutils literal notranslate"><span class="pre">ControlFigure.TimeLineKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.BtSetZero"><code class="docutils literal notranslate"><span class="pre">ControlFigure.BtSetZero()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.SetTimes"><code class="docutils literal notranslate"><span class="pre">ControlFigure.SetTimes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.StartAnimation"><code class="docutils literal notranslate"><span class="pre">ControlFigure.StartAnimation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.StartMapAnimation"><code class="docutils literal notranslate"><span class="pre">ControlFigure.StartMapAnimation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">ControlFigure.TimeLineKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.Update"><code class="docutils literal notranslate"><span class="pre">ControlFigure.Update()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.UpdateAnimation"><code class="docutils literal notranslate"><span class="pre">ControlFigure.UpdateAnimation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.UpdateGraph"><code class="docutils literal notranslate"><span class="pre">ControlFigure.UpdateGraph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.UpdateMapAnimation"><code class="docutils literal notranslate"><span class="pre">ControlFigure.UpdateMapAnimation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.submit_start"><code class="docutils literal notranslate"><span class="pre">ControlFigure.submit_start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.ControlFigure.submit_stop"><code class="docutils literal notranslate"><span class="pre">ControlFigure.submit_stop()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-PhyREC.SignalProcess">PhyREC.SignalProcess module</a><ul>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.Abs"><code class="docutils literal notranslate"><span class="pre">Abs()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.ApplyProcessChain"><code class="docutils literal notranslate"><span class="pre">ApplyProcessChain()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.AvgSpectrogram"><code class="docutils literal notranslate"><span class="pre">AvgSpectrogram()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.CrossCorr"><code class="docutils literal notranslate"><span class="pre">CrossCorr()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.Derivative"><code class="docutils literal notranslate"><span class="pre">Derivative()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.DownSampling"><code class="docutils literal notranslate"><span class="pre">DownSampling()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.Filter"><code class="docutils literal notranslate"><span class="pre">Filter()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.Gain"><code class="docutils literal notranslate"><span class="pre">Gain()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.MedianFilt"><code class="docutils literal notranslate"><span class="pre">MedianFilt()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.PearsonCorr"><code class="docutils literal notranslate"><span class="pre">PearsonCorr()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.RemoveDC"><code class="docutils literal notranslate"><span class="pre">RemoveDC()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.Resample"><code class="docutils literal notranslate"><span class="pre">Resample()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.SetZero"><code class="docutils literal notranslate"><span class="pre">SetZero()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.Spectrogram"><code class="docutils literal notranslate"><span class="pre">Spectrogram()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.SplineSmooth"><code class="docutils literal notranslate"><span class="pre">SplineSmooth()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.ThresholdTrianGen"><code class="docutils literal notranslate"><span class="pre">ThresholdTrianGen()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.TrigAveraging"><code class="docutils literal notranslate"><span class="pre">TrigAveraging()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.dbrms"><code class="docutils literal notranslate"><span class="pre">dbrms()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.power"><code class="docutils literal notranslate"><span class="pre">power()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.power_sliding"><code class="docutils literal notranslate"><span class="pre">power_sliding()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.rms"><code class="docutils literal notranslate"><span class="pre">rms()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.sliding_window"><code class="docutils literal notranslate"><span class="pre">sliding_window()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.sliding_window_2sigs"><code class="docutils literal notranslate"><span class="pre">sliding_window_2sigs()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SignalProcess.strides_signal"><code class="docutils literal notranslate"><span class="pre">strides_signal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.PlotWaves.ImgSlot"><code class="docutils literal notranslate"><span class="pre">ImgSlot</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.ImgSlot.DefAxKwargs"><code class="docutils literal notranslate"><span class="pre">ImgSlot.DefAxKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.ImgSlot.DefImKwargs"><code class="docutils literal notranslate"><span class="pre">ImgSlot.DefImKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">ImgSlot.DefAxKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">ImgSlot.DefImKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.ImgSlot.PlotSignal"><code class="docutils literal notranslate"><span class="pre">ImgSlot.PlotSignal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.ImgSlot.UpdateAxKwargs"><code class="docutils literal notranslate"><span class="pre">ImgSlot.UpdateAxKwargs()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-PhyREC.SupportFunctions">PhyREC.SupportFunctions module</a><ul>
-<li><a class="reference internal" href="#PhyREC.SupportFunctions.ColorBarPlot"><code class="docutils literal notranslate"><span class="pre">ColorBarPlot</span></code></a><ul>
-<li><a class="reference internal" href="#PhyREC.SupportFunctions.ColorBarPlot.GenColorBars"><code class="docutils literal notranslate"><span class="pre">ColorBarPlot.GenColorBars()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SupportFunctions.ColorBarPlot.ImgDicts"><code class="docutils literal notranslate"><span class="pre">ColorBarPlot.ImgDicts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots"><code class="docutils literal notranslate"><span class="pre">PlotSlots</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.ScaleBarKwargs"><code class="docutils literal notranslate"><span class="pre">PlotSlots.ScaleBarKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.RcGeneralParams"><code class="docutils literal notranslate"><span class="pre">PlotSlots.RcGeneralParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.FigKwargs"><code class="docutils literal notranslate"><span class="pre">PlotSlots.FigKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.gridspec_Kwargs"><code class="docutils literal notranslate"><span class="pre">PlotSlots.gridspec_Kwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.TimeAxisProp"><code class="docutils literal notranslate"><span class="pre">PlotSlots.TimeAxisProp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.LegendKwargs"><code class="docutils literal notranslate"><span class="pre">PlotSlots.LegendKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.AddLegend"><code class="docutils literal notranslate"><span class="pre">PlotSlots.AddLegend()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.ClearAxes"><code class="docutils literal notranslate"><span class="pre">PlotSlots.ClearAxes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">PlotSlots.FigKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.FormatFigure"><code class="docutils literal notranslate"><span class="pre">PlotSlots.FormatFigure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">PlotSlots.LegendKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.PlotChannels"><code class="docutils literal notranslate"><span class="pre">PlotSlots.PlotChannels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.PlotEventAvarage"><code class="docutils literal notranslate"><span class="pre">PlotSlots.PlotEventAvarage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.PlotEvents"><code class="docutils literal notranslate"><span class="pre">PlotSlots.PlotEvents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">PlotSlots.RcGeneralParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6"><code class="docutils literal notranslate"><span class="pre">PlotSlots.ScaleBarKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.SortSlotsAx"><code class="docutils literal notranslate"><span class="pre">PlotSlots.SortSlotsAx()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7"><code class="docutils literal notranslate"><span class="pre">PlotSlots.TimeAxisProp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.PlotSlots.UpdateFigKwargs"><code class="docutils literal notranslate"><span class="pre">PlotSlots.UpdateFigKwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8"><code class="docutils literal notranslate"><span class="pre">PlotSlots.gridspec_Kwargs</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#PhyREC.SupportFunctions.DebugFilterPlot"><code class="docutils literal notranslate"><span class="pre">DebugFilterPlot</span></code></a><ul>
-<li><a class="reference internal" href="#PhyREC.SupportFunctions.DebugFilterPlot.InitFigure"><code class="docutils literal notranslate"><span class="pre">DebugFilterPlot.InitFigure()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SupportFunctions.DebugFilterPlot.PlotResponse"><code class="docutils literal notranslate"><span class="pre">DebugFilterPlot.PlotResponse()</span></code></a></li>
-<li><a class="reference internal" href="#PhyREC.SupportFunctions.DebugFilterPlot.nFFT"><code class="docutils literal notranslate"><span class="pre">DebugFilterPlot.nFFT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.PlotWaves.SlotBase"><code class="docutils literal notranslate"><span class="pre">SlotBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.SlotBase.CheckTime"><code class="docutils literal notranslate"><span class="pre">SlotBase.CheckTime()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.SlotBase.GetSignal"><code class="docutils literal notranslate"><span class="pre">SlotBase.GetSignal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.SlotBase.UpdateAxKwargs"><code class="docutils literal notranslate"><span class="pre">SlotBase.UpdateAxKwargs()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#PhyREC.SupportFunctions.DrawBarScale"><code class="docutils literal notranslate"><span class="pre">DrawBarScale()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.PlotWaves.SpecSlot"><code class="docutils literal notranslate"><span class="pre">SpecSlot</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.SpecSlot.DefspecKwargs"><code class="docutils literal notranslate"><span class="pre">SpecSlot.DefspecKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.SpecSlot.DefAvgSpectKwargs"><code class="docutils literal notranslate"><span class="pre">SpecSlot.DefAvgSpectKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.SpecSlot.DefAxKwargs"><code class="docutils literal notranslate"><span class="pre">SpecSlot.DefAxKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.SpecSlot.DefImKwargs"><code class="docutils literal notranslate"><span class="pre">SpecSlot.DefImKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.SpecSlot.CalcAvarage"><code class="docutils literal notranslate"><span class="pre">SpecSlot.CalcAvarage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id9"><code class="docutils literal notranslate"><span class="pre">SpecSlot.DefAvgSpectKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10"><code class="docutils literal notranslate"><span class="pre">SpecSlot.DefAxKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11"><code class="docutils literal notranslate"><span class="pre">SpecSlot.DefImKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id12"><code class="docutils literal notranslate"><span class="pre">SpecSlot.DefspecKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.SpecSlot.PlotSignal"><code class="docutils literal notranslate"><span class="pre">SpecSlot.PlotSignal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.SpecSlot.UpdateLineKwargs"><code class="docutils literal notranslate"><span class="pre">SpecSlot.UpdateLineKwargs()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-PhyREC">Module contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.PlotWaves.SpikeSlot"><code class="docutils literal notranslate"><span class="pre">SpikeSlot</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.SpikeSlot.DefLineKwargs"><code class="docutils literal notranslate"><span class="pre">SpikeSlot.DefLineKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.SpikeSlot.DefAxKwargs"><code class="docutils literal notranslate"><span class="pre">SpikeSlot.DefAxKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id13"><code class="docutils literal notranslate"><span class="pre">SpikeSlot.DefAxKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id14"><code class="docutils literal notranslate"><span class="pre">SpikeSlot.DefLineKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.SpikeSlot.PlotSignal"><code class="docutils literal notranslate"><span class="pre">SpikeSlot.PlotSignal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.SpikeSlot.UpdateLineKwargs"><code class="docutils literal notranslate"><span class="pre">SpikeSlot.UpdateLineKwargs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.PlotWaves.UpdateTreeDictProp"><code class="docutils literal notranslate"><span class="pre">UpdateTreeDictProp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot"><code class="docutils literal notranslate"><span class="pre">WaveSlot</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.DefTrialLineKwargs"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefTrialLineKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.DefLineKwargs"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefLineKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.DefAxKwargs"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefAxKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.MaxPlotPoints"><code class="docutils literal notranslate"><span class="pre">WaveSlot.MaxPlotPoints</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.CalcAvarage"><code class="docutils literal notranslate"><span class="pre">WaveSlot.CalcAvarage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id15"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefAxKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id16"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefLineKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id17"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefTrialLineKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id18"><code class="docutils literal notranslate"><span class="pre">WaveSlot.MaxPlotPoints</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.PlotSignal"><code class="docutils literal notranslate"><span class="pre">WaveSlot.PlotSignal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.UpdateLineKwargs"><code class="docutils literal notranslate"><span class="pre">WaveSlot.UpdateLineKwargs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.PlotWaves.WavesColorSlot"><code class="docutils literal notranslate"><span class="pre">WavesColorSlot</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WavesColorSlot.DefImKwargs"><code class="docutils literal notranslate"><span class="pre">WavesColorSlot.DefImKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WavesColorSlot.DefAxKwargs"><code class="docutils literal notranslate"><span class="pre">WavesColorSlot.DefAxKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id19"><code class="docutils literal notranslate"><span class="pre">WavesColorSlot.DefAxKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id20"><code class="docutils literal notranslate"><span class="pre">WavesColorSlot.DefImKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WavesColorSlot.PlotSignal"><code class="docutils literal notranslate"><span class="pre">WavesColorSlot.PlotSignal()</span></code></a></li>
 </ul>
 </li>
 </ul>
-</div>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-PhyREC.SignalAnalysis">PhyREC.SignalAnalysis module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalAnalysis.PlotEventAvg"><code class="docutils literal notranslate"><span class="pre">PlotEventAvg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalAnalysis.PlotPSD"><code class="docutils literal notranslate"><span class="pre">PlotPSD()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalAnalysis.PlotPSD_SNR"><code class="docutils literal notranslate"><span class="pre">PlotPSD_SNR()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalAnalysis.PlotSpectralCoherence"><code class="docutils literal notranslate"><span class="pre">PlotSpectralCoherence()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalAnalysis.nFFTFMin"><code class="docutils literal notranslate"><span class="pre">nFFTFMin()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalAnalysis.threshold_detection"><code class="docutils literal notranslate"><span class="pre">threshold_detection()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-PhyREC.SignalProcess">PhyREC.SignalProcess module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.Abs"><code class="docutils literal notranslate"><span class="pre">Abs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.ApplyProcessChain"><code class="docutils literal notranslate"><span class="pre">ApplyProcessChain()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.AvgSpectrogram"><code class="docutils literal notranslate"><span class="pre">AvgSpectrogram()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.CrossCorr"><code class="docutils literal notranslate"><span class="pre">CrossCorr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.Derivative"><code class="docutils literal notranslate"><span class="pre">Derivative()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.DownSampling"><code class="docutils literal notranslate"><span class="pre">DownSampling()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.Filter"><code class="docutils literal notranslate"><span class="pre">Filter()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.Gain"><code class="docutils literal notranslate"><span class="pre">Gain()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.MedianFilt"><code class="docutils literal notranslate"><span class="pre">MedianFilt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.PearsonCorr"><code class="docutils literal notranslate"><span class="pre">PearsonCorr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.RemoveDC"><code class="docutils literal notranslate"><span class="pre">RemoveDC()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.Resample"><code class="docutils literal notranslate"><span class="pre">Resample()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.SetZero"><code class="docutils literal notranslate"><span class="pre">SetZero()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.Spectrogram"><code class="docutils literal notranslate"><span class="pre">Spectrogram()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.SplineSmooth"><code class="docutils literal notranslate"><span class="pre">SplineSmooth()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.ThresholdTrianGen"><code class="docutils literal notranslate"><span class="pre">ThresholdTrianGen()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.TrigAveraging"><code class="docutils literal notranslate"><span class="pre">TrigAveraging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.dbrms"><code class="docutils literal notranslate"><span class="pre">dbrms()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.power"><code class="docutils literal notranslate"><span class="pre">power()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.power_sliding"><code class="docutils literal notranslate"><span class="pre">power_sliding()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.rms"><code class="docutils literal notranslate"><span class="pre">rms()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.sliding_window"><code class="docutils literal notranslate"><span class="pre">sliding_window()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.sliding_window_2sigs"><code class="docutils literal notranslate"><span class="pre">sliding_window_2sigs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SignalProcess.strides_signal"><code class="docutils literal notranslate"><span class="pre">strides_signal()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-PhyREC.SupportFunctions">PhyREC.SupportFunctions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SupportFunctions.ColorBarPlot"><code class="docutils literal notranslate"><span class="pre">ColorBarPlot</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.SupportFunctions.ColorBarPlot.GenColorBars"><code class="docutils literal notranslate"><span class="pre">ColorBarPlot.GenColorBars()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.SupportFunctions.ColorBarPlot.ImgDicts"><code class="docutils literal notranslate"><span class="pre">ColorBarPlot.ImgDicts</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SupportFunctions.DebugFilterPlot"><code class="docutils literal notranslate"><span class="pre">DebugFilterPlot</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.SupportFunctions.DebugFilterPlot.InitFigure"><code class="docutils literal notranslate"><span class="pre">DebugFilterPlot.InitFigure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.SupportFunctions.DebugFilterPlot.PlotResponse"><code class="docutils literal notranslate"><span class="pre">DebugFilterPlot.PlotResponse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.SupportFunctions.DebugFilterPlot.nFFT"><code class="docutils literal notranslate"><span class="pre">DebugFilterPlot.nFFT</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#PhyREC.SupportFunctions.DrawBarScale"><code class="docutils literal notranslate"><span class="pre">DrawBarScale()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-PhyREC">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -2322,7 +2323,9 @@ If None, uses timewidth/10.</p></li>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="PhyREC documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
 
   <hr/>
 
