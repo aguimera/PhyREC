@@ -31,6 +31,7 @@ from matplotlib.widgets import Slider, Button, TextBox
 from matplotlib.artist import ArtistInspector
 import PhyREC.SignalProcess as Spro
 from PhyREC import SpectColBars
+from PhyREC.SupportFunctions import DrawBarScale
 import datetime
 from tsdownsample import MinMaxLTTBDownsampler as DownSampler
 
@@ -352,11 +353,12 @@ class SpecSlot(SlotBase):
 
         f = spec.annotations['Freq']
         data = Spro.Resample(spec, MaxPoints=self.MaxPoints)
-        img = self.Ax.imshow(np.array(data).astype(float).transpose(),
+        data_plain = np.asarray(data.magnitude).transpose()
+        img = self.Ax.imshow(data_plain,
                              origin='lower',
                              aspect='auto',
-                             extent=(spec.t_start, spec.t_stop,
-                                     np.min(f), np.max(f)),
+                             extent=(spec.t_start.magnitude, spec.t_stop.magnitude,
+                                     np.min(f.magnitude), np.max(f.magnitude)),
                              **self.imKwargs,
                              )
         self.img = img
