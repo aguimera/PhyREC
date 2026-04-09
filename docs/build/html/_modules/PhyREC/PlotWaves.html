@@ -39,8 +39,11 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/PhyREC.html">PhyREC package</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -99,6 +102,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.artist</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArtistInspector</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">PhyREC.SignalProcess</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">Spro</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">PhyREC</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpectColBars</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PhyREC.SupportFunctions</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawBarScale</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tsdownsample</span><span class="w"> </span><span class="kn">import</span> <span class="n">MinMaxLTTBDownsampler</span> <span class="k">as</span> <span class="n">DownSampler</span>
 
@@ -448,11 +452,12 @@
 
         <span class="n">f</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">annotations</span><span class="p">[</span><span class="s1">&#39;Freq&#39;</span><span class="p">]</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">Spro</span><span class="o">.</span><span class="n">Resample</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">MaxPoints</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MaxPoints</span><span class="p">)</span>
-        <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span>
+        <span class="n">data_plain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">magnitude</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">data_plain</span><span class="p">,</span>
                              <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span>
                              <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span>
-                             <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">t_start</span><span class="p">,</span> <span class="n">spec</span><span class="o">.</span><span class="n">t_stop</span><span class="p">,</span>
-                                     <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">f</span><span class="p">)),</span>
+                             <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">t_start</span><span class="o">.</span><span class="n">magnitude</span><span class="p">,</span> <span class="n">spec</span><span class="o">.</span><span class="n">t_stop</span><span class="o">.</span><span class="n">magnitude</span><span class="p">,</span>
+                                     <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">magnitude</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">magnitude</span><span class="p">)),</span>
                              <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">imKwargs</span><span class="p">,</span>
                              <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">img</span> <span class="o">=</span> <span class="n">img</span>

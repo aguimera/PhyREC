@@ -23,6 +23,7 @@ extensions = [
     "sphinx.ext.napoleon",   # Google / NumPy style docstrings
     "sphinx.ext.viewcode",
     "sphinx.ext.autosummary",
+    "myst_parser",
 ]
 
 autosummary_generate = True
@@ -39,3 +40,8 @@ exclude_patterns = []
 
 html_theme = "sphinx_rtd_theme"
 html_static_path = ['_static']
+
+source_suffix = {
+    ".rst": "restructuredtext",
+    ".md": "markdown",
+}
