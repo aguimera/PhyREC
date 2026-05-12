@@ -3,4 +3,3 @@ sphinx-rtd-theme
 myst-parser
 
 # install your package for autodoc
--e ..
