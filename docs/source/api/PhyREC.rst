@@ -4,14 +4,6 @@ PhyREC package
 Submodules
 ----------
 
-PhyREC.Calibration\_old module
-------------------------------
-
-.. automodule:: PhyREC.Calibration_old
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
 PhyREC.ImageSequence module
 ---------------------------
 
@@ -52,10 +44,3 @@ PhyREC.SupportFunctions module
    :show-inheritance:
    :undoc-members:
 
-Module contents
----------------
-
-.. automodule:: PhyREC
-   :members:
-   :show-inheritance:
-   :undoc-members:
