@@ -5,5 +5,7 @@ myst-parser
 numpy
 matplotlib
 scipy
+quantities
+neo
 
 # install your package for autodoc
