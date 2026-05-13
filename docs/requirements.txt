@@ -2,4 +2,8 @@ sphinx
 sphinx-rtd-theme
 myst-parser
 
+numpy
+matplotlib
+scipy
+
 # install your package for autodoc
