@@ -72,13 +72,20 @@ class ImageSequence(pq.Quantity):
 
     def __deepcopy__(self, memo):
         """
-            Create a deep copy of the data object.
-            All attributes and annotations are also deep copied.
-            References to parent objects are not kept, they are set to None.
+        Create a deep copy of the data object.
 
+        All attributes and annotations are also deep copied.
+        References to parent objects are not kept, they are set to None.
 
-            :param memo: (dict) Objects that have been deep copied already
-            :return: (DataObject) Deep copy of the input DataObject
+        Parameters
+        ----------
+        memo : dict
+            Objects that have been deep copied already.
+
+        Returns
+        -------
+        ImageSequence
+            Deep copy of the input ImageSequence object.
         """
         cls = self.__class__
         necessary_attrs = {'signal': self,
@@ -146,22 +153,50 @@ class ImageSequence(pq.Quantity):
         return obj.view(ImageSequence)
 
     def time_index(self, t):
-        """Return the array index corresponding to the time `t`"""
+        """
+        Return the array index corresponding to the time `t`.
+
+        Parameters
+        ----------
+        t : quantities.Quantity
+            Time value to convert to array index.
+
+        Returns
+        -------
+        int
+            Array index corresponding to the time value.
+        """
         i = (t - self.t_start) * self.sampling_rate
         i = int(np.rint(i.simplified.magnitude))
         return i
 
     def time_slice(self, t_start, t_stop):
-        '''
-        Creates a new AnalogSignal corresponding to the time slice of the
-        original AnalogSignal between times t_start, t_stop. Note, that for
-        numerical stability reasons if t_start does not fall exactly on
-        the time bins defined by the sampling_period it will be rounded to
-        the nearest sampling bin. The time bin for t_stop will be chosen to
-        make the duration of the resultant signal as close as possible to
-        t_stop - t_start. This means that for a given duration, the size
-        of the slice will always be the same.
-        '''
+        """
+        Create a new ImageSequence corresponding to the time slice of the original.
+
+        Creates a time slice between t_start and t_stop. For numerical stability,
+        if t_start does not fall exactly on time bins defined by the sampling_period,
+        it will be rounded to the nearest sampling bin. The time bin for t_stop will
+        be chosen to make the duration of the resultant signal as close as possible to
+        t_stop - t_start. This means for a given duration, the slice size is always the same.
+
+        Parameters
+        ----------
+        t_start : quantities.Quantity
+            Start time of the slice. If None, uses the beginning of signal.
+        t_stop : quantities.Quantity
+            Stop time of the slice. If None, uses the end of signal.
+
+        Returns
+        -------
+        ImageSequence
+            Time-sliced ImageSequence object.
+
+        Raises
+        ------
+        ValueError
+            If t_start or t_stop are outside the signal duration.
+        """
 
         # checking start time and transforming to start index
         if t_start is None:
@@ -190,71 +225,74 @@ class ImageSequence(pq.Quantity):
 
     @property
     def duration(self):
-        '''
-        Signal duration
+        """
+        Signal duration.
 
-        (:attr:`size` * :attr:`sampling_period`)
-        '''
+        Computed as size * sampling_period.
+
+        Returns
+        -------
+        quantities.Quantity
+            Duration of the signal.
+        """
         return self.shape[0] / self.sampling_rate
 
     @property
     def t_stop(self):
-        '''
-
+        """
         Time when the signal ends.
 
-
-
         Returns
-
         -------
-
-        quantity
-
+        quantities.Quantity
             t_start + duration.
-
-        '''
-
+        """
         return self.t_start + self.duration
 
     @property
     def times(self):
-        '''
-        The time points of each sample of the signal
+        """
+        The time points of each sample of the signal.
 
-        (:attr:`t_start` + arange(:attr:`shape`)/:attr:`sampling_rate`)
-        '''
+        Computed as t_start + arange(shape) / sampling_rate.
+
+        Returns
+        -------
+        quantities.Quantity
+            Array of time points for each sample.
+        """
         return self.t_start + np.arange(self.shape[0]) / self.sampling_rate
 
     @property
     def sampling_period(self):
-        '''
-
+        """
         Interval between two samples.
 
-
-
         Returns
-
         -------
-
-        quantity
-
+        quantities.Quantity
             1 / sampling_rate.
-
-        '''
-
+        """
         return 1. / self.sampling_rate
 
     def annotate(self, **annotations):
         """
-        Add annotations (non-standardized metadata) to a Neo object.
+        Add annotations (non-standardized metadata) to an ImageSequence object.
 
-        Example:
+        Parameters
+        ----------
+        **annotations
+            Arbitrary keyword arguments to store as annotations.
 
+        Returns
+        -------
+        None
+
+        Examples
+        --------
         >>> obj.annotate(key1=value0, key2=value1)
         >>> obj.key2
-        value2
+        value1
         """
         self.annotations.update(annotations)
 
@@ -344,11 +382,30 @@ class ImageSequence(pq.Quantity):
 
         # return results[0] if len(results) == 1 else results
     def duplicate_with_new_data(self, signal, units=None):
-        '''
+        """
         Create a new signal with the same metadata but different data.
-        Required attributes of the signal are used.
-        Note: Array annotations can not be copied here because length of data can change
-        '''
+
+        Required attributes of the signal are used. Note that array annotations
+        cannot be copied here because the length of data can change.
+
+        Parameters
+        ----------
+        signal : array-like
+            New signal data for the duplicated object.
+        units : quantities.Quantity, optional
+            Units for the new signal. If None, uses self.units.
+
+        Returns
+        -------
+        ImageSequence
+            New ImageSequence with same metadata but new data.
+
+        Notes
+        -----
+        Array annotations are not copied here because it is not ensured that the
+        same number of samples is used and they would possibly make no sense
+        when combined with another signal.
+        """
         if units is None:
             units = self.units
         # else:

@@ -93,12 +93,17 @@
 
 <span class="sd">    This function computes the smallest power-of-two FFT size that ensures the frequency resolution is sufficient for the specified minimum frequency.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        Fs (float or quantity): Sampling frequency.</span>
-<span class="sd">        Fmin (float or quantity): Minimum frequency of interest.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Fs : float or quantity</span>
+<span class="sd">        Sampling frequency.</span>
+<span class="sd">    Fmin : float or quantity</span>
+<span class="sd">        Minimum frequency of interest.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        int: Minimum FFT size (power of 2).</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        Minimum FFT size (power of 2).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">Fs</span><span class="o">/</span><span class="n">Fmin</span><span class="p">))</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span></div>
 
@@ -175,20 +180,33 @@
 
 <span class="sd">    Computes and plots the magnitude-squared coherence between the reference signal and each signal in the list, using Welch&#39;s method.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        RefSig (neo.AnalogSignal): Reference signal for coherence calculation.</span>
-<span class="sd">        Signals (list): List of signal objects with GetSignal method.</span>
-<span class="sd">        Time (tuple, optional): Time range to analyze.</span>
-<span class="sd">        nFFT (int): Number of FFT points. Default 2**17.</span>
-<span class="sd">        FMin (float, optional): Minimum frequency for FFT size calculation.</span>
-<span class="sd">        Ax (matplotlib.axes.Axes, optional): Axes to plot on. If None, creates new figure.</span>
-<span class="sd">        scaling (str): Scaling for coherence (&#39;density&#39; or &#39;spectrum&#39;). Default &#39;density&#39;.</span>
-<span class="sd">        Units (quantities.Quantity, optional): Units for signals.</span>
-<span class="sd">        Noverlap (int): Overlap factor for FFT. Default 2.</span>
-<span class="sd">        **LineKwargs: Additional keyword arguments for plotting lines.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    RefSig : neo.AnalogSignal</span>
+<span class="sd">        Reference signal for coherence calculation.</span>
+<span class="sd">    Signals : list</span>
+<span class="sd">        List of signal objects with GetSignal method.</span>
+<span class="sd">    Time : tuple, optional</span>
+<span class="sd">        Time range to analyze.</span>
+<span class="sd">    nFFT : int</span>
+<span class="sd">        Number of FFT points. Default 2**17.</span>
+<span class="sd">    FMin : float, optional</span>
+<span class="sd">        Minimum frequency for FFT size calculation.</span>
+<span class="sd">    Ax : matplotlib.axes.Axes, optional</span>
+<span class="sd">        Axes to plot on. If None, creates new figure.</span>
+<span class="sd">    scaling : str</span>
+<span class="sd">        Scaling for coherence (&#39;density&#39; or &#39;spectrum&#39;). Default &#39;density&#39;.</span>
+<span class="sd">    Units : quantities.Quantity, optional</span>
+<span class="sd">        Units for signals.</span>
+<span class="sd">    Noverlap : int</span>
+<span class="sd">        Overlap factor for FFT. Default 2.</span>
+<span class="sd">    **LineKwargs</span>
+<span class="sd">        Additional keyword arguments for plotting lines.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        tuple: (frequencies, list of coherence arrays)</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        (frequencies, list of coherence arrays)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">Ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -235,19 +253,31 @@
 
 <span class="sd">    Computes and plots the PSD for each signal in the list using Welch&#39;s method, with options for scaling and units.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        Signals (list): List of signal objects.</span>
-<span class="sd">        Time (tuple, optional): Time range to analyze.</span>
-<span class="sd">        nFFT (int): Number of FFT points. Default 2**17.</span>
-<span class="sd">        FMin (float, optional): Minimum frequency for FFT size calculation.</span>
-<span class="sd">        Ax (matplotlib.axes.Axes, optional): Axes to plot on. If None, creates new figure.</span>
-<span class="sd">        scaling (str): Scaling for PSD (&#39;density&#39; or &#39;spectrum&#39;). Default &#39;density&#39;.</span>
-<span class="sd">        Units (quantities.Quantity, optional): Units for signals.</span>
-<span class="sd">        Noverlap (int): Overlap factor for FFT. Default 2.</span>
-<span class="sd">        **LineKwargs: Additional keyword arguments for plotting lines.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Signals : list</span>
+<span class="sd">        List of signal objects.</span>
+<span class="sd">    Time : tuple, optional</span>
+<span class="sd">        Time range to analyze.</span>
+<span class="sd">    nFFT : int</span>
+<span class="sd">        Number of FFT points. Default 2**17.</span>
+<span class="sd">    FMin : float, optional</span>
+<span class="sd">        Minimum frequency for FFT size calculation.</span>
+<span class="sd">    Ax : matplotlib.axes.Axes, optional</span>
+<span class="sd">        Axes to plot on. If None, creates new figure.</span>
+<span class="sd">    scaling : str</span>
+<span class="sd">        Scaling for PSD (&#39;density&#39; or &#39;spectrum&#39;). Default &#39;density&#39;.</span>
+<span class="sd">    Units : quantities.Quantity, optional</span>
+<span class="sd">        Units for signals.</span>
+<span class="sd">    Noverlap : int</span>
+<span class="sd">        Overlap factor for FFT. Default 2.</span>
+<span class="sd">    **LineKwargs</span>
+<span class="sd">        Additional keyword arguments for plotting lines.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        dict: Dictionary with signal names as keys, containing &#39;psd&#39; and &#39;ff&#39; arrays.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Dictionary with signal names as keys, containing &#39;psd&#39; and &#39;ff&#39; arrays.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">Ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -322,21 +352,34 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot event-averaged signals with optional spectrogram.</span>
 
-<span class="sd">    Computes and plots the average signal across multiple events for each signal in the list, with options for overlapping traces, standard deviation, and spectrogram display.</span>
+<span class="sd">    Computes and plots the average signal across multiple events for each signal</span>
+<span class="sd">    in the list, with options for overlapping traces, standard deviation,</span>
+<span class="sd">    and spectrogram display.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        Signals (list): List of signal objects.</span>
-<span class="sd">        TimesEvent (array-like): Times of events to average around.</span>
-<span class="sd">        TimeAvg (tuple): Time window around each event (start, stop).</span>
-<span class="sd">        Time (tuple, optional): Overall time range.</span>
-<span class="sd">        OverLap (bool): Whether to plot individual traces. Default True.</span>
-<span class="sd">        Std (bool): Whether to plot standard deviation. Default True.</span>
-<span class="sd">        Units (quantities.Quantity, optional): Units for signals.</span>
-<span class="sd">        FileOutPrefix (str, optional): Prefix for saving figures.</span>
-<span class="sd">        SpecSlot (object, optional): Spectrogram slot for additional plotting.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Signals : list</span>
+<span class="sd">        List of signal objects.</span>
+<span class="sd">    TimesEvent : array-like</span>
+<span class="sd">        Times of events to average around.</span>
+<span class="sd">    TimeAvg : tuple</span>
+<span class="sd">        Time window around each event (start, stop).</span>
+<span class="sd">    Time : tuple, optional</span>
+<span class="sd">        Overall time range.</span>
+<span class="sd">    OverLap : bool, optional</span>
+<span class="sd">        Whether to plot individual traces (default: True).</span>
+<span class="sd">    Std : bool, optional</span>
+<span class="sd">        Whether to plot standard deviation (default: True).</span>
+<span class="sd">    Units : quantities.Quantity, optional</span>
+<span class="sd">        Units for signals.</span>
+<span class="sd">    FileOutPrefix : str, optional</span>
+<span class="sd">        Prefix for saving figures.</span>
+<span class="sd">    SpecSlot : object, optional</span>
+<span class="sd">        Spectrogram slot for additional plotting.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        None</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Signals</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
@@ -566,25 +609,38 @@
 <div class="viewcode-block" id="PlotPSD_SNR">
 <a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SignalAnalysis.PlotPSD_SNR">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">PlotPSD_SNR</span><span class="p">(</span><span class="n">Signals</span><span class="p">,</span> <span class="n">TimeSig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">TimeNoise</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nFFT</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">17</span><span class="p">,</span> <span class="n">FMin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">scaling</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="n">Units</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">LineKwargs</span><span class="p">):</span>
+             <span class="n">scaling</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="n">Units</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">LineKwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot signal-to-noise ratio (SNR) based on PSD for multiple signals.</span>
 
-<span class="sd">    Computes and plots the SNR as the ratio of signal PSD to noise PSD for each signal in the list, using Welch&#39;s method.</span>
+<span class="sd">    Computes and plots the SNR as the ratio of signal PSD to noise PSD for each</span>
+<span class="sd">    signal in the list, using Welch&#39;s method.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        Signals (list): List of signal objects with GetSignal method.</span>
-<span class="sd">        TimeSig (tuple, optional): Time range for signal.</span>
-<span class="sd">        TimeNoise (tuple, optional): Time range for noise.</span>
-<span class="sd">        nFFT (int): Number of FFT points. Default 2**17.</span>
-<span class="sd">        FMin (float, optional): Minimum frequency for FFT size calculation.</span>
-<span class="sd">        Ax (matplotlib.axes.Axes, optional): Axes to plot on. If None, creates new figure.</span>
-<span class="sd">        scaling (str): Scaling for PSD (&#39;density&#39; or &#39;spectrum&#39;). Default &#39;density&#39;.</span>
-<span class="sd">        Units (quantities.Quantity, optional): Units for signals.</span>
-<span class="sd">        **LineKwargs: Additional keyword arguments for plotting lines.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Signals : list</span>
+<span class="sd">        List of signal objects with GetSignal method.</span>
+<span class="sd">    TimeSig : tuple, optional</span>
+<span class="sd">        Time range for signal.</span>
+<span class="sd">    TimeNoise : tuple, optional</span>
+<span class="sd">        Time range for noise.</span>
+<span class="sd">    nFFT : int</span>
+<span class="sd">        Number of FFT points. Default 2**17.</span>
+<span class="sd">    FMin : float, optional</span>
+<span class="sd">        Minimum frequency for FFT size calculation.</span>
+<span class="sd">    Ax : matplotlib.axes.Axes, optional</span>
+<span class="sd">        Axes to plot on. If None, creates new figure.</span>
+<span class="sd">    scaling : str</span>
+<span class="sd">        Scaling for PSD (&#39;density&#39; or &#39;spectrum&#39;). Default &#39;density&#39;.</span>
+<span class="sd">    Units : quantities.Quantity, optional</span>
+<span class="sd">        Units for signals.</span>
+<span class="sd">    **LineKwargs</span>
+<span class="sd">        Additional keyword arguments for plotting lines.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        dict: Dictionary with signal names as keys, containing &#39;SNR&#39; and &#39;ff&#39; arrays.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Dictionary with signal names as keys, containing &#39;SNR&#39; and &#39;ff&#39; arrays.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">Ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -651,6 +707,12 @@
               <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;x-small&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">PSD</span></div>
+
+
+
+
+
+
 
 
 </pre></div>

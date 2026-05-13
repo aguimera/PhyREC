@@ -145,13 +145,20 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memo</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Create a deep copy of the data object.</span>
-<span class="sd">            All attributes and annotations are also deep copied.</span>
-<span class="sd">            References to parent objects are not kept, they are set to None.</span>
+<span class="sd">        Create a deep copy of the data object.</span>
 
+<span class="sd">        All attributes and annotations are also deep copied.</span>
+<span class="sd">        References to parent objects are not kept, they are set to None.</span>
 
-<span class="sd">            :param memo: (dict) Objects that have been deep copied already</span>
-<span class="sd">            :return: (DataObject) Deep copy of the input DataObject</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        memo : dict</span>
+<span class="sd">            Objects that have been deep copied already.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ImageSequence</span>
+<span class="sd">            Deep copy of the input ImageSequence object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">cls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
         <span class="n">necessary_attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;signal&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="p">,</span>
@@ -224,7 +231,19 @@
 <div class="viewcode-block" id="ImageSequence.time_index">
 <a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.ImageSequence.ImageSequence.time_index">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">time_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the array index corresponding to the time `t`&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the array index corresponding to the time `t`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t : quantities.Quantity</span>
+<span class="sd">            Time value to convert to array index.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Array index corresponding to the time value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span>
         <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">simplified</span><span class="o">.</span><span class="n">magnitude</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">i</span></div>
@@ -233,16 +252,32 @@
 <div class="viewcode-block" id="ImageSequence.time_slice">
 <a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.ImageSequence.ImageSequence.time_slice">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">time_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_start</span><span class="p">,</span> <span class="n">t_stop</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Creates a new AnalogSignal corresponding to the time slice of the</span>
-<span class="sd">        original AnalogSignal between times t_start, t_stop. Note, that for</span>
-<span class="sd">        numerical stability reasons if t_start does not fall exactly on</span>
-<span class="sd">        the time bins defined by the sampling_period it will be rounded to</span>
-<span class="sd">        the nearest sampling bin. The time bin for t_stop will be chosen to</span>
-<span class="sd">        make the duration of the resultant signal as close as possible to</span>
-<span class="sd">        t_stop - t_start. This means that for a given duration, the size</span>
-<span class="sd">        of the slice will always be the same.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new ImageSequence corresponding to the time slice of the original.</span>
+
+<span class="sd">        Creates a time slice between t_start and t_stop. For numerical stability,</span>
+<span class="sd">        if t_start does not fall exactly on time bins defined by the sampling_period,</span>
+<span class="sd">        it will be rounded to the nearest sampling bin. The time bin for t_stop will</span>
+<span class="sd">        be chosen to make the duration of the resultant signal as close as possible to</span>
+<span class="sd">        t_stop - t_start. This means for a given duration, the slice size is always the same.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t_start : quantities.Quantity</span>
+<span class="sd">            Start time of the slice. If None, uses the beginning of signal.</span>
+<span class="sd">        t_stop : quantities.Quantity</span>
+<span class="sd">            Stop time of the slice. If None, uses the end of signal.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ImageSequence</span>
+<span class="sd">            Time-sliced ImageSequence object.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If t_start or t_stop are outside the signal duration.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># checking start time and transforming to start index</span>
         <span class="k">if</span> <span class="n">t_start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -272,73 +307,76 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Signal duration</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Signal duration.</span>
 
-<span class="sd">        (:attr:`size` * :attr:`sampling_period`)</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        Computed as size * sampling_period.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        quantities.Quantity</span>
+<span class="sd">            Duration of the signal.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">t_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Time when the signal ends.</span>
 
-
-
 <span class="sd">        Returns</span>
-
 <span class="sd">        -------</span>
-
-<span class="sd">        quantity</span>
-
+<span class="sd">        quantities.Quantity</span>
 <span class="sd">            t_start + duration.</span>
-
-<span class="sd">        &#39;&#39;&#39;</span>
-
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">times</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        The time points of each sample of the signal</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The time points of each sample of the signal.</span>
 
-<span class="sd">        (:attr:`t_start` + arange(:attr:`shape`)/:attr:`sampling_rate`)</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        Computed as t_start + arange(shape) / sampling_rate.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        quantities.Quantity</span>
+<span class="sd">            Array of time points for each sample.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">sampling_period</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Interval between two samples.</span>
 
-
-
 <span class="sd">        Returns</span>
-
 <span class="sd">        -------</span>
-
-<span class="sd">        quantity</span>
-
+<span class="sd">        quantities.Quantity</span>
 <span class="sd">            1 / sampling_rate.</span>
-
-<span class="sd">        &#39;&#39;&#39;</span>
-
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mf">1.</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span>
 
 <div class="viewcode-block" id="ImageSequence.annotate">
 <a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.ImageSequence.ImageSequence.annotate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">annotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">annotations</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Add annotations (non-standardized metadata) to a Neo object.</span>
+<span class="sd">        Add annotations (non-standardized metadata) to an ImageSequence object.</span>
 
-<span class="sd">        Example:</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        **annotations</span>
+<span class="sd">            Arbitrary keyword arguments to store as annotations.</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
 <span class="sd">        &gt;&gt;&gt; obj.annotate(key1=value0, key2=value1)</span>
 <span class="sd">        &gt;&gt;&gt; obj.key2</span>
-<span class="sd">        value2</span>
+<span class="sd">        value1</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">annotations</span><span class="p">)</span></div>
 
@@ -431,11 +469,30 @@
 <div class="viewcode-block" id="ImageSequence.duplicate_with_new_data">
 <a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.ImageSequence.ImageSequence.duplicate_with_new_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">duplicate_with_new_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a new signal with the same metadata but different data.</span>
-<span class="sd">        Required attributes of the signal are used.</span>
-<span class="sd">        Note: Array annotations can not be copied here because length of data can change</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+
+<span class="sd">        Required attributes of the signal are used. Note that array annotations</span>
+<span class="sd">        cannot be copied here because the length of data can change.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        signal : array-like</span>
+<span class="sd">            New signal data for the duplicated object.</span>
+<span class="sd">        units : quantities.Quantity, optional</span>
+<span class="sd">            Units for the new signal. If None, uses self.units.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ImageSequence</span>
+<span class="sd">            New ImageSequence with same metadata but new data.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Array annotations are not copied here because it is not ensured that the</span>
+<span class="sd">        same number of samples is used and they would possibly make no sense</span>
+<span class="sd">        when combined with another signal.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">units</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">units</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span>
         <span class="c1"># else:</span>

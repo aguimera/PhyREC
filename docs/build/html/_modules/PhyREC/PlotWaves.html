@@ -117,13 +117,18 @@
 <span class="sd">    matplotlib artists. For each property, it checks if it&#39;s a direct setter</span>
 <span class="sd">    on the object, and if not, recursively applies it to the appropriate sub-object.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        obj: A matplotlib artist object to update.</span>
-<span class="sd">        prop (dict): Nested dictionary of properties where keys are property names</span>
-<span class="sd">                    and values are either property values or dicts for nested updates.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    obj : matplotlib artist object</span>
+<span class="sd">        A matplotlib artist object to update.</span>
+<span class="sd">    prop : dict</span>
+<span class="sd">        Nested dictionary of properties where keys are property names</span>
+<span class="sd">        and values are either property values or dicts for nested updates.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        None: Modifies the object in-place.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Modifies the object in-place.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ains</span> <span class="o">=</span> <span class="n">ArtistInspector</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
     <span class="n">validp</span> <span class="o">=</span> <span class="n">ains</span><span class="o">.</span><span class="n">get_setters</span><span class="p">()</span>
@@ -156,13 +161,17 @@
 <span class="sd">        Ensures provided time bounds are valid and within the signal duration.</span>
 <span class="sd">        If a single time value is provided, generates a window starting at that time.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            Time (tuple or None): (start_time, stop_time) specification. Can be None</span>
-<span class="sd">                                 to use full signal range. Single-element sequences</span>
-<span class="sd">                                 are converted to windows of size sampling_period.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Time : tuple or None</span>
+<span class="sd">            (start_time, stop_time) specification. Can be None</span>
+<span class="sd">            to use full signal range. Single-element sequences</span>
+<span class="sd">            are converted to windows of size sampling_period.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            tuple: (Tstart, Tstop) - validated time window within signal bounds.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple</span>
+<span class="sd">            (Tstart, Tstop) - validated time window within signal bounds.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">Time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Signal</span><span class="o">.</span><span class="n">t_start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Signal</span><span class="o">.</span><span class="n">t_stop</span><span class="p">)</span>
@@ -192,13 +201,17 @@
 <span class="sd">        Retrieves the signal for the given time window and converts to the specified</span>
 <span class="sd">        units if provided. Updates the stored units to match the returned signal.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            Time (tuple or None): Time window (start_time, stop_time). See CheckTime().</span>
-<span class="sd">            Units (quantities.Quantity, optional): Target units for rescaling.</span>
-<span class="sd">                                                   Uses self.units if None.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Time : tuple or None</span>
+<span class="sd">            Time window (start_time, stop_time). See CheckTime().</span>
+<span class="sd">        Units : quantities.Quantity, optional</span>
+<span class="sd">            Target units for rescaling. Uses self.units if None.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            neo.AnalogSignal: Signal data for the time window in requested units.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        neo.AnalogSignal</span>
+<span class="sd">            Signal data for the time window in requested units.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">Units</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">_Units</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span>
@@ -221,11 +234,15 @@
 <span class="sd">        Applies nested property updates to the matplotlib axis object using</span>
 <span class="sd">        the UpdateTreeDictProp function for recursive property setting.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            AxKwargs (dict): Dictionary of axis properties to update, can be nested.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        AxKwargs : dict</span>
+<span class="sd">            Dictionary of axis properties to update, can be nested.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Modifies the axis in-place.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Modifies the axis in-place.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># pass</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">AxKwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">AxKwargs</span><span class="p">)</span>
@@ -372,7 +389,21 @@
 <div class="viewcode-block" id="SpecSlot.UpdateLineKwargs">
 <a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.PlotWaves.SpecSlot.UpdateLineKwargs">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">UpdateLineKwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">LineKwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update line drawing properties (currently not implemented).&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update line drawing properties.</span>
+
+<span class="sd">        Currently not implemented.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        LineKwargs : dict</span>
+<span class="sd">            Line style parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Not implemented.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
 
@@ -382,16 +413,26 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize a spectrogram visualization slot.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            Signal (neo.AnalogSignal): Signal to compute spectrogram from.</span>
-<span class="sd">            Units (quantities.Quantity, optional): Units for signal rescaling.</span>
-<span class="sd">            Position (int, optional): Subplot position for this slot.</span>
-<span class="sd">            imKwargs (dict, optional): Additional imshow() keyword arguments.</span>
-<span class="sd">            specKwargs (dict, optional): Spectrogram computation parameters.</span>
-<span class="sd">            AxKwargs (dict, optional): Additional axis property settings.</span>
-<span class="sd">            Ax (matplotlib.axes.Axes, optional): Axis to plot into. Creates new if None.</span>
-<span class="sd">            MaxPoints (int, optional): Maximum time points for spectrogram display (default: 10000).</span>
-<span class="sd">            AvgSpectKwargs (dict, optional): Parameters for averaged spectrogram computation.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Signal : neo.AnalogSignal</span>
+<span class="sd">            Signal to compute spectrogram from.</span>
+<span class="sd">        Units : quantities.Quantity, optional</span>
+<span class="sd">            Units for signal rescaling.</span>
+<span class="sd">        Position : int, optional</span>
+<span class="sd">            Subplot position for this slot.</span>
+<span class="sd">        imKwargs : dict, optional</span>
+<span class="sd">            Additional imshow() keyword arguments.</span>
+<span class="sd">        specKwargs : dict, optional</span>
+<span class="sd">            Spectrogram computation parameters.</span>
+<span class="sd">        AxKwargs : dict, optional</span>
+<span class="sd">            Additional axis property settings.</span>
+<span class="sd">        Ax : matplotlib.axes.Axes, optional</span>
+<span class="sd">            Axis to plot into. Creates new if None.</span>
+<span class="sd">        MaxPoints : int, optional</span>
+<span class="sd">            Maximum time points for spectrogram display (default: 10000).</span>
+<span class="sd">        AvgSpectKwargs : dict, optional</span>
+<span class="sd">            Parameters for averaged spectrogram computation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">MaxPoints</span> <span class="o">=</span> <span class="n">MaxPoints</span>
@@ -430,12 +471,17 @@
 <span class="sd">        spectrogram computation from raw signals or direct display of pre-computed</span>
 <span class="sd">        spectrograms with optional downsampling.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            Time (tuple or None): Time window to plot. See CheckTime() for details.</span>
-<span class="sd">            Units (quantities.Quantity, optional): Units for signal rescaling.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Time : tuple or None</span>
+<span class="sd">            Time window to plot. See CheckTime() for details.</span>
+<span class="sd">        Units : quantities.Quantity, optional</span>
+<span class="sd">            Units for signal rescaling.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Updates self.img and self.current_time attributes.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Updates self.img and self.current_time attributes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GetSignal</span><span class="p">(</span><span class="n">Time</span><span class="p">,</span> <span class="n">Units</span><span class="p">)</span>
 
@@ -469,14 +515,21 @@
 <span class="sd">        for each trial, and averages them to produce a single representative</span>
 <span class="sd">        spectrogram with optional normalization.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            TimeAvg (tuple): Time window relative to trigger events (before, after).</span>
-<span class="sd">            TimesEvent (array-like): Times of trigger events.</span>
-<span class="sd">            Units (quantities.Quantity, optional): Units for signal rescaling.</span>
-<span class="sd">            **Kwargs: Additional keyword arguments passed to averaging function.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        TimeAvg : tuple</span>
+<span class="sd">            Time window relative to trigger events (before, after).</span>
+<span class="sd">        TimesEvent : array-like</span>
+<span class="sd">            Times of trigger events.</span>
+<span class="sd">        Units : quantities.Quantity, optional</span>
+<span class="sd">            Units for signal rescaling.</span>
+<span class="sd">        **Kwargs</span>
+<span class="sd">            Additional keyword arguments passed to averaging function.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            neo.AnalogSignal: The averaged spectrogram data.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        neo.AnalogSignal</span>
+<span class="sd">            The averaged spectrogram data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">sig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GetSignal</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">Units</span><span class="p">)</span>
@@ -527,11 +580,15 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update spike line drawing properties.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            LineKwargs (dict): Line style parameters (color, linestyle, linewidth, etc.).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        LineKwargs : dict</span>
+<span class="sd">            Line style parameters (color, linestyle, linewidth, etc.).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Modifies the plotted lines in-place.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Modifies the plotted lines in-place.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">LineKwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">LineKwargs</span><span class="p">)</span>
         <span class="n">UpdateTreeDictProp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Line</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">LineKwargs</span><span class="p">)</span></div>
@@ -543,13 +600,20 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize a spike train visualization slot.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            Signal (neo.SpikeTrain): Spike times to visualize.</span>
-<span class="sd">            Units (str, optional): Units for spike time display (default: &#39;s&#39;).</span>
-<span class="sd">            Position (int, optional): Subplot position for this slot.</span>
-<span class="sd">            Ax (matplotlib.axes.Axes, optional): Axis to plot into. Creates new if None.</span>
-<span class="sd">            AxKwargs (dict, optional): Additional axis property settings.</span>
-<span class="sd">            **LineKwargs: Additional vertical line style keyword arguments.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Signal : neo.SpikeTrain</span>
+<span class="sd">            Spike times to visualize.</span>
+<span class="sd">        Units : str, optional</span>
+<span class="sd">            Units for spike time display (default: &#39;s&#39;).</span>
+<span class="sd">        Position : int, optional</span>
+<span class="sd">            Subplot position for this slot.</span>
+<span class="sd">        Ax : matplotlib.axes.Axes, optional</span>
+<span class="sd">            Axis to plot into. Creates new if None.</span>
+<span class="sd">        AxKwargs : dict, optional</span>
+<span class="sd">            Additional axis property settings.</span>
+<span class="sd">        **LineKwargs</span>
+<span class="sd">            Additional vertical line style keyword arguments.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">LineKwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DefLineKwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -577,12 +641,17 @@
 <span class="sd">        Displays spike times as vertical lines spanning the current y-axis limits,</span>
 <span class="sd">        allowing visualization of when spikes occurred in relation to other signals.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            Time (tuple or None): Time window to plot. See CheckTime() for details.</span>
-<span class="sd">            Units (quantities.Quantity, optional): Units for spike time display.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Time : tuple or None</span>
+<span class="sd">            Time window to plot. See CheckTime() for details.</span>
+<span class="sd">        Units : quantities.Quantity, optional</span>
+<span class="sd">            Units for spike time display.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Updates self.Lines attribute.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Updates self.Lines attribute.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Fig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
@@ -638,11 +707,15 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update waveform line drawing properties.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            LineKwargs (dict): Line style parameters (color, linestyle, linewidth, etc.).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        LineKwargs : dict</span>
+<span class="sd">            Line style parameters (color, linestyle, linewidth, etc.).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Modifies the plotted line in-place.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Modifies the plotted line in-place.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">LineKwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">LineKwargs</span><span class="p">)</span>
         <span class="n">UpdateTreeDictProp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Line</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">LineKwargs</span><span class="p">)</span></div>
@@ -655,18 +728,28 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize a time-series waveform visualization slot.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            Signal (neo.AnalogSignal): Continuous signal to plot.</span>
-<span class="sd">            Units (quantities.Quantity, optional): Units for signal scaling.</span>
-<span class="sd">            UnitsInLabel (bool, optional): If True, include units in plot label (default: False).</span>
-<span class="sd">            Position (int, optional): Subplot position for this slot.</span>
-<span class="sd">            Ax (matplotlib.axes.Axes, optional): Axis to plot into. Creates new if None.</span>
-<span class="sd">            AxKwargs (dict, optional): Additional axis property settings.</span>
-<span class="sd">            TrialProcessChain (list, optional): Processing functions to apply to trials</span>
-<span class="sd">                                               during averaged waveform calculation.</span>
-<span class="sd">            DownSampling (bool, optional): Enable automatic downsampling (default: True).</span>
-<span class="sd">            Sampler (object, optional): Custom downsampler instance. Uses MinMaxLTTBDownsampler if None.</span>
-<span class="sd">            **LineKwargs: Additional line style keyword arguments.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Signal : neo.AnalogSignal</span>
+<span class="sd">            Continuous signal to plot.</span>
+<span class="sd">        Units : quantities.Quantity, optional</span>
+<span class="sd">            Units for signal scaling.</span>
+<span class="sd">        UnitsInLabel : bool, optional</span>
+<span class="sd">            If True, include units in plot label (default: False).</span>
+<span class="sd">        Position : int, optional</span>
+<span class="sd">            Subplot position for this slot.</span>
+<span class="sd">        Ax : matplotlib.axes.Axes, optional</span>
+<span class="sd">            Axis to plot into. Creates new if None.</span>
+<span class="sd">        AxKwargs : dict, optional</span>
+<span class="sd">            Additional axis property settings.</span>
+<span class="sd">        TrialProcessChain : list, optional</span>
+<span class="sd">            Processing functions to apply to trials during averaged waveform calculation.</span>
+<span class="sd">        DownSampling : bool, optional</span>
+<span class="sd">            Enable automatic downsampling (default: True).</span>
+<span class="sd">        Sampler : object, optional</span>
+<span class="sd">            Custom downsampler instance. Uses MinMaxLTTBDownsampler if None.</span>
+<span class="sd">        **LineKwargs</span>
+<span class="sd">            Additional line style keyword arguments.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">DownSampling</span> <span class="o">=</span> <span class="n">DownSampling</span>
@@ -715,12 +798,17 @@
 <span class="sd">        Renders the signal with automatic downsampling if needed, formats labels</span>
 <span class="sd">        with units if requested, and updates axis limits to match the signal window.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            Time (tuple or None): Time window to plot. See CheckTime() for details.</span>
-<span class="sd">            Units (quantities.Quantity, optional): Units for signal rescaling.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Time : tuple or None</span>
+<span class="sd">            Time window to plot. See CheckTime() for details.</span>
+<span class="sd">        Units : quantities.Quantity, optional</span>
+<span class="sd">            Units for signal rescaling.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Updates self.Lines, self.current_time, and axis properties.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Updates self.Lines, self.current_time, and axis properties.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Fig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
@@ -745,11 +833,15 @@
 <span class="sd">        large datasets using the configured sampler. Updates current_time and</span>
 <span class="sd">        axis limits to match the signal window.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            sig (neo.AnalogSignal): Signal data to plot.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sig : neo.AnalogSignal</span>
+<span class="sd">            Signal data to plot.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Updates self.Lines, self.current_time, and axis limits.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Updates self.Lines, self.current_time, and axis limits.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">sig</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">MaxPlotPoints</span><span class="p">:</span>
             <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DownSampler</span><span class="o">.</span><span class="n">downsample</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">sig</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">n_out</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MaxPlotPoints</span><span class="p">)</span>
@@ -782,21 +874,33 @@
 <span class="sd">        standard deviation as filled regions. Supports preprocessing of individual</span>
 <span class="sd">        trials before averaging through a processing chain.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            TimeAvg (tuple): Time window relative to trigger events (before, after).</span>
-<span class="sd">            TimesEvent (array-like): Times of trigger events.</span>
-<span class="sd">            Units (quantities.Quantity, optional): Units for signal rescaling.</span>
-<span class="sd">            PlotMean (bool, optional): Plot the averaged waveform (default: True).</span>
-<span class="sd">            PlotStd (bool, optional): Show standard deviation as shaded region (default: False).</span>
-<span class="sd">            PlotTrials (bool, optional): Overlay individual trial traces (default: False).</span>
-<span class="sd">            TrialLineKwargs (dict, optional): Line style for trial plotting.</span>
-<span class="sd">            StdAlpha (float, optional): Transparency of std dev region (default: 0.2).</span>
-<span class="sd">            TrialProcessChain (list, optional): Processing functions for trials</span>
-<span class="sd">                                               before averaging.</span>
-<span class="sd">            **kwargs: Additional keyword arguments.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        TimeAvg : tuple</span>
+<span class="sd">            Time window relative to trigger events (before, after).</span>
+<span class="sd">        TimesEvent : array-like</span>
+<span class="sd">            Times of trigger events.</span>
+<span class="sd">        Units : quantities.Quantity, optional</span>
+<span class="sd">            Units for signal rescaling.</span>
+<span class="sd">        PlotMean : bool, optional</span>
+<span class="sd">            Plot the averaged waveform (default: True).</span>
+<span class="sd">        PlotStd : bool, optional</span>
+<span class="sd">            Show standard deviation as shaded region (default: False).</span>
+<span class="sd">        PlotTrials : bool, optional</span>
+<span class="sd">            Overlay individual trial traces (default: False).</span>
+<span class="sd">        TrialLineKwargs : dict, optional</span>
+<span class="sd">            Line style for trial plotting.</span>
+<span class="sd">        StdAlpha : float, optional</span>
+<span class="sd">            Transparency of std dev region (default: 0.2).</span>
+<span class="sd">        TrialProcessChain : list, optional</span>
+<span class="sd">            Processing functions for trials before averaging.</span>
+<span class="sd">        **kwargs</span>
+<span class="sd">            Additional keyword arguments.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            neo.AnalogSignal: The averaged waveform with std annotation.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        neo.AnalogSignal</span>
+<span class="sd">            The averaged waveform with std annotation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">TrialLineKwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -861,12 +965,18 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize a 2D image data visualization slot.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            Signal: 2D/3D array-like data where first dimension is time/frames.</span>
-<span class="sd">            Ax (matplotlib.axes.Axes, optional): Axis to plot into.</span>
-<span class="sd">            AxKwargs (dict, optional): Additional axis property settings.</span>
-<span class="sd">            Units (quantities.Quantity, optional): Units for data scaling.</span>
-<span class="sd">            imKwargs (dict, optional): Additional imshow() keyword arguments.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Signal : array-like</span>
+<span class="sd">            2D/3D array-like data where first dimension is time/frames.</span>
+<span class="sd">        Ax : matplotlib.axes.Axes, optional</span>
+<span class="sd">            Axis to plot into.</span>
+<span class="sd">        AxKwargs : dict, optional</span>
+<span class="sd">            Additional axis property settings.</span>
+<span class="sd">        Units : quantities.Quantity, optional</span>
+<span class="sd">            Units for data scaling.</span>
+<span class="sd">        imKwargs : dict, optional</span>
+<span class="sd">            Additional imshow() keyword arguments.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Signal</span> <span class="o">=</span> <span class="n">Signal</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ax</span> <span class="o">=</span> <span class="n">Ax</span>
@@ -893,12 +1003,17 @@
 <span class="sd">        Updates the displayed image with data from the specified time window,</span>
 <span class="sd">        refreshes the title with frame information, and triggers canvas redraw.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            Time (tuple or None): Time window to plot. See CheckTime() for details.</span>
-<span class="sd">            Units (quantities.Quantity, optional): Units for data rescaling.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Time : tuple or None</span>
+<span class="sd">            Time window to plot. See CheckTime() for details.</span>
+<span class="sd">        Units : quantities.Quantity, optional</span>
+<span class="sd">            Units for data rescaling.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Updates self.Img and redraws the canvas.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Updates self.Img and redraws the canvas.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GetSignal</span><span class="p">(</span><span class="n">Time</span><span class="p">,</span> <span class="n">Units</span><span class="p">)</span>
 
@@ -912,7 +1027,19 @@
 <div class="viewcode-block" id="ImgSlot.UpdateAxKwargs">
 <a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.PlotWaves.ImgSlot.UpdateAxKwargs">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">UpdateAxKwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">AxKwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update axis properties (not implemented for ImgSlot).&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update axis properties (not implemented for ImgSlot).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        AxKwargs : dict</span>
+<span class="sd">            Axis property parameters (unused).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Method not implemented for this slot type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 </div>
 
@@ -1033,11 +1160,15 @@
 <span class="sd">        Applies zero-baseline correction to all signals marked with &#39;LiveZero&#39;</span>
 <span class="sd">        annotation using the mean value over the start time window.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            val: Event value (unused, callback parameter).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        val</span>
+<span class="sd">            Event value (unused, callback parameter).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Modifies signals in-place and triggers visualization update.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Modifies signals in-place and triggers visualization update.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">Twind</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sTstart</span><span class="o">.</span><span class="n">val</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">s</span><span class="p">,</span>
                  <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sTstart</span><span class="o">.</span><span class="n">val</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
@@ -1059,11 +1190,15 @@
 <span class="sd">        Toggles animation mode where map visualizations cycle through a time</span>
 <span class="sd">        window in discrete steps, with optional time indicator lines on other axes.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            val: Event value (unused, callback parameter).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        val</span>
+<span class="sd">            Event value (unused, callback parameter).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Creates or stops animation timer and updates button label.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Creates or stops animation timer and updates button label.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">TimerMap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bStartMapAni</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;Annimate Maps START&#39;</span><span class="p">)</span>
@@ -1110,8 +1245,10 @@
 <span class="sd">        time indicator lines on synchronized axes. Loops back to start when</span>
 <span class="sd">        the end of the time window is reached.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Updates map displays and time lines.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Updates map displays and time lines.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
         <span class="c1"># print(t-self.OldTime)</span>
@@ -1141,11 +1278,15 @@
 <span class="sd">        Toggles automatic scrolling mode where the display continuously advances</span>
 <span class="sd">        through the signal, useful for scanning through large datasets.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            val: Event value (unused, callback parameter).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        val</span>
+<span class="sd">            Event value (unused, callback parameter).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Creates or stops animation timer and updates button label.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Creates or stops animation timer and updates button label.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Timer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bStart</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;Start&#39;</span><span class="p">)</span>
@@ -1177,8 +1318,10 @@
 <span class="sd">        Called by the animation timer to update the display window position</span>
 <span class="sd">        during continuous animation playback.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Updates time slider positions.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Updates time slider positions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sTstart</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sTstart</span><span class="o">.</span><span class="n">val</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sTshow</span><span class="o">.</span><span class="n">val</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span></div>
 
@@ -1192,11 +1335,15 @@
 <span class="sd">        Called when time sliders are adjusted to update the displayed time window.</span>
 <span class="sd">        Refreshes all plot slots if refresh is enabled.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            val: Event value (unused, callback parameter).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        val</span>
+<span class="sd">            Event value (unused, callback parameter).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Triggers visualization update.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Triggers visualization update.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">twind</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sTstart</span><span class="o">.</span><span class="n">val</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">s</span><span class="p">,</span>
                  <span class="bp">self</span><span class="o">.</span><span class="n">sTstart</span><span class="o">.</span><span class="n">val</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">s</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sTshow</span><span class="o">.</span><span class="n">val</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
@@ -1214,11 +1361,15 @@
 <span class="sd">        Updates all plot slots with data from the given time window and refreshes</span>
 <span class="sd">        the matplotlib canvases.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            twind (tuple): Time window (start_time, stop_time).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        twind : tuple</span>
+<span class="sd">            Time window (start_time, stop_time).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Redraws all figures.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Redraws all figures.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pltSL</span><span class="o">.</span><span class="n">PlotChannels</span><span class="p">(</span><span class="n">twind</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pltSLFigs</span><span class="p">:</span>
@@ -1234,11 +1385,15 @@
 <span class="sd">        Validates the entered start time, ensures it doesn&#39;t exceed stop time,</span>
 <span class="sd">        and updates the time sliders accordingly.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            text (str): Text value entered in start time box.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        text : str</span>
+<span class="sd">            Text value entered in start time box.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Updates time sliders and internal state.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Updates time sliders and internal state.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
@@ -1266,11 +1421,15 @@
 <span class="sd">        Validates the entered stop time, ensures it&#39;s greater than start time,</span>
 <span class="sd">        and updates the time window sliders accordingly.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            text (str): Text value entered in stop time box.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        text : str</span>
+<span class="sd">            Text value entered in stop time box.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Updates time sliders and internal state.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Updates time sliders and internal state.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
@@ -1300,11 +1459,15 @@
 <span class="sd">        Updates text boxes and sliders to reflect a specific time window,</span>
 <span class="sd">        with refresh disabled during updates to avoid multiple redraws.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            twind (tuple): Time window (start_time, stop_time).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        twind : tuple</span>
+<span class="sd">            Time window (start_time, stop_time).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Updates control positions.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Updates control positions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Refresh</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">TextStop</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">twind</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
@@ -1373,11 +1536,15 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update figure-level properties.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            FigKwargs (dict): Figure property updates to apply.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        FigKwargs : dict</span>
+<span class="sd">            Figure property updates to apply.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Modifies self.Fig in-place.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Modifies self.Fig in-place.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">FigKwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">FigKwargs</span><span class="p">)</span>
         <span class="n">UpdateTreeDictProp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Fig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">FigKwargs</span><span class="p">)</span></div>
@@ -1390,8 +1557,10 @@
 <span class="sd">        Creates a subplot layout based on slot positions and assigns axes</span>
 <span class="sd">        to each slot. Handles both single and multiple-row layouts.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Populates self.Fig, self.Axs, and self.CAxs.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Populates self.Fig, self.Axs, and self.CAxs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">Pos</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1429,18 +1598,26 @@
 <span class="sd">        Sets up figure and axes layout, applies styling, enables optional</span>
 <span class="sd">        interactive controls, and configures signal visualization slots.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            Slots (list): List of slot objects (WaveSlot, SpecSlot, etc.).</span>
-<span class="sd">            Fig (matplotlib.figure.Figure, optional): Existing figure to use.</span>
-<span class="sd">                                                      Creates new if None.</span>
-<span class="sd">            FigKwargs (dict, optional): Figure-level property overrides.</span>
-<span class="sd">            RcGeneralParams (dict, optional): Matplotlib rc parameter overrides.</span>
-<span class="sd">            AxKwargs (dict, optional): Common axis property updates for all slots.</span>
-<span class="sd">            TimeAxis (int or iterable, optional): Which subplot(s) show the time axis</span>
-<span class="sd">                                                  (default: -1, last subplot).</span>
-<span class="sd">            ScaleBarAx (int, optional): Subplot index for scale bar overlay.</span>
-<span class="sd">            LiveControl (bool, optional): Enable interactive control panel (default: False).</span>
-<span class="sd">            AxsAnimationLines (list, optional): Axes for animation time indicator lines.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Slots : list</span>
+<span class="sd">            List of slot objects (WaveSlot, SpecSlot, etc.).</span>
+<span class="sd">        Fig : matplotlib.figure.Figure, optional</span>
+<span class="sd">            Existing figure to use. Creates new if None.</span>
+<span class="sd">        FigKwargs : dict, optional</span>
+<span class="sd">            Figure-level property overrides.</span>
+<span class="sd">        RcGeneralParams : dict, optional</span>
+<span class="sd">            Matplotlib rc parameter overrides.</span>
+<span class="sd">        AxKwargs : dict, optional</span>
+<span class="sd">            Common axis property updates for all slots.</span>
+<span class="sd">        TimeAxis : int or iterable, optional</span>
+<span class="sd">            Which subplot(s) show the time axis (default: -1, last subplot).</span>
+<span class="sd">        ScaleBarAx : int, optional</span>
+<span class="sd">            Subplot index for scale bar overlay.</span>
+<span class="sd">        LiveControl : bool, optional</span>
+<span class="sd">            Enable interactive control panel (default: False).</span>
+<span class="sd">        AxsAnimationLines : list, optional</span>
+<span class="sd">            Axes for animation time indicator lines.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">RcGeneralParams</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1493,8 +1670,10 @@
 <span class="sd">        Builds a dictionary associating each subplot axis with all slots</span>
 <span class="sd">        that share that axis, useful for batch operations on related slots.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Populates self.SlotsInAxs dictionary.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Populates self.SlotsInAxs dictionary.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">SlotsInAxs</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Axs</span><span class="p">:</span>
@@ -1514,8 +1693,10 @@
 <span class="sd">        Clears previous plots to prepare for new visualization, useful before</span>
 <span class="sd">        updating displays with new time windows or data.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Removes all line objects from all axes.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Removes all line objects from all axes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">sl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Slots</span><span class="p">:</span>
             <span class="k">while</span> <span class="n">sl</span><span class="o">.</span><span class="n">Ax</span><span class="o">.</span><span class="n">lines</span><span class="p">:</span>
@@ -1532,8 +1713,10 @@
 <span class="sd">        axes. Scale bar unit is automatically derived from signal units if not</span>
 <span class="sd">        explicitly specified.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Modifies figure in-place.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Modifies figure in-place.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ScaleBarAx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1553,11 +1736,15 @@
 <span class="sd">        Updates legend style settings and applies them to all axes, displaying</span>
 <span class="sd">        labels for all plotted signals.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            **LegendKwargs: Legend configuration parameters (fontsize, ncol, loc, etc.).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        **LegendKwargs</span>
+<span class="sd">            Legend configuration parameters (fontsize, ncol, loc, etc.).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Adds legends to all axes.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Adds legends to all axes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">LegendKwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">LegendKwargs</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">Ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Axs</span><span class="p">:</span>
@@ -1573,13 +1760,19 @@
 <span class="sd">        Updates all slot visualizations with data from the given time window,</span>
 <span class="sd">        refreshes image colorbars, and updates the internal time tracking.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            Time (tuple or None): Time window to plot. See CheckTime() for details.</span>
-<span class="sd">            Units (quantities.Quantity, optional): Units for signal rescaling.</span>
-<span class="sd">            FormatFigure (bool, optional): Apply figure formatting (default: True).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Time : tuple or None</span>
+<span class="sd">            Time window to plot. See CheckTime() for details.</span>
+<span class="sd">        Units : quantities.Quantity, optional</span>
+<span class="sd">            Units for signal rescaling.</span>
+<span class="sd">        FormatFigure : bool, optional</span>
+<span class="sd">            Apply figure formatting (default: True).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Updates all slot visualizations and refreshes canvases.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Updates all slot visualizations and refreshes canvases.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ClearAxes</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;plot channels&#39;</span><span class="p">)</span>
@@ -1612,19 +1805,27 @@
 <span class="sd">        specified times across all axes, with optional text labels at the top</span>
 <span class="sd">        or bottom of a selected axis.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            Times (array-like): Times of events to mark.</span>
-<span class="sd">            Labels (array-like, optional): Text labels for events.</span>
-<span class="sd">            lAx (int, optional): Axis index for placing text labels (default: 0).</span>
-<span class="sd">            fontsize (str, optional): Font size for text labels (default: &#39;xx-small&#39;).</span>
-<span class="sd">            LabPosition (str, optional): Vertical position of labels: &#39;top&#39; or &#39;bottom&#39;</span>
-<span class="sd">                                        (default: &#39;top&#39;).</span>
-<span class="sd">            duration (quantities.Quantity, optional): Event duration for shading regions.</span>
-<span class="sd">                                                      If None, draws vertical lines.</span>
-<span class="sd">            **kwargs: Additional matplotlib vlines/vspan keyword arguments.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Times : array-like</span>
+<span class="sd">            Times of events to mark.</span>
+<span class="sd">        Labels : array-like, optional</span>
+<span class="sd">            Text labels for events.</span>
+<span class="sd">        lAx : int, optional</span>
+<span class="sd">            Axis index for placing text labels (default: 0).</span>
+<span class="sd">        fontsize : str, optional</span>
+<span class="sd">            Font size for text labels (default: &#39;xx-small&#39;).</span>
+<span class="sd">        LabPosition : str, optional</span>
+<span class="sd">            Vertical position of labels: &#39;top&#39; or &#39;bottom&#39; (default: &#39;top&#39;).</span>
+<span class="sd">        duration : quantities.Quantity, optional</span>
+<span class="sd">            Event duration for shading regions. If None, draws vertical lines.</span>
+<span class="sd">        **kwargs</span>
+<span class="sd">            Additional matplotlib vlines/vspan keyword arguments.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Adds event markers and labels to plot.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Adds event markers and labels to plot.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">xlim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
@@ -1675,15 +1876,23 @@
 <span class="sd">        and standard deviations, and displays the results. Supports visualization</span>
 <span class="sd">        of event-locked responses across all signal slots.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            TimeAvg (tuple): Time window relative to events (before, after).</span>
-<span class="sd">            TimesEvent (array-like): Times of trigger events.</span>
-<span class="sd">            Units (quantities.Quantity, optional): Units for signal rescaling.</span>
-<span class="sd">            ClearAxes (bool, optional): Clear previous plots before drawing (default: True).</span>
-<span class="sd">            **Avgkwargs: Additional averaging parameters (PlotMean, PlotStd, PlotTrials, etc.).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        TimeAvg : tuple</span>
+<span class="sd">            Time window relative to events (before, after).</span>
+<span class="sd">        TimesEvent : array-like</span>
+<span class="sd">            Times of trigger events.</span>
+<span class="sd">        Units : quantities.Quantity, optional</span>
+<span class="sd">            Units for signal rescaling.</span>
+<span class="sd">        ClearAxes : bool, optional</span>
+<span class="sd">            Clear previous plots before drawing (default: True).</span>
+<span class="sd">        **Avgkwargs</span>
+<span class="sd">            Additional averaging parameters (PlotMean, PlotStd, PlotTrials, etc.).</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            list: Averaged signal objects, one per slot.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            Averaged signal objects, one per slot.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">ClearAxes</span><span class="p">:</span>

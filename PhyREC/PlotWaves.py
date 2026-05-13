@@ -44,13 +44,18 @@ def UpdateTreeDictProp(obj, prop):
     matplotlib artists. For each property, it checks if it's a direct setter
     on the object, and if not, recursively applies it to the appropriate sub-object.
 
-    Args:
-        obj: A matplotlib artist object to update.
-        prop (dict): Nested dictionary of properties where keys are property names
-                    and values are either property values or dicts for nested updates.
+    Parameters
+    ----------
+    obj : matplotlib artist object
+        A matplotlib artist object to update.
+    prop : dict
+        Nested dictionary of properties where keys are property names
+        and values are either property values or dicts for nested updates.
 
-    Returns:
-        None: Modifies the object in-place.
+    Returns
+    -------
+    None
+        Modifies the object in-place.
     """
     ains = ArtistInspector(obj)
     validp = ains.get_setters()
@@ -78,13 +83,17 @@ class SlotBase():
         Ensures provided time bounds are valid and within the signal duration.
         If a single time value is provided, generates a window starting at that time.
 
-        Args:
-            Time (tuple or None): (start_time, stop_time) specification. Can be None
-                                 to use full signal range. Single-element sequences
-                                 are converted to windows of size sampling_period.
+        Parameters
+        ----------
+        Time : tuple or None
+            (start_time, stop_time) specification. Can be None
+            to use full signal range. Single-element sequences
+            are converted to windows of size sampling_period.
 
-        Returns:
-            tuple: (Tstart, Tstop) - validated time window within signal bounds.
+        Returns
+        -------
+        tuple
+            (Tstart, Tstop) - validated time window within signal bounds.
         """
         if Time is None:
             return (self.Signal.t_start, self.Signal.t_stop)
@@ -111,13 +120,17 @@ class SlotBase():
         Retrieves the signal for the given time window and converts to the specified
         units if provided. Updates the stored units to match the returned signal.
 
-        Args:
-            Time (tuple or None): Time window (start_time, stop_time). See CheckTime().
-            Units (quantities.Quantity, optional): Target units for rescaling.
-                                                   Uses self.units if None.
+        Parameters
+        ----------
+        Time : tuple or None
+            Time window (start_time, stop_time). See CheckTime().
+        Units : quantities.Quantity, optional
+            Target units for rescaling. Uses self.units if None.
 
-        Returns:
-            neo.AnalogSignal: Signal data for the time window in requested units.
+        Returns
+        -------
+        neo.AnalogSignal
+            Signal data for the time window in requested units.
         """
         if Units is None:
             _Units = self.units
@@ -137,11 +150,15 @@ class SlotBase():
         Applies nested property updates to the matplotlib axis object using
         the UpdateTreeDictProp function for recursive property setting.
 
-        Args:
-            AxKwargs (dict): Dictionary of axis properties to update, can be nested.
+        Parameters
+        ----------
+        AxKwargs : dict
+            Dictionary of axis properties to update, can be nested.
 
-        Returns:
-            None: Modifies the axis in-place.
+        Returns
+        -------
+        None
+            Modifies the axis in-place.
         """
         # pass
         self.AxKwargs.update(AxKwargs)
@@ -282,7 +299,21 @@ class SpecSlot(SlotBase):
     }
 
     def UpdateLineKwargs(self, LineKwargs):
-        """Update line drawing properties (currently not implemented)."""
+        """
+        Update line drawing properties.
+
+        Currently not implemented.
+
+        Parameters
+        ----------
+        LineKwargs : dict
+            Line style parameters.
+
+        Returns
+        -------
+        None
+            Not implemented.
+        """
         pass
 
     def __init__(self, Signal, Units=None, Position=None, imKwargs=None,
@@ -291,16 +322,26 @@ class SpecSlot(SlotBase):
         """
         Initialize a spectrogram visualization slot.
 
-        Args:
-            Signal (neo.AnalogSignal): Signal to compute spectrogram from.
-            Units (quantities.Quantity, optional): Units for signal rescaling.
-            Position (int, optional): Subplot position for this slot.
-            imKwargs (dict, optional): Additional imshow() keyword arguments.
-            specKwargs (dict, optional): Spectrogram computation parameters.
-            AxKwargs (dict, optional): Additional axis property settings.
-            Ax (matplotlib.axes.Axes, optional): Axis to plot into. Creates new if None.
-            MaxPoints (int, optional): Maximum time points for spectrogram display (default: 10000).
-            AvgSpectKwargs (dict, optional): Parameters for averaged spectrogram computation.
+        Parameters
+        ----------
+        Signal : neo.AnalogSignal
+            Signal to compute spectrogram from.
+        Units : quantities.Quantity, optional
+            Units for signal rescaling.
+        Position : int, optional
+            Subplot position for this slot.
+        imKwargs : dict, optional
+            Additional imshow() keyword arguments.
+        specKwargs : dict, optional
+            Spectrogram computation parameters.
+        AxKwargs : dict, optional
+            Additional axis property settings.
+        Ax : matplotlib.axes.Axes, optional
+            Axis to plot into. Creates new if None.
+        MaxPoints : int, optional
+            Maximum time points for spectrogram display (default: 10000).
+        AvgSpectKwargs : dict, optional
+            Parameters for averaged spectrogram computation.
         """
 
         self.MaxPoints = MaxPoints
@@ -337,12 +378,17 @@ class SpecSlot(SlotBase):
         spectrogram computation from raw signals or direct display of pre-computed
         spectrograms with optional downsampling.
 
-        Args:
-            Time (tuple or None): Time window to plot. See CheckTime() for details.
-            Units (quantities.Quantity, optional): Units for signal rescaling.
+        Parameters
+        ----------
+        Time : tuple or None
+            Time window to plot. See CheckTime() for details.
+        Units : quantities.Quantity, optional
+            Units for signal rescaling.
 
-        Returns:
-            None: Updates self.img and self.current_time attributes.
+        Returns
+        -------
+        None
+            Updates self.img and self.current_time attributes.
         """
         sig = self.GetSignal(Time, Units)
 
@@ -373,14 +419,21 @@ class SpecSlot(SlotBase):
         for each trial, and averages them to produce a single representative
         spectrogram with optional normalization.
 
-        Args:
-            TimeAvg (tuple): Time window relative to trigger events (before, after).
-            TimesEvent (array-like): Times of trigger events.
-            Units (quantities.Quantity, optional): Units for signal rescaling.
-            **Kwargs: Additional keyword arguments passed to averaging function.
+        Parameters
+        ----------
+        TimeAvg : tuple
+            Time window relative to trigger events (before, after).
+        TimesEvent : array-like
+            Times of trigger events.
+        Units : quantities.Quantity, optional
+            Units for signal rescaling.
+        **Kwargs
+            Additional keyword arguments passed to averaging function.
 
-        Returns:
-            neo.AnalogSignal: The averaged spectrogram data.
+        Returns
+        -------
+        neo.AnalogSignal
+            The averaged spectrogram data.
         """
 
         sig = self.GetSignal((None, None), Units)
@@ -425,11 +478,15 @@ class SpikeSlot(SlotBase):
         """
         Update spike line drawing properties.
 
-        Args:
-            LineKwargs (dict): Line style parameters (color, linestyle, linewidth, etc.).
+        Parameters
+        ----------
+        LineKwargs : dict
+            Line style parameters (color, linestyle, linewidth, etc.).
 
-        Returns:
-            None: Modifies the plotted lines in-place.
+        Returns
+        -------
+        None
+            Modifies the plotted lines in-place.
         """
         self.LineKwargs.update(LineKwargs)
         UpdateTreeDictProp(self.Line, self.LineKwargs)
@@ -440,13 +497,20 @@ class SpikeSlot(SlotBase):
         """
         Initialize a spike train visualization slot.
 
-        Args:
-            Signal (neo.SpikeTrain): Spike times to visualize.
-            Units (str, optional): Units for spike time display (default: 's').
-            Position (int, optional): Subplot position for this slot.
-            Ax (matplotlib.axes.Axes, optional): Axis to plot into. Creates new if None.
-            AxKwargs (dict, optional): Additional axis property settings.
-            **LineKwargs: Additional vertical line style keyword arguments.
+        Parameters
+        ----------
+        Signal : neo.SpikeTrain
+            Spike times to visualize.
+        Units : str, optional
+            Units for spike time display (default: 's').
+        Position : int, optional
+            Subplot position for this slot.
+        Ax : matplotlib.axes.Axes, optional
+            Axis to plot into. Creates new if None.
+        AxKwargs : dict, optional
+            Additional axis property settings.
+        **LineKwargs
+            Additional vertical line style keyword arguments.
         """
 
         self.LineKwargs = self.DefLineKwargs.copy()
@@ -472,12 +536,17 @@ class SpikeSlot(SlotBase):
         Displays spike times as vertical lines spanning the current y-axis limits,
         allowing visualization of when spikes occurred in relation to other signals.
 
-        Args:
-            Time (tuple or None): Time window to plot. See CheckTime() for details.
-            Units (quantities.Quantity, optional): Units for spike time display.
+        Parameters
+        ----------
+        Time : tuple or None
+            Time window to plot. See CheckTime() for details.
+        Units : quantities.Quantity, optional
+            Units for spike time display.
 
-        Returns:
-            None: Updates self.Lines attribute.
+        Returns
+        -------
+        None
+            Updates self.Lines attribute.
         """
         if self.Ax is None:
             self.Fig, self.Ax = plt.subplots()
@@ -527,11 +596,15 @@ class WaveSlot(SlotBase):
         """
         Update waveform line drawing properties.
 
-        Args:
-            LineKwargs (dict): Line style parameters (color, linestyle, linewidth, etc.).
+        Parameters
+        ----------
+        LineKwargs : dict
+            Line style parameters (color, linestyle, linewidth, etc.).
 
-        Returns:
-            None: Modifies the plotted line in-place.
+        Returns
+        -------
+        None
+            Modifies the plotted line in-place.
         """
         self.LineKwargs.update(LineKwargs)
         UpdateTreeDictProp(self.Line, self.LineKwargs)
@@ -543,18 +616,28 @@ class WaveSlot(SlotBase):
         """
         Initialize a time-series waveform visualization slot.
 
-        Args:
-            Signal (neo.AnalogSignal): Continuous signal to plot.
-            Units (quantities.Quantity, optional): Units for signal scaling.
-            UnitsInLabel (bool, optional): If True, include units in plot label (default: False).
-            Position (int, optional): Subplot position for this slot.
-            Ax (matplotlib.axes.Axes, optional): Axis to plot into. Creates new if None.
-            AxKwargs (dict, optional): Additional axis property settings.
-            TrialProcessChain (list, optional): Processing functions to apply to trials
-                                               during averaged waveform calculation.
-            DownSampling (bool, optional): Enable automatic downsampling (default: True).
-            Sampler (object, optional): Custom downsampler instance. Uses MinMaxLTTBDownsampler if None.
-            **LineKwargs: Additional line style keyword arguments.
+        Parameters
+        ----------
+        Signal : neo.AnalogSignal
+            Continuous signal to plot.
+        Units : quantities.Quantity, optional
+            Units for signal scaling.
+        UnitsInLabel : bool, optional
+            If True, include units in plot label (default: False).
+        Position : int, optional
+            Subplot position for this slot.
+        Ax : matplotlib.axes.Axes, optional
+            Axis to plot into. Creates new if None.
+        AxKwargs : dict, optional
+            Additional axis property settings.
+        TrialProcessChain : list, optional
+            Processing functions to apply to trials during averaged waveform calculation.
+        DownSampling : bool, optional
+            Enable automatic downsampling (default: True).
+        Sampler : object, optional
+            Custom downsampler instance. Uses MinMaxLTTBDownsampler if None.
+        **LineKwargs
+            Additional line style keyword arguments.
         """
 
         self.DownSampling = DownSampling
@@ -601,12 +684,17 @@ class WaveSlot(SlotBase):
         Renders the signal with automatic downsampling if needed, formats labels
         with units if requested, and updates axis limits to match the signal window.
 
-        Args:
-            Time (tuple or None): Time window to plot. See CheckTime() for details.
-            Units (quantities.Quantity, optional): Units for signal rescaling.
+        Parameters
+        ----------
+        Time : tuple or None
+            Time window to plot. See CheckTime() for details.
+        Units : quantities.Quantity, optional
+            Units for signal rescaling.
 
-        Returns:
-            None: Updates self.Lines, self.current_time, and axis properties.
+        Returns
+        -------
+        None
+            Updates self.Lines, self.current_time, and axis properties.
         """
         if self.Ax is None:
             self.Fig, self.Ax = plt.subplots()
@@ -630,11 +718,15 @@ class WaveSlot(SlotBase):
         large datasets using the configured sampler. Updates current_time and
         axis limits to match the signal window.
 
-        Args:
-            sig (neo.AnalogSignal): Signal data to plot.
+        Parameters
+        ----------
+        sig : neo.AnalogSignal
+            Signal data to plot.
 
-        Returns:
-            None: Updates self.Lines, self.current_time, and axis limits.
+        Returns
+        -------
+        None
+            Updates self.Lines, self.current_time, and axis limits.
         """
         if sig.size > self.MaxPlotPoints:
             idx = self.DownSampler.downsample(np.asarray(sig)[:, 0], n_out=self.MaxPlotPoints)
@@ -665,21 +757,33 @@ class WaveSlot(SlotBase):
         standard deviation as filled regions. Supports preprocessing of individual
         trials before averaging through a processing chain.
 
-        Args:
-            TimeAvg (tuple): Time window relative to trigger events (before, after).
-            TimesEvent (array-like): Times of trigger events.
-            Units (quantities.Quantity, optional): Units for signal rescaling.
-            PlotMean (bool, optional): Plot the averaged waveform (default: True).
-            PlotStd (bool, optional): Show standard deviation as shaded region (default: False).
-            PlotTrials (bool, optional): Overlay individual trial traces (default: False).
-            TrialLineKwargs (dict, optional): Line style for trial plotting.
-            StdAlpha (float, optional): Transparency of std dev region (default: 0.2).
-            TrialProcessChain (list, optional): Processing functions for trials
-                                               before averaging.
-            **kwargs: Additional keyword arguments.
+        Parameters
+        ----------
+        TimeAvg : tuple
+            Time window relative to trigger events (before, after).
+        TimesEvent : array-like
+            Times of trigger events.
+        Units : quantities.Quantity, optional
+            Units for signal rescaling.
+        PlotMean : bool, optional
+            Plot the averaged waveform (default: True).
+        PlotStd : bool, optional
+            Show standard deviation as shaded region (default: False).
+        PlotTrials : bool, optional
+            Overlay individual trial traces (default: False).
+        TrialLineKwargs : dict, optional
+            Line style for trial plotting.
+        StdAlpha : float, optional
+            Transparency of std dev region (default: 0.2).
+        TrialProcessChain : list, optional
+            Processing functions for trials before averaging.
+        **kwargs
+            Additional keyword arguments.
 
-        Returns:
-            neo.AnalogSignal: The averaged waveform with std annotation.
+        Returns
+        -------
+        neo.AnalogSignal
+            The averaged waveform with std annotation.
         """
 
         if TrialLineKwargs is not None:
@@ -740,12 +844,18 @@ class ImgSlot(SlotBase):
         """
         Initialize a 2D image data visualization slot.
 
-        Args:
-            Signal: 2D/3D array-like data where first dimension is time/frames.
-            Ax (matplotlib.axes.Axes, optional): Axis to plot into.
-            AxKwargs (dict, optional): Additional axis property settings.
-            Units (quantities.Quantity, optional): Units for data scaling.
-            imKwargs (dict, optional): Additional imshow() keyword arguments.
+        Parameters
+        ----------
+        Signal : array-like
+            2D/3D array-like data where first dimension is time/frames.
+        Ax : matplotlib.axes.Axes, optional
+            Axis to plot into.
+        AxKwargs : dict, optional
+            Additional axis property settings.
+        Units : quantities.Quantity, optional
+            Units for data scaling.
+        imKwargs : dict, optional
+            Additional imshow() keyword arguments.
         """
         self.Signal = Signal
         self.Ax = Ax
@@ -770,12 +880,17 @@ class ImgSlot(SlotBase):
         Updates the displayed image with data from the specified time window,
         refreshes the title with frame information, and triggers canvas redraw.
 
-        Args:
-            Time (tuple or None): Time window to plot. See CheckTime() for details.
-            Units (quantities.Quantity, optional): Units for data rescaling.
+        Parameters
+        ----------
+        Time : tuple or None
+            Time window to plot. See CheckTime() for details.
+        Units : quantities.Quantity, optional
+            Units for data rescaling.
 
-        Returns:
-            None: Updates self.Img and redraws the canvas.
+        Returns
+        -------
+        None
+            Updates self.Img and redraws the canvas.
         """
         sig = self.GetSignal(Time, Units)
 
@@ -786,7 +901,19 @@ class ImgSlot(SlotBase):
         self.Ax.figure.canvas.draw()
 
     def UpdateAxKwargs(self, AxKwargs):
-        """Update axis properties (not implemented for ImgSlot)."""
+        """
+        Update axis properties (not implemented for ImgSlot).
+
+        Parameters
+        ----------
+        AxKwargs : dict
+            Axis property parameters (unused).
+
+        Returns
+        -------
+        None
+            Method not implemented for this slot type.
+        """
         pass
 
 
@@ -901,11 +1028,15 @@ class ControlFigure():
         Applies zero-baseline correction to all signals marked with 'LiveZero'
         annotation using the mean value over the start time window.
 
-        Args:
-            val: Event value (unused, callback parameter).
+        Parameters
+        ----------
+        val
+            Event value (unused, callback parameter).
 
-        Returns:
-            None: Modifies signals in-place and triggers visualization update.
+        Returns
+        -------
+        None
+            Modifies signals in-place and triggers visualization update.
         """
         Twind = (self.sTstart.val * pq.s,
                  (self.sTstart.val + 5) * pq.s)
@@ -924,11 +1055,15 @@ class ControlFigure():
         Toggles animation mode where map visualizations cycle through a time
         window in discrete steps, with optional time indicator lines on other axes.
 
-        Args:
-            val: Event value (unused, callback parameter).
+        Parameters
+        ----------
+        val
+            Event value (unused, callback parameter).
 
-        Returns:
-            None: Creates or stops animation timer and updates button label.
+        Returns
+        -------
+        None
+            Creates or stops animation timer and updates button label.
         """
         if self.TimerMap is not None:
             self.bStartMapAni.label.set_label('Annimate Maps START')
@@ -972,8 +1107,10 @@ class ControlFigure():
         time indicator lines on synchronized axes. Loops back to start when
         the end of the time window is reached.
 
-        Returns:
-            None: Updates map displays and time lines.
+        Returns
+        -------
+        None
+            Updates map displays and time lines.
         """
         t = datetime.datetime.now()
         # print(t-self.OldTime)
@@ -1000,11 +1137,15 @@ class ControlFigure():
         Toggles automatic scrolling mode where the display continuously advances
         through the signal, useful for scanning through large datasets.
 
-        Args:
-            val: Event value (unused, callback parameter).
+        Parameters
+        ----------
+        val
+            Event value (unused, callback parameter).
 
-        Returns:
-            None: Creates or stops animation timer and updates button label.
+        Returns
+        -------
+        None
+            Creates or stops animation timer and updates button label.
         """
         if self.Timer is not None:
             self.bStart.label.set_label('Start')
@@ -1033,8 +1174,10 @@ class ControlFigure():
         Called by the animation timer to update the display window position
         during continuous animation playback.
 
-        Returns:
-            None: Updates time slider positions.
+        Returns
+        -------
+        None
+            Updates time slider positions.
         """
         self.sTstart.set_val(self.sTstart.val + self.sTshow.val / 2)
 
@@ -1045,11 +1188,15 @@ class ControlFigure():
         Called when time sliders are adjusted to update the displayed time window.
         Refreshes all plot slots if refresh is enabled.
 
-        Args:
-            val: Event value (unused, callback parameter).
+        Parameters
+        ----------
+        val
+            Event value (unused, callback parameter).
 
-        Returns:
-            None: Triggers visualization update.
+        Returns
+        -------
+        None
+            Triggers visualization update.
         """
         twind = (self.sTstart.val * pq.s,
                  self.sTstart.val * pq.s + self.sTshow.val * pq.s)
@@ -1064,11 +1211,15 @@ class ControlFigure():
         Updates all plot slots with data from the given time window and refreshes
         the matplotlib canvases.
 
-        Args:
-            twind (tuple): Time window (start_time, stop_time).
+        Parameters
+        ----------
+        twind : tuple
+            Time window (start_time, stop_time).
 
-        Returns:
-            None: Redraws all figures.
+        Returns
+        -------
+        None
+            Redraws all figures.
         """
         self.pltSL.PlotChannels(twind)
         for f in self.pltSLFigs:
@@ -1081,11 +1232,15 @@ class ControlFigure():
         Validates the entered start time, ensures it doesn't exceed stop time,
         and updates the time sliders accordingly.
 
-        Args:
-            text (str): Text value entered in start time box.
+        Parameters
+        ----------
+        text : str
+            Text value entered in start time box.
 
-        Returns:
-            None: Updates time sliders and internal state.
+        Returns
+        -------
+        None
+            Updates time sliders and internal state.
         """
         try:
             val = float(text)
@@ -1110,11 +1265,15 @@ class ControlFigure():
         Validates the entered stop time, ensures it's greater than start time,
         and updates the time window sliders accordingly.
 
-        Args:
-            text (str): Text value entered in stop time box.
+        Parameters
+        ----------
+        text : str
+            Text value entered in stop time box.
 
-        Returns:
-            None: Updates time sliders and internal state.
+        Returns
+        -------
+        None
+            Updates time sliders and internal state.
         """
         try:
             val = float(text)
@@ -1141,11 +1300,15 @@ class ControlFigure():
         Updates text boxes and sliders to reflect a specific time window,
         with refresh disabled during updates to avoid multiple redraws.
 
-        Args:
-            twind (tuple): Time window (start_time, stop_time).
+        Parameters
+        ----------
+        twind : tuple
+            Time window (start_time, stop_time).
 
-        Returns:
-            None: Updates control positions.
+        Returns
+        -------
+        None
+            Updates control positions.
         """
         self.Refresh = False
         self.TextStop.set_val(str(np.array(twind[1])))
@@ -1208,11 +1371,15 @@ class PlotSlots():
         """
         Update figure-level properties.
 
-        Args:
-            FigKwargs (dict): Figure property updates to apply.
+        Parameters
+        ----------
+        FigKwargs : dict
+            Figure property updates to apply.
 
-        Returns:
-            None: Modifies self.Fig in-place.
+        Returns
+        -------
+        None
+            Modifies self.Fig in-place.
         """
         self.FigKwargs.update(FigKwargs)
         UpdateTreeDictProp(self.Fig, self.FigKwargs)
@@ -1224,8 +1391,10 @@ class PlotSlots():
         Creates a subplot layout based on slot positions and assigns axes
         to each slot. Handles both single and multiple-row layouts.
 
-        Returns:
-            None: Populates self.Fig, self.Axs, and self.CAxs.
+        Returns
+        -------
+        None
+            Populates self.Fig, self.Axs, and self.CAxs.
         """
 
         Pos = []
@@ -1263,18 +1432,26 @@ class PlotSlots():
         Sets up figure and axes layout, applies styling, enables optional
         interactive controls, and configures signal visualization slots.
 
-        Args:
-            Slots (list): List of slot objects (WaveSlot, SpecSlot, etc.).
-            Fig (matplotlib.figure.Figure, optional): Existing figure to use.
-                                                      Creates new if None.
-            FigKwargs (dict, optional): Figure-level property overrides.
-            RcGeneralParams (dict, optional): Matplotlib rc parameter overrides.
-            AxKwargs (dict, optional): Common axis property updates for all slots.
-            TimeAxis (int or iterable, optional): Which subplot(s) show the time axis
-                                                  (default: -1, last subplot).
-            ScaleBarAx (int, optional): Subplot index for scale bar overlay.
-            LiveControl (bool, optional): Enable interactive control panel (default: False).
-            AxsAnimationLines (list, optional): Axes for animation time indicator lines.
+        Parameters
+        ----------
+        Slots : list
+            List of slot objects (WaveSlot, SpecSlot, etc.).
+        Fig : matplotlib.figure.Figure, optional
+            Existing figure to use. Creates new if None.
+        FigKwargs : dict, optional
+            Figure-level property overrides.
+        RcGeneralParams : dict, optional
+            Matplotlib rc parameter overrides.
+        AxKwargs : dict, optional
+            Common axis property updates for all slots.
+        TimeAxis : int or iterable, optional
+            Which subplot(s) show the time axis (default: -1, last subplot).
+        ScaleBarAx : int, optional
+            Subplot index for scale bar overlay.
+        LiveControl : bool, optional
+            Enable interactive control panel (default: False).
+        AxsAnimationLines : list, optional
+            Axes for animation time indicator lines.
         """
 
         if RcGeneralParams is not None:
@@ -1325,8 +1502,10 @@ class PlotSlots():
         Builds a dictionary associating each subplot axis with all slots
         that share that axis, useful for batch operations on related slots.
 
-        Returns:
-            None: Populates self.SlotsInAxs dictionary.
+        Returns
+        -------
+        None
+            Populates self.SlotsInAxs dictionary.
         """
         self.SlotsInAxs = {}
         for ax in self.Axs:
@@ -1343,8 +1522,10 @@ class PlotSlots():
         Clears previous plots to prepare for new visualization, useful before
         updating displays with new time windows or data.
 
-        Returns:
-            None: Removes all line objects from all axes.
+        Returns
+        -------
+        None
+            Removes all line objects from all axes.
         """
         for sl in self.Slots:
             while sl.Ax.lines:
@@ -1358,8 +1539,10 @@ class PlotSlots():
         axes. Scale bar unit is automatically derived from signal units if not
         explicitly specified.
 
-        Returns:
-            None: Modifies figure in-place.
+        Returns
+        -------
+        None
+            Modifies figure in-place.
         """
 
         if self.ScaleBarAx is not None:
@@ -1376,11 +1559,15 @@ class PlotSlots():
         Updates legend style settings and applies them to all axes, displaying
         labels for all plotted signals.
 
-        Args:
-            **LegendKwargs: Legend configuration parameters (fontsize, ncol, loc, etc.).
+        Parameters
+        ----------
+        **LegendKwargs
+            Legend configuration parameters (fontsize, ncol, loc, etc.).
 
-        Returns:
-            None: Adds legends to all axes.
+        Returns
+        -------
+        None
+            Adds legends to all axes.
         """
         self.LegendKwargs.update(LegendKwargs)
         for Ax in self.Axs:
@@ -1393,13 +1580,19 @@ class PlotSlots():
         Updates all slot visualizations with data from the given time window,
         refreshes image colorbars, and updates the internal time tracking.
 
-        Args:
-            Time (tuple or None): Time window to plot. See CheckTime() for details.
-            Units (quantities.Quantity, optional): Units for signal rescaling.
-            FormatFigure (bool, optional): Apply figure formatting (default: True).
+        Parameters
+        ----------
+        Time : tuple or None
+            Time window to plot. See CheckTime() for details.
+        Units : quantities.Quantity, optional
+            Units for signal rescaling.
+        FormatFigure : bool, optional
+            Apply figure formatting (default: True).
 
-        Returns:
-            None: Updates all slot visualizations and refreshes canvases.
+        Returns
+        -------
+        None
+            Updates all slot visualizations and refreshes canvases.
         """
         self.ClearAxes()
         print('plot channels')
@@ -1429,19 +1622,27 @@ class PlotSlots():
         specified times across all axes, with optional text labels at the top
         or bottom of a selected axis.
 
-        Args:
-            Times (array-like): Times of events to mark.
-            Labels (array-like, optional): Text labels for events.
-            lAx (int, optional): Axis index for placing text labels (default: 0).
-            fontsize (str, optional): Font size for text labels (default: 'xx-small').
-            LabPosition (str, optional): Vertical position of labels: 'top' or 'bottom'
-                                        (default: 'top').
-            duration (quantities.Quantity, optional): Event duration for shading regions.
-                                                      If None, draws vertical lines.
-            **kwargs: Additional matplotlib vlines/vspan keyword arguments.
+        Parameters
+        ----------
+        Times : array-like
+            Times of events to mark.
+        Labels : array-like, optional
+            Text labels for events.
+        lAx : int, optional
+            Axis index for placing text labels (default: 0).
+        fontsize : str, optional
+            Font size for text labels (default: 'xx-small').
+        LabPosition : str, optional
+            Vertical position of labels: 'top' or 'bottom' (default: 'top').
+        duration : quantities.Quantity, optional
+            Event duration for shading regions. If None, draws vertical lines.
+        **kwargs
+            Additional matplotlib vlines/vspan keyword arguments.
 
-        Returns:
-            None: Adds event markers and labels to plot.
+        Returns
+        -------
+        None
+            Adds event markers and labels to plot.
         """
 
         xlim = self.Axs[0].get_xlim()
@@ -1489,15 +1690,23 @@ class PlotSlots():
         and standard deviations, and displays the results. Supports visualization
         of event-locked responses across all signal slots.
 
-        Args:
-            TimeAvg (tuple): Time window relative to events (before, after).
-            TimesEvent (array-like): Times of trigger events.
-            Units (quantities.Quantity, optional): Units for signal rescaling.
-            ClearAxes (bool, optional): Clear previous plots before drawing (default: True).
-            **Avgkwargs: Additional averaging parameters (PlotMean, PlotStd, PlotTrials, etc.).
+        Parameters
+        ----------
+        TimeAvg : tuple
+            Time window relative to events (before, after).
+        TimesEvent : array-like
+            Times of trigger events.
+        Units : quantities.Quantity, optional
+            Units for signal rescaling.
+        ClearAxes : bool, optional
+            Clear previous plots before drawing (default: True).
+        **Avgkwargs
+            Additional averaging parameters (PlotMean, PlotStd, PlotTrials, etc.).
 
-        Returns:
-            list: Averaged signal objects, one per slot.
+        Returns
+        -------
+        list
+            Averaged signal objects, one per slot.
         """
 
         if ClearAxes:

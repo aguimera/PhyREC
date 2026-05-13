@@ -85,14 +85,54 @@
 <div class="viewcode-block" id="DebugFilterPlot">
 <a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SupportFunctions.DebugFilterPlot">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DebugFilterPlot</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Debug visualization tool for filter frequency response.</span>
+
+<span class="sd">    Provides utilities to plot the magnitude and phase response of filter</span>
+<span class="sd">    designs to aid in filter development and debugging.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nFFT : int</span>
+<span class="sd">        FFT size for frequency response computation (default: 2**15).</span>
+<span class="sd">    Fig : matplotlib.figure.Figure or None</span>
+<span class="sd">        Matplotlib figure object, None until InitFigure is called.</span>
+<span class="sd">    AxM : matplotlib.axes.Axes</span>
+<span class="sd">        Magnitude response axes.</span>
+<span class="sd">    AxP : matplotlib.axes.Axes</span>
+<span class="sd">        Phase response axes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">nFFT</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">15</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the debug filter plot tool.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Fig</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="DebugFilterPlot.InitFigure">
 <a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SupportFunctions.DebugFilterPlot.InitFigure">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">InitFigure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create figure and axes for plotting filter response.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Creates self.Fig, self.AxM, and self.AxP.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Fig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">AxM</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">AxP</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">twinx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AxM</span><span class="p">)</span></div>
 
@@ -100,6 +140,21 @@
 <div class="viewcode-block" id="DebugFilterPlot.PlotResponse">
 <a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SupportFunctions.DebugFilterPlot.PlotResponse">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">PlotResponse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sos</span><span class="p">,</span> <span class="n">Fs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot the magnitude and phase response of a filter.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sos : array-like</span>
+<span class="sd">            Second-order sections representation of the filter.</span>
+<span class="sd">        Fs : float</span>
+<span class="sd">            Sampling frequency of the filter.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Plots magnitude and phase response on the figure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">InitFigure</span><span class="p">()</span>
 
@@ -118,14 +173,54 @@
 <div class="viewcode-block" id="ColorBarPlot">
 <a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SupportFunctions.ColorBarPlot">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ColorBarPlot</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Utility for generating and displaying colorbars for image plots.</span>
+
+<span class="sd">    Manages a collection of image objects and displays their colorbars</span>
+<span class="sd">    in a convenient grid layout.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ImgDicts : dict</span>
+<span class="sd">        Dictionary of image objects where key is the image name/id and value</span>
+<span class="sd">        is the image object from matplotlib.</span>
+<span class="sd">    Fig : matplotlib.figure.Figure or None</span>
+<span class="sd">        Matplotlib figure for colorbars, None until GenColorBars is called.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ImgDicts</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the colorbar plotter.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Fig</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="ColorBarPlot.GenColorBars">
 <a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.SupportFunctions.ColorBarPlot.GenColorBars">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">GenColorBars</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate colorbars for all images in ImgDicts.</span>
+
+<span class="sd">        Creates a new figure with one axis per image and displays</span>
+<span class="sd">        the colorbar for each.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Creates self.Fig with colorbars.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Fig</span><span class="p">,</span> <span class="n">Ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ImgDicts</span><span class="p">))</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="n">Ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -146,6 +241,50 @@
                  <span class="n">xlabelpad</span><span class="o">=-</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">ylabelpad</span><span class="o">=-</span><span class="mf">0.04</span><span class="p">,</span>
                  <span class="n">xunit</span><span class="o">=</span><span class="s1">&#39;sec&#39;</span><span class="p">,</span> <span class="n">yunit</span><span class="o">=</span><span class="s1">&#39;mV&#39;</span><span class="p">,</span> <span class="n">LineWidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">Color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
                  <span class="n">FontSize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draw a scale bar on the specified axes for indicating data magnitudes.</span>
+
+<span class="sd">    Adds a scale bar with optional labels to a matplotlib axes, useful for</span>
+<span class="sd">    publications and presentations to indicate the scale of plotted data.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Ax : matplotlib.axes.Axes</span>
+<span class="sd">        Axes object to draw the scale bar on.</span>
+<span class="sd">    Location : str, optional</span>
+<span class="sd">        Position of scale bar: &#39;Bottom Left&#39; (default), &#39;Bottom Rigth&#39;, &#39;Top Left&#39;, &#39;Top Rigth&#39;.</span>
+<span class="sd">    xsize : float or int, optional</span>
+<span class="sd">        Horizontal size of the scale bar. If None, defaults to 1/5 of axis width.</span>
+<span class="sd">    ysize : float or int, optional</span>
+<span class="sd">        Vertical size of the scale bar. If None, defaults to 1/5 of axis height.</span>
+<span class="sd">    xoff : float, optional</span>
+<span class="sd">        Horizontal offset from the specified location (default: 0.1).</span>
+<span class="sd">    yoff : float, optional</span>
+<span class="sd">        Vertical offset from the specified location (default: 0.1).</span>
+<span class="sd">    xlabelpad : float, optional</span>
+<span class="sd">        Padding for horizontal label relative to bar (default: -0.04).</span>
+<span class="sd">    ylabelpad : float, optional</span>
+<span class="sd">        Padding for vertical label relative to bar (default: -0.04).</span>
+<span class="sd">    xunit : str, optional</span>
+<span class="sd">        Unit label for horizontal scale (default: &#39;sec&#39;).</span>
+<span class="sd">    yunit : str, optional</span>
+<span class="sd">        Unit label for vertical scale (default: &#39;mV&#39;).</span>
+<span class="sd">    LineWidth : int, optional</span>
+<span class="sd">        Width of scale bar lines (default: 5).</span>
+<span class="sd">    Color : str, optional</span>
+<span class="sd">        Color of scale bar (default: &#39;k&#39; for black).</span>
+<span class="sd">    FontSize : int or str, optional</span>
+<span class="sd">        Font size for labels. If None, uses default.</span>
+<span class="sd">    ylabel : str, optional</span>
+<span class="sd">        Custom label for vertical scale. If None, &#39;ysize yunit&#39; is used.</span>
+<span class="sd">    xlabel : str, optional</span>
+<span class="sd">        Custom label for horizontal scale. If None, &#39;xsize xunit&#39; is used.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        Modifies the axes in-place by adding scale bar graphics and labels.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># calculate length of the bars</span>
     <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">Ax</span><span class="o">.</span><span class="n">axis</span><span class="p">()</span>

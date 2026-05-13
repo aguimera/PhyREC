@@ -20,12 +20,17 @@ def nFFTFMin(Fs, Fmin):
 
     This function computes the smallest power-of-two FFT size that ensures the frequency resolution is sufficient for the specified minimum frequency.
 
-    Args:
-        Fs (float or quantity): Sampling frequency.
-        Fmin (float or quantity): Minimum frequency of interest.
+    Parameters
+    ----------
+    Fs : float or quantity
+        Sampling frequency.
+    Fmin : float or quantity
+        Minimum frequency of interest.
 
-    Returns:
-        int: Minimum FFT size (power of 2).
+    Returns
+    -------
+    int
+        Minimum FFT size (power of 2).
     """
     return int(2**(np.around(np.log2(Fs/Fmin))+1))
 
@@ -96,20 +101,33 @@ def PlotSpectralCoherence(RefSig, Signals, Time=None, nFFT=2**17, FMin=None, Ax=
 
     Computes and plots the magnitude-squared coherence between the reference signal and each signal in the list, using Welch's method.
 
-    Args:
-        RefSig (neo.AnalogSignal): Reference signal for coherence calculation.
-        Signals (list): List of signal objects with GetSignal method.
-        Time (tuple, optional): Time range to analyze.
-        nFFT (int): Number of FFT points. Default 2**17.
-        FMin (float, optional): Minimum frequency for FFT size calculation.
-        Ax (matplotlib.axes.Axes, optional): Axes to plot on. If None, creates new figure.
-        scaling (str): Scaling for coherence ('density' or 'spectrum'). Default 'density'.
-        Units (quantities.Quantity, optional): Units for signals.
-        Noverlap (int): Overlap factor for FFT. Default 2.
-        **LineKwargs: Additional keyword arguments for plotting lines.
+    Parameters
+    ----------
+    RefSig : neo.AnalogSignal
+        Reference signal for coherence calculation.
+    Signals : list
+        List of signal objects with GetSignal method.
+    Time : tuple, optional
+        Time range to analyze.
+    nFFT : int
+        Number of FFT points. Default 2**17.
+    FMin : float, optional
+        Minimum frequency for FFT size calculation.
+    Ax : matplotlib.axes.Axes, optional
+        Axes to plot on. If None, creates new figure.
+    scaling : str
+        Scaling for coherence ('density' or 'spectrum'). Default 'density'.
+    Units : quantities.Quantity, optional
+        Units for signals.
+    Noverlap : int
+        Overlap factor for FFT. Default 2.
+    **LineKwargs
+        Additional keyword arguments for plotting lines.
 
-    Returns:
-        tuple: (frequencies, list of coherence arrays)
+    Returns
+    -------
+    tuple
+        (frequencies, list of coherence arrays)
     """
 
     if Ax is None:
@@ -153,19 +171,31 @@ def PlotPSD(Signals, Time=None, nFFT=2**17, FMin=None, Ax=None,
 
     Computes and plots the PSD for each signal in the list using Welch's method, with options for scaling and units.
 
-    Args:
-        Signals (list): List of signal objects.
-        Time (tuple, optional): Time range to analyze.
-        nFFT (int): Number of FFT points. Default 2**17.
-        FMin (float, optional): Minimum frequency for FFT size calculation.
-        Ax (matplotlib.axes.Axes, optional): Axes to plot on. If None, creates new figure.
-        scaling (str): Scaling for PSD ('density' or 'spectrum'). Default 'density'.
-        Units (quantities.Quantity, optional): Units for signals.
-        Noverlap (int): Overlap factor for FFT. Default 2.
-        **LineKwargs: Additional keyword arguments for plotting lines.
+    Parameters
+    ----------
+    Signals : list
+        List of signal objects.
+    Time : tuple, optional
+        Time range to analyze.
+    nFFT : int
+        Number of FFT points. Default 2**17.
+    FMin : float, optional
+        Minimum frequency for FFT size calculation.
+    Ax : matplotlib.axes.Axes, optional
+        Axes to plot on. If None, creates new figure.
+    scaling : str
+        Scaling for PSD ('density' or 'spectrum'). Default 'density'.
+    Units : quantities.Quantity, optional
+        Units for signals.
+    Noverlap : int
+        Overlap factor for FFT. Default 2.
+    **LineKwargs
+        Additional keyword arguments for plotting lines.
 
-    Returns:
-        dict: Dictionary with signal names as keys, containing 'psd' and 'ff' arrays.
+    Returns
+    -------
+    dict
+        Dictionary with signal names as keys, containing 'psd' and 'ff' arrays.
     """
 
     if Ax is None:
@@ -237,21 +267,34 @@ def PlotEventAvg(Signals, TimesEvent, TimeAvg, Time=None,
     """
     Plot event-averaged signals with optional spectrogram.
 
-    Computes and plots the average signal across multiple events for each signal in the list, with options for overlapping traces, standard deviation, and spectrogram display.
+    Computes and plots the average signal across multiple events for each signal
+    in the list, with options for overlapping traces, standard deviation,
+    and spectrogram display.
 
-    Args:
-        Signals (list): List of signal objects.
-        TimesEvent (array-like): Times of events to average around.
-        TimeAvg (tuple): Time window around each event (start, stop).
-        Time (tuple, optional): Overall time range.
-        OverLap (bool): Whether to plot individual traces. Default True.
-        Std (bool): Whether to plot standard deviation. Default True.
-        Units (quantities.Quantity, optional): Units for signals.
-        FileOutPrefix (str, optional): Prefix for saving figures.
-        SpecSlot (object, optional): Spectrogram slot for additional plotting.
+    Parameters
+    ----------
+    Signals : list
+        List of signal objects.
+    TimesEvent : array-like
+        Times of events to average around.
+    TimeAvg : tuple
+        Time window around each event (start, stop).
+    Time : tuple, optional
+        Overall time range.
+    OverLap : bool, optional
+        Whether to plot individual traces (default: True).
+    Std : bool, optional
+        Whether to plot standard deviation (default: True).
+    Units : quantities.Quantity, optional
+        Units for signals.
+    FileOutPrefix : str, optional
+        Prefix for saving figures.
+    SpecSlot : object, optional
+        Spectrogram slot for additional plotting.
 
-    Returns:
-        None
+    Returns
+    -------
+    None
     """
 
     if len(Signals)>1:
@@ -478,25 +521,38 @@ def PlotEventAvg(Signals, TimesEvent, TimeAvg, Time=None,
 
 
 def PlotPSD_SNR(Signals, TimeSig=None, TimeNoise=None, nFFT=2**17, FMin=None, Ax=None,
-            scaling='density', Units=None, **LineKwargs):
+             scaling='density', Units=None, **LineKwargs):
     """
     Plot signal-to-noise ratio (SNR) based on PSD for multiple signals.
 
-    Computes and plots the SNR as the ratio of signal PSD to noise PSD for each signal in the list, using Welch's method.
+    Computes and plots the SNR as the ratio of signal PSD to noise PSD for each
+    signal in the list, using Welch's method.
 
-    Args:
-        Signals (list): List of signal objects with GetSignal method.
-        TimeSig (tuple, optional): Time range for signal.
-        TimeNoise (tuple, optional): Time range for noise.
-        nFFT (int): Number of FFT points. Default 2**17.
-        FMin (float, optional): Minimum frequency for FFT size calculation.
-        Ax (matplotlib.axes.Axes, optional): Axes to plot on. If None, creates new figure.
-        scaling (str): Scaling for PSD ('density' or 'spectrum'). Default 'density'.
-        Units (quantities.Quantity, optional): Units for signals.
-        **LineKwargs: Additional keyword arguments for plotting lines.
+    Parameters
+    ----------
+    Signals : list
+        List of signal objects with GetSignal method.
+    TimeSig : tuple, optional
+        Time range for signal.
+    TimeNoise : tuple, optional
+        Time range for noise.
+    nFFT : int
+        Number of FFT points. Default 2**17.
+    FMin : float, optional
+        Minimum frequency for FFT size calculation.
+    Ax : matplotlib.axes.Axes, optional
+        Axes to plot on. If None, creates new figure.
+    scaling : str
+        Scaling for PSD ('density' or 'spectrum'). Default 'density'.
+    Units : quantities.Quantity, optional
+        Units for signals.
+    **LineKwargs
+        Additional keyword arguments for plotting lines.
 
-    Returns:
-        dict: Dictionary with signal names as keys, containing 'SNR' and 'ff' arrays.
+    Returns
+    -------
+    dict
+        Dictionary with signal names as keys, containing 'SNR' and 'ff' arrays.
     """
 
     if Ax is None:
@@ -563,4 +619,10 @@ def PlotPSD_SNR(Signals, TimeSig=None, TimeNoise=None, nFFT=2**17, FMin=None, Ax
               fontsize='x-small')
 
     return PSD
+
+
+
+
+
+
 

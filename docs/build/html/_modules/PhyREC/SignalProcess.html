@@ -117,13 +117,18 @@
 <span class="sd">    Applies a chain of processing operations (filtering, downsampling, etc.)</span>
 <span class="sd">    to a signal in sequence. Useful for building complex processing pipelines.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal): Input signal to process.</span>
-<span class="sd">        ProcessChain (list or None): List of dicts with &#39;function&#39; and &#39;args&#39; keys,</span>
-<span class="sd">                                     or None to skip processing.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal</span>
+<span class="sd">        Input signal to process.</span>
+<span class="sd">    ProcessChain : list or None</span>
+<span class="sd">        List of dicts with &#39;function&#39; and &#39;args&#39; keys,</span>
+<span class="sd">        or None to skip processing.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.AnalogSignal: Processed signal after applying all operations in chain.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.AnalogSignal</span>
+<span class="sd">        Processed signal after applying all operations in chain.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">ProcessChain</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">sig</span>
@@ -149,21 +154,33 @@
 <span class="sd">    frequency and time resolution. Supports z-score normalization and time-windowed</span>
 <span class="sd">    normalization for baseline subtraction.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal): Input signal to analyze.</span>
-<span class="sd">        Fres (quantities.Quantity, optional): Frequency resolution (default: 2 Hz).</span>
-<span class="sd">        TimeRes (quantities.Quantity, optional): Time resolution window (default: 0.01 s).</span>
-<span class="sd">        Fmin (quantities.Quantity, optional): Minimum frequency to include (default: 1 Hz).</span>
-<span class="sd">        Fmax (quantities.Quantity, optional): Maximum frequency to include (default: 200 Hz).</span>
-<span class="sd">        Zscored (bool, optional): Apply z-score normalization (default: True).</span>
-<span class="sd">        NormTime (tuple, optional): Time window for baseline normalization. If None,</span>
-<span class="sd">                                    uses full signal for z-score normalization.</span>
-<span class="sd">        dtype (type, optional): Output data type (default: float).</span>
-<span class="sd">        **specKwarg: Additional scipy.signal.spectrogram keyword arguments.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal</span>
+<span class="sd">        Input signal to analyze.</span>
+<span class="sd">    Fres : quantities.Quantity, optional</span>
+<span class="sd">        Frequency resolution (default: 2 Hz).</span>
+<span class="sd">    TimeRes : quantities.Quantity, optional</span>
+<span class="sd">        Time resolution window (default: 0.01 s).</span>
+<span class="sd">    Fmin : quantities.Quantity, optional</span>
+<span class="sd">        Minimum frequency to include (default: 1 Hz).</span>
+<span class="sd">    Fmax : quantities.Quantity, optional</span>
+<span class="sd">        Maximum frequency to include (default: 200 Hz).</span>
+<span class="sd">    Zscored : bool, optional</span>
+<span class="sd">        Apply z-score normalization (default: True).</span>
+<span class="sd">    NormTime : tuple, optional</span>
+<span class="sd">        Time window for baseline normalization. If None,</span>
+<span class="sd">        uses full signal for z-score normalization.</span>
+<span class="sd">    dtype : type, optional</span>
+<span class="sd">        Output data type (default: float).</span>
+<span class="sd">    **specKwarg</span>
+<span class="sd">        Additional scipy.signal.spectrogram keyword arguments.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.AnalogSignal: Spectrogram data with frequency array in annotations.</span>
-<span class="sd">                         Shape is (time_bins, freq_bins_subset).</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.AnalogSignal</span>
+<span class="sd">        Spectrogram data with frequency array in annotations.</span>
+<span class="sd">        Shape is (time_bins, freq_bins_subset).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">nFFT</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="n">Fres</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
     <span class="n">Ts</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">sampling_period</span>
@@ -221,20 +238,31 @@
 <span class="sd">    optional baseline normalization. Useful for analyzing frequency content of</span>
 <span class="sd">    event-locked responses.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal): Input signal to analyze.</span>
-<span class="sd">        TimesEvent (array-like): Event trigger times.</span>
-<span class="sd">        TimeAvg (tuple): Time window relative to events (before, after).</span>
-<span class="sd">        SpecArgs (dict): Spectrogram parameters (Fmin, Fmax, Fres, TimeRes, Zscored).</span>
-<span class="sd">        AvgSpectNorm (str, optional): Normalization type: &#39;Zscore&#39; or other (default: &#39;Zscore&#39;).</span>
-<span class="sd">        AvgSpectNormTime (tuple, optional): Time window for baseline normalization.</span>
-<span class="sd">                                            If None, uses entire averaged spectrogram.</span>
-<span class="sd">        TrialProcessChain (list, optional): Processing functions applied to each trial</span>
-<span class="sd">                                            before averaging.</span>
-<span class="sd">        **kwargs: Additional keyword arguments.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal</span>
+<span class="sd">        Input signal to analyze.</span>
+<span class="sd">    TimesEvent : array-like</span>
+<span class="sd">        Event trigger times.</span>
+<span class="sd">    TimeAvg : tuple</span>
+<span class="sd">        Time window relative to events (before, after).</span>
+<span class="sd">    SpecArgs : dict</span>
+<span class="sd">        Spectrogram parameters (Fmin, Fmax, Fres, TimeRes, Zscored).</span>
+<span class="sd">    AvgSpectNorm : str, optional</span>
+<span class="sd">        Normalization type: &#39;Zscore&#39; or other (default: &#39;Zscore&#39;).</span>
+<span class="sd">    AvgSpectNormTime : tuple, optional</span>
+<span class="sd">        Time window for baseline normalization.</span>
+<span class="sd">        If None, uses entire averaged spectrogram.</span>
+<span class="sd">    TrialProcessChain : list, optional</span>
+<span class="sd">        Processing functions applied to each trial</span>
+<span class="sd">        before averaging.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Additional keyword arguments.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.AnalogSignal: Averaged and normalized spectrogram.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.AnalogSignal</span>
+<span class="sd">        Averaged and normalized spectrogram.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">Acc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
     <span class="n">Trials</span> <span class="o">=</span> <span class="mi">0</span>
@@ -293,16 +321,23 @@
 <span class="sd">    Extracts signal segments around trigger times, optionally applies per-trial</span>
 <span class="sd">    processing, and computes mean and standard deviation of the ensemble.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal): Input signal to average.</span>
-<span class="sd">        TimesEvent (array-like): Event trigger times.</span>
-<span class="sd">        TimeAvg (tuple): Time window relative to events (before, after).</span>
-<span class="sd">        TrialProcessChain (list, optional): Processing functions applied to each trial</span>
-<span class="sd">                                            before averaging.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal</span>
+<span class="sd">        Input signal to average.</span>
+<span class="sd">    TimesEvent : array-like</span>
+<span class="sd">        Event trigger times.</span>
+<span class="sd">    TimeAvg : tuple</span>
+<span class="sd">        Time window relative to events (before, after).</span>
+<span class="sd">    TrialProcessChain : list, optional</span>
+<span class="sd">        Processing functions applied to each trial</span>
+<span class="sd">        before averaging.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.AnalogSignal: Averaged signal with annotations containing &#39;std&#39; (std dev signal)</span>
-<span class="sd">                         and &#39;acc&#39; (all stacked trials for ensemble statistics).</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.AnalogSignal</span>
+<span class="sd">        Averaged signal with annotations containing &#39;std&#39; (std dev signal)</span>
+<span class="sd">        and &#39;acc&#39; (all stacked trials for ensemble statistics).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">Ts</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">sampling_period</span>
     <span class="n">nSamps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">TimeAvg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">TimeAvg</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">Ts</span><span class="p">)</span>
@@ -348,11 +383,15 @@
 <span class="sd">    Calculates the discrete first derivative (dV/dt) of the signal, returning</span>
 <span class="sd">    a new signal with adjusted start time to align sample positions.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal): Input signal.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal</span>
+<span class="sd">        Input signal.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.AnalogSignal: First derivative with units of [original_units / time].</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.AnalogSignal</span>
+<span class="sd">        First derivative with units of [original_units / time].</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">derivative_sig</span> <span class="o">=</span> <span class="n">AnalogSignal</span><span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">as_quantity</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">sig</span><span class="o">.</span><span class="n">sampling_period</span><span class="p">,</span>
@@ -373,13 +412,19 @@
 <span class="sd">    Reduces sampling rate by an integer factor using scipy&#39;s decimate function,</span>
 <span class="sd">    optionally applying zero-phase filtering to avoid phase distortion.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal): Input signal to downsample.</span>
-<span class="sd">        Fact (int): Decimation factor (output rate = input rate / Fact).</span>
-<span class="sd">        zero_phase (bool, optional): Apply zero-phase filtering (default: True).</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal</span>
+<span class="sd">        Input signal to downsample.</span>
+<span class="sd">    Fact : int</span>
+<span class="sd">        Decimation factor (output rate = input rate / Fact).</span>
+<span class="sd">    zero_phase : bool, optional</span>
+<span class="sd">        Apply zero-phase filtering (default: True).</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.AnalogSignal: Downsampled signal with reduced sampling rate.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.AnalogSignal</span>
+<span class="sd">        Downsampled signal with reduced sampling rate.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="n">Fact</span><span class="p">)</span>
     <span class="n">rs</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">decimate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sig</span><span class="p">),</span>
@@ -402,13 +447,18 @@
 <span class="sd">    Applies scipy&#39;s detrend function to remove constant offset or polynomial trends</span>
 <span class="sd">    from the signal.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal): Input signal.</span>
-<span class="sd">        Type (str, optional): Detrending type: &#39;constant&#39;, &#39;linear&#39;, etc.</span>
-<span class="sd">                             (default: &#39;constant&#39; removes DC offset).</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal</span>
+<span class="sd">        Input signal.</span>
+<span class="sd">    Type : str, optional</span>
+<span class="sd">        Detrending type: &#39;constant&#39;, &#39;linear&#39;, etc.</span>
+<span class="sd">        (default: &#39;constant&#39; removes DC offset).</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.AnalogSignal: Detrended signal with same units.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.AnalogSignal</span>
+<span class="sd">        Detrended signal with same units.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">st</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
     <span class="n">st</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">detrend</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">Type</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -425,13 +475,18 @@
 <span class="sd">    Removes the mean voltage over a specified time window, useful for establishing</span>
 <span class="sd">    a common baseline reference across recordings.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal): Input signal.</span>
-<span class="sd">        TWind (tuple, optional): Time window for baseline estimation (start, stop).</span>
-<span class="sd">                                 If None, uses first 30 seconds of signal.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal</span>
+<span class="sd">        Input signal.</span>
+<span class="sd">    TWind : tuple, optional</span>
+<span class="sd">        Time window for baseline estimation (start, stop).</span>
+<span class="sd">        If None, uses first 30 seconds of signal.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.AnalogSignal: Signal with baseline subtracted.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.AnalogSignal</span>
+<span class="sd">        Signal with baseline subtracted.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">TWind</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">TWind</span> <span class="o">=</span> <span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">t_start</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">t_start</span> <span class="o">+</span> <span class="mi">30</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
@@ -452,12 +507,17 @@
 
 <span class="sd">    Scales signal amplitude by a constant gain factor.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal): Input signal.</span>
-<span class="sd">        Gain (float): Multiplication factor.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal</span>
+<span class="sd">        Input signal.</span>
+<span class="sd">    Gain : float</span>
+<span class="sd">        Multiplication factor.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.AnalogSignal: Scaled signal.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.AnalogSignal</span>
+<span class="sd">        Scaled signal.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">sig</span> <span class="o">*</span> <span class="n">Gain</span></div>
 
@@ -472,14 +532,20 @@
 <span class="sd">    Resamples signal using rational resampling with automatic downsampling factor</span>
 <span class="sd">    selection based on target frequency or maximum point count.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal): Input signal.</span>
-<span class="sd">        Fs (quantities.Quantity, optional): Target sampling rate.</span>
-<span class="sd">        MaxPoints (int, optional): Target maximum number of samples. Takes precedence</span>
-<span class="sd">                                   over Fs if both provided.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal</span>
+<span class="sd">        Input signal.</span>
+<span class="sd">    Fs : quantities.Quantity, optional</span>
+<span class="sd">        Target sampling rate.</span>
+<span class="sd">    MaxPoints : int, optional</span>
+<span class="sd">        Target maximum number of samples. Takes precedence</span>
+<span class="sd">        over Fs if both provided.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.AnalogSignal: Resampled signal with new sampling rate.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.AnalogSignal</span>
+<span class="sd">        Resampled signal with new sampling rate.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">MaxPoints</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">Fs</span> <span class="o">/</span> <span class="n">sig</span><span class="o">.</span><span class="n">sampling_rate</span>
@@ -511,11 +577,15 @@
 
 <span class="sd">    Takes the element-wise absolute value while preserving signal structure and units.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal): Input signal.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal</span>
+<span class="sd">        Input signal.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.AnalogSignal: Absolute value of signal with same units.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.AnalogSignal</span>
+<span class="sd">        Absolute value of signal with same units.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">st</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
     <span class="n">st</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
@@ -533,11 +603,15 @@
 <span class="sd">    Squares the signal values element-wise. Useful for power spectral analysis</span>
 <span class="sd">    and RMS calculations.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal): Input signal.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal</span>
+<span class="sd">        Input signal.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.AnalogSignal: Squared signal with units of [original_units]^2.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.AnalogSignal</span>
+<span class="sd">        Squared signal with units of [original_units]^2.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">st</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="c1">#    st = st**2</span>
@@ -554,15 +628,22 @@
 <span class="sd">    Implements zero-phase digital filtering using second-order sections (SOS)</span>
 <span class="sd">    format for numerical stability.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal): Input signal to filter.</span>
-<span class="sd">        Type (str): Filter type: &#39;lowpass&#39;, &#39;highpass&#39;, &#39;bandpass&#39;, &#39;bandstop&#39;.</span>
-<span class="sd">        Order (int): Filter order (pole count).</span>
-<span class="sd">        Freqs (quantities.Quantity or array-like): Critical frequency/frequencies.</span>
-<span class="sd">                                                    For bandpass/bandstop, array of 2 values.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal</span>
+<span class="sd">        Input signal to filter.</span>
+<span class="sd">    Type : str</span>
+<span class="sd">        Filter type: &#39;lowpass&#39;, &#39;highpass&#39;, &#39;bandpass&#39;, &#39;bandstop&#39;.</span>
+<span class="sd">    Order : int</span>
+<span class="sd">        Filter order (pole count).</span>
+<span class="sd">    Freqs : quantities.Quantity or array-like</span>
+<span class="sd">        Critical frequency/frequencies.</span>
+<span class="sd">        For bandpass/bandstop, array of 2 values.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.AnalogSignal: Filtered signal with same units and structure.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.AnalogSignal</span>
+<span class="sd">        Filtered signal with same units and structure.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">st</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
     <span class="n">Fs</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">sampling_rate</span><span class="o">.</span><span class="n">magnitude</span>
@@ -590,16 +671,23 @@
 <span class="sd">    Identifies times when signal crosses a threshold, with minimum time interval</span>
 <span class="sd">    between detected events to avoid multiple detections of slow threshold crossings.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal): Input signal to analyze.</span>
-<span class="sd">        RelaxTime (quantities.Quantity, optional): Minimum interval between detections</span>
-<span class="sd">                                                   (default: 0.4 s).</span>
-<span class="sd">        threshold (float, optional): Threshold value. If None, uses mean + std of signal.</span>
-<span class="sd">        sign (str, optional): Crossing direction: &#39;below&#39;, &#39;above&#39;, or &#39;both&#39;</span>
-<span class="sd">                             (default: &#39;below&#39;).</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal</span>
+<span class="sd">        Input signal to analyze.</span>
+<span class="sd">    RelaxTime : quantities.Quantity, optional</span>
+<span class="sd">        Minimum interval between detections</span>
+<span class="sd">        (default: 0.4 s).</span>
+<span class="sd">    threshold : float, optional</span>
+<span class="sd">        Threshold value. If None, uses mean + std of signal.</span>
+<span class="sd">    sign : str, optional</span>
+<span class="sd">        Crossing direction: &#39;below&#39;, &#39;above&#39;, or &#39;both&#39;</span>
+<span class="sd">        (default: &#39;below&#39;).</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.SpikeTrain: Detected spike times with same t_start and t_stop as input.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.SpikeTrain</span>
+<span class="sd">        Detected spike times with same t_start and t_stop as input.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">threshold</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">threshold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
@@ -626,14 +714,20 @@
 <span class="sd">    Fits a smoothing spline to the signal and evaluates at original sample points.</span>
 <span class="sd">    Reduces noise while preserving signal features.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal): Input signal to smooth.</span>
-<span class="sd">        sFact (int, optional): Smoothing factor: output has sFact times fewer knots</span>
-<span class="sd">                              than input samples (default: 2).</span>
-<span class="sd">        **kwargs: Additional scipy UnivariateSpline keyword arguments.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal</span>
+<span class="sd">        Input signal to smooth.</span>
+<span class="sd">    sFact : int, optional</span>
+<span class="sd">        Smoothing factor: output has sFact times fewer knots</span>
+<span class="sd">        than input samples (default: 2).</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Additional scipy UnivariateSpline keyword arguments.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.AnalogSignal: Smoothed signal.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.AnalogSignal</span>
+<span class="sd">        Smoothed signal.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">sFact</span>
     <span class="n">spl</span> <span class="o">=</span> <span class="n">UnivariateSpline</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
@@ -650,14 +744,20 @@
 <span class="sd">    Applies a nonlinear median filter with specified kernel size. Kernel size</span>
 <span class="sd">    is automatically adjusted to be odd if necessary.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal): Input signal to filter.</span>
-<span class="sd">        window_size (quantities.Quantity, optional): Filter window duration in seconds.</span>
-<span class="sd">                                                     If None, uses 1/10th of signal duration.</span>
-<span class="sd">        **kwargs: Additional keyword arguments.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal</span>
+<span class="sd">        Input signal to filter.</span>
+<span class="sd">    window_size : quantities.Quantity, optional</span>
+<span class="sd">        Filter window duration in seconds.</span>
+<span class="sd">        If None, uses 1/10th of signal duration.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Additional keyword arguments.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.AnalogSignal: Filtered signal.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.AnalogSignal</span>
+<span class="sd">        Filtered signal.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">window_size</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">kernel_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
@@ -681,12 +781,17 @@
 
 <span class="sd">    Calculates root mean square in 20*log10 scale (dB).</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        x (array-like): Input data.</span>
-<span class="sd">        axis (int, optional): Axis along which to compute (default: -1, last axis).</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array-like</span>
+<span class="sd">        Input data.</span>
+<span class="sd">    axis : int, optional</span>
+<span class="sd">        Axis along which to compute (default: -1, last axis).</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        float or ndarray: RMS value in dB.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float or ndarray</span>
+<span class="sd">        RMS value in dB.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)))</span></div>
 
@@ -700,12 +805,17 @@
 
 <span class="sd">    Calculates sqrt(mean(x^2)) along specified axis.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        x (array-like): Input data.</span>
-<span class="sd">        axis (int, optional): Axis along which to compute (default: -1, last axis).</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array-like</span>
+<span class="sd">        Input data.</span>
+<span class="sd">    axis : int, optional</span>
+<span class="sd">        Axis along which to compute (default: -1, last axis).</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        float or ndarray: RMS value.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float or ndarray</span>
+<span class="sd">        RMS value.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">))</span></div>
 
@@ -719,12 +829,17 @@
 
 <span class="sd">    Calculates mean(x^2) along specified axis.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        x (array-like): Input data.</span>
-<span class="sd">        axis (int, optional): Axis along which to compute (default: -1, last axis).</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array-like</span>
+<span class="sd">        Input data.</span>
+<span class="sd">    axis : int, optional</span>
+<span class="sd">        Axis along which to compute (default: -1, last axis).</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        float or ndarray: Power value.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float or ndarray</span>
+<span class="sd">        Power value.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span></div>
 
@@ -739,17 +854,23 @@
 <span class="sd">    Generates overlapping windows of specified width and step size, useful for</span>
 <span class="sd">    sliding window analysis and feature extraction.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal): Input signal (2D or 3D).</span>
-<span class="sd">        timewidth (quantities.Quantity): Window duration.</span>
-<span class="sd">        steptime (quantities.Quantity, optional): Step size between windows.</span>
-<span class="sd">                                                  If None, uses timewidth/10.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal</span>
+<span class="sd">        Input signal (2D or 3D).</span>
+<span class="sd">    timewidth : quantities.Quantity</span>
+<span class="sd">        Window duration.</span>
+<span class="sd">    steptime : quantities.Quantity, optional</span>
+<span class="sd">        Step size between windows.</span>
+<span class="sd">        If None, uses timewidth/10.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        tuple: (strides, time_width, step_time) where:</span>
-<span class="sd">            - strides: Array of windowed data views</span>
-<span class="sd">            - time_width: Window duration in seconds</span>
-<span class="sd">            - step_time: Step duration in seconds</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        (strides, time_width, step_time) where:</span>
+<span class="sd">        - strides: Array of windowed data views</span>
+<span class="sd">        - time_width: Window duration in seconds</span>
+<span class="sd">        - step_time: Step duration in seconds</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">steptime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">steptime</span> <span class="o">=</span> <span class="n">timewidth</span> <span class="o">/</span> <span class="mi">10</span>
@@ -781,18 +902,26 @@
 <span class="sd">    statistics or features within each window, returning a new signal with one</span>
 <span class="sd">    sample per window.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig (neo.AnalogSignal or neo.ImageSequence): Input signal.</span>
-<span class="sd">        timewidth (quantities.Quantity): Window duration.</span>
-<span class="sd">        steptime (quantities.Quantity, optional): Step size between windows.</span>
-<span class="sd">                                                  If None, uses timewidth/10.</span>
-<span class="sd">        func (callable): Function to apply to each window. Should accept array-like</span>
-<span class="sd">                        and return scalar or 1D array.</span>
-<span class="sd">        **fkwargs: Additional keyword arguments passed to func.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig : neo.AnalogSignal or neo.ImageSequence</span>
+<span class="sd">        Input signal.</span>
+<span class="sd">    timewidth : quantities.Quantity</span>
+<span class="sd">        Window duration.</span>
+<span class="sd">    steptime : quantities.Quantity, optional</span>
+<span class="sd">        Step size between windows.</span>
+<span class="sd">        If None, uses timewidth/10.</span>
+<span class="sd">    func : callable</span>
+<span class="sd">        Function to apply to each window. Should accept array-like</span>
+<span class="sd">        and return scalar or 1D array.</span>
+<span class="sd">    **fkwargs</span>
+<span class="sd">        Additional keyword arguments passed to func.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.AnalogSignal or ImageSequence: Result with sampling rate corresponding</span>
-<span class="sd">                                          to window step time.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.AnalogSignal or ImageSequence</span>
+<span class="sd">        Result with sampling rate corresponding</span>
+<span class="sd">        to window step time.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">strides</span><span class="p">,</span> <span class="n">time_width</span><span class="p">,</span> <span class="n">step_time</span> <span class="o">=</span> <span class="n">strides_signal</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">timewidth</span><span class="p">,</span> <span class="n">steptime</span><span class="p">)</span>
 
@@ -825,16 +954,23 @@
 <span class="sd">    Calculates normalized cross-correlation and corresponding lags for pairs of</span>
 <span class="sd">    signals. Returns maximum correlation and lag for each channel pair.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        x1 (ndarray): First signal array (channels, samples).</span>
-<span class="sd">        x2 (ndarray): Second signal array (channels, samples).</span>
-<span class="sd">        fs (quantities.Quantity): Sampling frequency for lag conversion.</span>
-<span class="sd">        **fkwargs: Additional keyword arguments.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x1 : ndarray</span>
+<span class="sd">        First signal array (channels, samples).</span>
+<span class="sd">    x2 : ndarray</span>
+<span class="sd">        Second signal array (channels, samples).</span>
+<span class="sd">    fs : quantities.Quantity</span>
+<span class="sd">        Sampling frequency for lag conversion.</span>
+<span class="sd">    **fkwargs</span>
+<span class="sd">        Additional keyword arguments.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        tuple: (max_corr, lags) where:</span>
-<span class="sd">            - max_corr: Maximum correlation value per channel pair (dimensionless)</span>
-<span class="sd">            - lags: Lag times corresponding to maximum correlation</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        (max_corr, lags) where:</span>
+<span class="sd">        - max_corr: Maximum correlation value per channel pair (dimensionless)</span>
+<span class="sd">        - lags: Lag times corresponding to maximum correlation</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">max_corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">x1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
     <span class="n">lags_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">x1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
@@ -860,15 +996,22 @@
 <span class="sd">    Calculates linear correlation between paired signals. Returns correlation</span>
 <span class="sd">    coefficient for each channel pair.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        x1 (ndarray): First signal array (channels, samples).</span>
-<span class="sd">        x2 (ndarray): Second signal array (channels, samples).</span>
-<span class="sd">        fs (quantities.Quantity): Sampling frequency (for compatibility, not used).</span>
-<span class="sd">        **fkwargs: Additional keyword arguments passed to scipy.stats.pearsonr.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x1 : ndarray</span>
+<span class="sd">        First signal array (channels, samples).</span>
+<span class="sd">    x2 : ndarray</span>
+<span class="sd">        Second signal array (channels, samples).</span>
+<span class="sd">    fs : quantities.Quantity</span>
+<span class="sd">        Sampling frequency (for compatibility, not used).</span>
+<span class="sd">    **fkwargs</span>
+<span class="sd">        Additional keyword arguments passed to scipy.stats.pearsonr.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        quantities.Quantity: Pearson correlation coefficient per channel pair</span>
-<span class="sd">                            (dimensionless, range -1 to 1).</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    quantities.Quantity</span>
+<span class="sd">        Pearson correlation coefficient per channel pair</span>
+<span class="sd">        (dimensionless, range -1 to 1).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">pearson_corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">x1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
     <span class="k">for</span> <span class="n">ic</span><span class="p">,</span> <span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)):</span>
@@ -891,21 +1034,30 @@
 <span class="sd">    to compute correlations or other bivariate statistics within each window pair,</span>
 <span class="sd">    returning results as a new signal with one sample per window.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        sig1 (neo.AnalogSignal): First input signal.</span>
-<span class="sd">        sig2 (neo.AnalogSignal): Second input signal.</span>
-<span class="sd">        timewidth (quantities.Quantity): Window duration.</span>
-<span class="sd">        steptime (quantities.Quantity, optional): Step size between windows.</span>
-<span class="sd">                                                  If None, uses timewidth/10.</span>
-<span class="sd">        func (callable): Function to apply to each window pair. Should accept</span>
-<span class="sd">                        two array-like arguments and return scalar or 1D array.</span>
-<span class="sd">                        Default: CrossCorr.</span>
-<span class="sd">        **fkwargs: Additional keyword arguments passed to func.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sig1 : neo.AnalogSignal</span>
+<span class="sd">        First input signal.</span>
+<span class="sd">    sig2 : neo.AnalogSignal</span>
+<span class="sd">        Second input signal.</span>
+<span class="sd">    timewidth : quantities.Quantity</span>
+<span class="sd">        Window duration.</span>
+<span class="sd">    steptime : quantities.Quantity, optional</span>
+<span class="sd">        Step size between windows.</span>
+<span class="sd">        If None, uses timewidth/10.</span>
+<span class="sd">    func : callable, optional</span>
+<span class="sd">        Function to apply to each window pair. Should accept</span>
+<span class="sd">        two array-like arguments and return scalar or 1D array.</span>
+<span class="sd">        Default: CrossCorr.</span>
+<span class="sd">    **fkwargs</span>
+<span class="sd">        Additional keyword arguments passed to func.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        neo.AnalogSignal or tuple: Result(s) with sampling rate corresponding</span>
-<span class="sd">                                   to window step time. If func returns tuple,</span>
-<span class="sd">                                   returns tuple of AnalogSignals.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neo.AnalogSignal or tuple</span>
+<span class="sd">        Result(s) with sampling rate corresponding</span>
+<span class="sd">        to window step time. If func returns tuple,</span>
+<span class="sd">        returns tuple of AnalogSignals.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">strides1</span><span class="p">,</span> <span class="n">time_width</span><span class="p">,</span> <span class="n">step_time</span> <span class="o">=</span> <span class="n">strides_signal</span><span class="p">(</span><span class="n">sig1</span><span class="p">,</span> <span class="n">timewidth</span><span class="p">,</span> <span class="n">steptime</span><span class="p">)</span>
     <span class="n">strides2</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">strides_signal</span><span class="p">(</span><span class="n">sig2</span><span class="p">,</span> <span class="n">timewidth</span><span class="p">,</span> <span class="n">steptime</span><span class="p">)</span>
@@ -932,63 +1084,6 @@
                             <span class="o">**</span><span class="n">sig1</span><span class="o">.</span><span class="n">annotations</span><span class="p">)</span></div>
 
 
-<span class="c1"># def xcorr(x, y, normed=True, detrend=mlab.detrend_none,</span>
-<span class="c1">#           usevlines=True, maxlags=10, **kwargs):</span>
-<span class="c1">#     Nx = len(x)</span>
-<span class="c1">#     if Nx != len(y):</span>
-<span class="c1">#         raise ValueError(&#39;x and y must be equal length&#39;)</span>
-<span class="c1">#</span>
-<span class="c1">#     x = detrend(np.asarray(x))</span>
-<span class="c1">#     y = detrend(np.asarray(y))</span>
-<span class="c1">#</span>
-<span class="c1">#     correls = np.correlate(x, y, mode=&quot;full&quot;)</span>
-<span class="c1">#</span>
-<span class="c1">#     if normed:</span>
-<span class="c1">#         correls /= np.sqrt(np.dot(x, x) * np.dot(y, y))</span>
-<span class="c1">#</span>
-<span class="c1">#     if maxlags is None:</span>
-<span class="c1">#         maxlags = Nx - 1</span>
-<span class="c1">#</span>
-<span class="c1">#     if maxlags &gt;= Nx or maxlags &lt; 1:</span>
-<span class="c1">#         raise ValueError(&#39;maxlags must be None or strictly &#39;</span>
-<span class="c1">#                          &#39;positive &lt; %d&#39; % Nx)</span>
-<span class="c1">#</span>
-<span class="c1">#     lags = np.arange(-maxlags, maxlags + 1)</span>
-<span class="c1">#     correls = correls[Nx - 1 - maxlags:Nx + maxlags]</span>
-<span class="c1">#</span>
-<span class="c1">#     return lags, correls</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#  def ThresholdInstantRate(sig, RelaxTime=0.1*pq.s, threshold=None,</span>
-<span class="c1">#                          OutSampling=0.01*pq.s,):</span>
-<span class="c1">#</span>
-<span class="c1">#     return elephant.statistics.instantaneous_rate(ThresholdTrianGen(sig,</span>
-<span class="c1">#                                                                     RelaxTime,</span>
-<span class="c1">#                                                                     threshold),</span>
-<span class="c1">#                                                   sampling_period=OutSampling)</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># def HilbertInstantFreq(sig, MaxFreq=20, MinFreq=0):</span>
-<span class="c1">#     SigH = elephant.signal_processing.hilbert(sig)</span>
-<span class="c1">#     insfreq = np.diff(np.angle(SigH)[:, 0]) / np.diff(SigH.times)</span>
-<span class="c1">#</span>
-<span class="c1">#     return AnalogSignal(signal=np.clip(insfreq.magnitude, 0, 20),</span>
-<span class="c1">#                         units=&#39;Hz&#39;,</span>
-<span class="c1">#                         name=sig.name,</span>
-<span class="c1">#                         sampling_rate=SigH.sampling_rate,</span>
-<span class="c1">#                         t_start=SigH.t_start)</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># def HilbertAngle(sig):</span>
-<span class="c1">#     SigH = elephant.signal_processing.hilbert(sig)</span>
-<span class="c1">#     return sig.duplicate_with_new_data(signal=np.angle(SigH),</span>
-<span class="c1">#                                        units=pq.radians)</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># def HilbertAmp(sig):</span>
-<span class="c1">#     SigH = elephant.signal_processing.hilbert(sig)</span>
-<span class="c1">#</span>
-<span class="c1">#     return sig.duplicate_with_new_data(signal=np.array(np.abs(SigH))*sig.units)</span>
 </pre></div>
 
            </div>
