@@ -233,98 +233,92 @@
 </div>
 
 
-
-<div class="viewcode-block" id="WavesColorSlot">
-<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.PlotWaves.WavesColorSlot">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">WavesColorSlot</span><span class="p">(</span><span class="n">SlotBase</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Visualization slot for color-mapped multi-channel waveforms.</span>
-
-<span class="sd">    Displays multi-channel signals as a 2D color-mapped image where channels</span>
-<span class="sd">    are arranged vertically and time runs horizontally. Useful for visualizing</span>
-<span class="sd">    high-density electrode array data.</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        DefImKwargs (dict): Default imshow() keyword arguments.</span>
-<span class="sd">        DefAxKwargs (dict): Default axis property settings.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">DefImKwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cmap&#39;</span><span class="p">:</span> <span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
-                   <span class="s1">&#39;interpolation&#39;</span><span class="p">:</span> <span class="s1">&#39;none&#39;</span><span class="p">,</span>
-                   <span class="p">}</span>
-
-    <span class="n">DefAxKwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="s1">&#39;Channels&#39;</span><span class="p">,</span>
-                   <span class="s1">&#39;xaxis&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;visible&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                             <span class="p">},</span>
-                   <span class="s1">&#39;yaxis&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;visible&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                             <span class="p">},</span>
-                   <span class="p">}</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Signal</span><span class="p">,</span> <span class="n">Units</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Position</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">imKwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">AxKwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">MaxPoints</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize a color-mapped waveform slot.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            Signal (neo.AnalogSignal): Multi-channel signal to plot.</span>
-<span class="sd">            Units (quantities.Quantity, optional): Units for signal scaling.</span>
-<span class="sd">            Position (int, optional): Subplot position for this slot.</span>
-<span class="sd">            imKwargs (dict, optional): Additional imshow() keyword arguments.</span>
-<span class="sd">            AxKwargs (dict, optional): Additional axis property settings.</span>
-<span class="sd">            Ax (matplotlib.axes.Axes, optional): Axis to plot into. Creates new if None.</span>
-<span class="sd">            MaxPoints (int, optional): Maximum number of time points to display</span>
-<span class="sd">                                       (triggers downsampling if exceeded).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">AxKwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DefAxKwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">imKwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DefImKwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Position</span> <span class="o">=</span> <span class="n">Position</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">MaxPoints</span> <span class="o">=</span> <span class="n">MaxPoints</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">Signal</span> <span class="o">=</span> <span class="n">Signal</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Signal</span><span class="o">.</span><span class="n">name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">=</span> <span class="n">Units</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ax</span> <span class="o">=</span> <span class="n">Ax</span>
-        <span class="k">if</span> <span class="n">AxKwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">AxKwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">AxKwargs</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">imKwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">imKwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">imKwargs</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">UpdateTreeDictProp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">AxKwargs</span><span class="p">)</span>
-
-<div class="viewcode-block" id="WavesColorSlot.PlotSignal">
-<a class="viewcode-back" href="../../api/PhyREC.html#PhyREC.PlotWaves.WavesColorSlot.PlotSignal">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">PlotSignal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Time</span><span class="p">,</span> <span class="n">Units</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Plot multi-channel signal as a color-mapped image.</span>
-
-<span class="sd">        Renders the signal data as a 2D heatmap with optional downsampling</span>
-<span class="sd">        for performance optimization.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            Time (tuple or None): Time window to plot. See CheckTime() for details.</span>
-<span class="sd">            Units (quantities.Quantity, optional): Units for signal rescaling.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            None: Updates self.img and self.current_time attributes.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">sig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GetSignal</span><span class="p">(</span><span class="n">Time</span><span class="p">,</span> <span class="n">Units</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">MaxPoints</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">sig</span> <span class="o">=</span> <span class="n">Spro</span><span class="o">.</span><span class="n">Resample</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">MaxPoints</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MaxPoints</span><span class="p">)</span>
-
-        <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span>
-                             <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span>
-                             <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">t_start</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">t_stop</span><span class="p">,</span>
-                                     <span class="mi">0</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
-                             <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">imKwargs</span><span class="p">,</span>
-                             <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">img</span> <span class="o">=</span> <span class="n">img</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">current_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">t_start</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">),</span>
-                             <span class="n">sig</span><span class="o">.</span><span class="n">t_stop</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">))</span></div>
-</div>
-
+<span class="c1">#</span>
+<span class="c1"># class WavesColorSlot(SlotBase):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Visualization slot for color-mapped multi-channel waveforms.</span>
+<span class="c1">#</span>
+<span class="c1">#     Displays multi-channel signals as a 2D color-mapped image where channels</span>
+<span class="c1">#     are arranged vertically and time runs horizontally. Useful for visualizing</span>
+<span class="c1">#     high-density electrode array data.</span>
+<span class="c1">#</span>
+<span class="c1">#     Attributes:</span>
+<span class="c1">#         DefImKwargs (dict): Default imshow() keyword arguments.</span>
+<span class="c1">#         DefAxKwargs (dict): Default axis property settings.</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     DefImKwargs = {&#39;cmap&#39;: &#39;viridis&#39;,</span>
+<span class="c1">#                    &#39;interpolation&#39;: &#39;none&#39;,</span>
+<span class="c1">#                    }</span>
+<span class="c1">#</span>
+<span class="c1">#     DefAxKwargs = {&#39;ylabel&#39;: &#39;Channels&#39;,</span>
+<span class="c1">#                    &#39;xaxis&#39;: {&#39;visible&#39;: False,</span>
+<span class="c1">#                              },</span>
+<span class="c1">#                    &#39;yaxis&#39;: {&#39;visible&#39;: True,</span>
+<span class="c1">#                              },</span>
+<span class="c1">#                    }</span>
+<span class="c1">#</span>
+<span class="c1">#     def __init__(self, Signal, Units=None, Position=None,</span>
+<span class="c1">#                  imKwargs=None, AxKwargs=None, Ax=None, MaxPoints=None):</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         Initialize a color-mapped waveform slot.</span>
+<span class="c1">#</span>
+<span class="c1">#         Args:</span>
+<span class="c1">#             Signal (neo.AnalogSignal): Multi-channel signal to plot.</span>
+<span class="c1">#             Units (quantities.Quantity, optional): Units for signal scaling.</span>
+<span class="c1">#             Position (int, optional): Subplot position for this slot.</span>
+<span class="c1">#             imKwargs (dict, optional): Additional imshow() keyword arguments.</span>
+<span class="c1">#             AxKwargs (dict, optional): Additional axis property settings.</span>
+<span class="c1">#             Ax (matplotlib.axes.Axes, optional): Axis to plot into. Creates new if None.</span>
+<span class="c1">#             MaxPoints (int, optional): Maximum number of time points to display</span>
+<span class="c1">#                                        (triggers downsampling if exceeded).</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#         self.AxKwargs = self.DefAxKwargs.copy()</span>
+<span class="c1">#         self.imKwargs = self.DefImKwargs.copy()</span>
+<span class="c1">#         self.Position = Position</span>
+<span class="c1">#         self.MaxPoints = MaxPoints</span>
+<span class="c1">#</span>
+<span class="c1">#         self.Signal = Signal</span>
+<span class="c1">#         self.name = self.Signal.name</span>
+<span class="c1">#         self.units = Units</span>
+<span class="c1">#</span>
+<span class="c1">#         self.Ax = Ax</span>
+<span class="c1">#         if AxKwargs is not None:</span>
+<span class="c1">#             self.AxKwargs.update(AxKwargs)</span>
+<span class="c1">#         if imKwargs is not None:</span>
+<span class="c1">#             self.imKwargs.update(imKwargs)</span>
+<span class="c1">#</span>
+<span class="c1">#         if self.Ax is not None:</span>
+<span class="c1">#             UpdateTreeDictProp(self.Ax, self.AxKwargs)</span>
+<span class="c1">#</span>
+<span class="c1">#     def PlotSignal(self, Time, Units=None):</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         Plot multi-channel signal as a color-mapped image.</span>
+<span class="c1">#</span>
+<span class="c1">#         Renders the signal data as a 2D heatmap with optional downsampling</span>
+<span class="c1">#         for performance optimization.</span>
+<span class="c1">#</span>
+<span class="c1">#         Args:</span>
+<span class="c1">#             Time (tuple or None): Time window to plot. See CheckTime() for details.</span>
+<span class="c1">#             Units (quantities.Quantity, optional): Units for signal rescaling.</span>
+<span class="c1">#</span>
+<span class="c1">#         Returns:</span>
+<span class="c1">#             None: Updates self.img and self.current_time attributes.</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         sig = self.GetSignal(Time, Units)</span>
+<span class="c1">#</span>
+<span class="c1">#         if self.MaxPoints is not None:</span>
+<span class="c1">#             sig = Spro.Resample(sig, MaxPoints=self.MaxPoints)</span>
+<span class="c1">#</span>
+<span class="c1">#         img = self.Ax.imshow(np.array(sig).astype(float).transpose(),</span>
+<span class="c1">#                              aspect=&#39;auto&#39;,</span>
+<span class="c1">#                              extent=(sig.t_start, sig.t_stop,</span>
+<span class="c1">#                                      0, sig.shape[1]),</span>
+<span class="c1">#                              **self.imKwargs,</span>
+<span class="c1">#                              )</span>
+<span class="c1">#         self.img = img</span>
+<span class="c1">#         self.current_time = (sig.t_start.rescale(&#39;s&#39;),</span>
+<span class="c1">#                              sig.t_stop.rescale(&#39;s&#39;))</span>
 
 
 <div class="viewcode-block" id="SpecSlot">

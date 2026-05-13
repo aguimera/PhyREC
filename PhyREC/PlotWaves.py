@@ -147,92 +147,92 @@ class SlotBase():
         self.AxKwargs.update(AxKwargs)
         UpdateTreeDictProp(self.Ax, self.AxKwargs)
 
-
-class WavesColorSlot(SlotBase):
-    """
-    Visualization slot for color-mapped multi-channel waveforms.
-
-    Displays multi-channel signals as a 2D color-mapped image where channels
-    are arranged vertically and time runs horizontally. Useful for visualizing
-    high-density electrode array data.
-
-    Attributes:
-        DefImKwargs (dict): Default imshow() keyword arguments.
-        DefAxKwargs (dict): Default axis property settings.
-    """
-    DefImKwargs = {'cmap': 'viridis',
-                   'interpolation': 'none',
-                   }
-
-    DefAxKwargs = {'ylabel': 'Channels',
-                   'xaxis': {'visible': False,
-                             },
-                   'yaxis': {'visible': True,
-                             },
-                   }
-
-    def __init__(self, Signal, Units=None, Position=None,
-                 imKwargs=None, AxKwargs=None, Ax=None, MaxPoints=None):
-        """
-        Initialize a color-mapped waveform slot.
-
-        Args:
-            Signal (neo.AnalogSignal): Multi-channel signal to plot.
-            Units (quantities.Quantity, optional): Units for signal scaling.
-            Position (int, optional): Subplot position for this slot.
-            imKwargs (dict, optional): Additional imshow() keyword arguments.
-            AxKwargs (dict, optional): Additional axis property settings.
-            Ax (matplotlib.axes.Axes, optional): Axis to plot into. Creates new if None.
-            MaxPoints (int, optional): Maximum number of time points to display
-                                       (triggers downsampling if exceeded).
-        """
-
-        self.AxKwargs = self.DefAxKwargs.copy()
-        self.imKwargs = self.DefImKwargs.copy()
-        self.Position = Position
-        self.MaxPoints = MaxPoints
-
-        self.Signal = Signal
-        self.name = self.Signal.name
-        self.units = Units
-
-        self.Ax = Ax
-        if AxKwargs is not None:
-            self.AxKwargs.update(AxKwargs)
-        if imKwargs is not None:
-            self.imKwargs.update(imKwargs)
-
-        if self.Ax is not None:
-            UpdateTreeDictProp(self.Ax, self.AxKwargs)
-
-    def PlotSignal(self, Time, Units=None):
-        """
-        Plot multi-channel signal as a color-mapped image.
-
-        Renders the signal data as a 2D heatmap with optional downsampling
-        for performance optimization.
-
-        Args:
-            Time (tuple or None): Time window to plot. See CheckTime() for details.
-            Units (quantities.Quantity, optional): Units for signal rescaling.
-
-        Returns:
-            None: Updates self.img and self.current_time attributes.
-        """
-        sig = self.GetSignal(Time, Units)
-
-        if self.MaxPoints is not None:
-            sig = Spro.Resample(sig, MaxPoints=self.MaxPoints)
-
-        img = self.Ax.imshow(np.array(sig).astype(float).transpose(),
-                             aspect='auto',
-                             extent=(sig.t_start, sig.t_stop,
-                                     0, sig.shape[1]),
-                             **self.imKwargs,
-                             )
-        self.img = img
-        self.current_time = (sig.t_start.rescale('s'),
-                             sig.t_stop.rescale('s'))
+#
+# class WavesColorSlot(SlotBase):
+#     """
+#     Visualization slot for color-mapped multi-channel waveforms.
+#
+#     Displays multi-channel signals as a 2D color-mapped image where channels
+#     are arranged vertically and time runs horizontally. Useful for visualizing
+#     high-density electrode array data.
+#
+#     Attributes:
+#         DefImKwargs (dict): Default imshow() keyword arguments.
+#         DefAxKwargs (dict): Default axis property settings.
+#     """
+#     DefImKwargs = {'cmap': 'viridis',
+#                    'interpolation': 'none',
+#                    }
+#
+#     DefAxKwargs = {'ylabel': 'Channels',
+#                    'xaxis': {'visible': False,
+#                              },
+#                    'yaxis': {'visible': True,
+#                              },
+#                    }
+#
+#     def __init__(self, Signal, Units=None, Position=None,
+#                  imKwargs=None, AxKwargs=None, Ax=None, MaxPoints=None):
+#         """
+#         Initialize a color-mapped waveform slot.
+#
+#         Args:
+#             Signal (neo.AnalogSignal): Multi-channel signal to plot.
+#             Units (quantities.Quantity, optional): Units for signal scaling.
+#             Position (int, optional): Subplot position for this slot.
+#             imKwargs (dict, optional): Additional imshow() keyword arguments.
+#             AxKwargs (dict, optional): Additional axis property settings.
+#             Ax (matplotlib.axes.Axes, optional): Axis to plot into. Creates new if None.
+#             MaxPoints (int, optional): Maximum number of time points to display
+#                                        (triggers downsampling if exceeded).
+#         """
+#
+#         self.AxKwargs = self.DefAxKwargs.copy()
+#         self.imKwargs = self.DefImKwargs.copy()
+#         self.Position = Position
+#         self.MaxPoints = MaxPoints
+#
+#         self.Signal = Signal
+#         self.name = self.Signal.name
+#         self.units = Units
+#
+#         self.Ax = Ax
+#         if AxKwargs is not None:
+#             self.AxKwargs.update(AxKwargs)
+#         if imKwargs is not None:
+#             self.imKwargs.update(imKwargs)
+#
+#         if self.Ax is not None:
+#             UpdateTreeDictProp(self.Ax, self.AxKwargs)
+#
+#     def PlotSignal(self, Time, Units=None):
+#         """
+#         Plot multi-channel signal as a color-mapped image.
+#
+#         Renders the signal data as a 2D heatmap with optional downsampling
+#         for performance optimization.
+#
+#         Args:
+#             Time (tuple or None): Time window to plot. See CheckTime() for details.
+#             Units (quantities.Quantity, optional): Units for signal rescaling.
+#
+#         Returns:
+#             None: Updates self.img and self.current_time attributes.
+#         """
+#         sig = self.GetSignal(Time, Units)
+#
+#         if self.MaxPoints is not None:
+#             sig = Spro.Resample(sig, MaxPoints=self.MaxPoints)
+#
+#         img = self.Ax.imshow(np.array(sig).astype(float).transpose(),
+#                              aspect='auto',
+#                              extent=(sig.t_start, sig.t_stop,
+#                                      0, sig.shape[1]),
+#                              **self.imKwargs,
+#                              )
+#         self.img = img
+#         self.current_time = (sig.t_start.rescale('s'),
+#                              sig.t_stop.rescale('s'))
 
 
 class SpecSlot(SlotBase):

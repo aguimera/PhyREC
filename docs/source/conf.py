@@ -28,6 +28,10 @@ extensions = [
 
 autosummary_generate = True
 
+autoclass_content = "both"
+napoleon_numpy_docstring = True
+napoleon_google_docstring = False
+
 
 templates_path = ['_templates']
 exclude_patterns = []
