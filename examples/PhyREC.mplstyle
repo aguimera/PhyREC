@@ -1,0 +1,9 @@
+xtick.labelsize : xx-small
+ytick.labelsize : xx-small
+legend.frameon : False
+legend.loc : lower left
+
+axes.spines.left   : False
+axes.spines.bottom : False
+axes.spines.top    : False
+axes.spines.right  : False
