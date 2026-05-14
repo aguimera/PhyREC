@@ -536,18 +536,44 @@ def Filter(sig, Type, Order, Freqs):
     neo.AnalogSignal
         Filtered signal with same units and structure.
     """
+
     st = np.array(sig)
     Fs = sig.sampling_rate.magnitude
-    freqs = Freqs / (0.5 * Fs)
 
-    # b, a = signal.butter(Order, freqs, Type)
-    # st = signal.filtfilt(b, a, st, axis=0)
+    # Normalize frequencies to Nyquist
+    freqs = np.asarray(Freqs, dtype=float) / (0.5 * Fs)
 
-    sos = signal.butter(Order, freqs, Type, output='sos')
+    # ---- Normalize shape (critical fix) ----
+    if freqs.ndim == 0:
+        freqs = float(freqs)
+    elif freqs.size == 1:
+        freqs = float(freqs[0])   # convert [x] → x
+    elif freqs.size == 2:
+        freqs = np.sort(freqs)    # ensure low < high
+    else:
+        raise ValueError("Freqs must be scalar or length-2 for band filters")
+
+    # ---- Validate by filter type ----
+    Type = Type.lower()
+
+    if Type in ["lowpass", "highpass"]:
+        if not np.isscalar(freqs):
+            raise ValueError(f"{Type} requires a scalar cutoff frequency")
+
+    elif Type in ["bandpass", "bandstop"]:
+        if not (isinstance(freqs, (list, tuple, np.ndarray)) and len(freqs) == 2):
+            raise ValueError(f"{Type} requires two cutoff frequencies")
+
+    else:
+        raise ValueError(f"Invalid filter type: {Type}")
+
+    # ---- Validate frequency range ----
+    if np.any(np.asarray(freqs) <= 0) or np.any(np.asarray(freqs) >= 1):
+        raise ValueError("Frequencies must be in (0, Nyquist)")
+
+    # ---- Design + apply filter ----
+    sos = signal.butter(Order, freqs, btype=Type, output='sos')
     st = signal.sosfiltfilt(sos, st, axis=0)
-
-    # DbgFplt.PlotResponse(a, b, Fs)
-    # DbgFplt.PlotResponse(sos, Fs)
 
     return sig.duplicate_with_new_data(signal=st * sig.units)
 
