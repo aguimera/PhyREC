@@ -193,7 +193,7 @@ class SlotBase():
 #         """
 #         Initialize a color-mapped waveform slot.
 #
-#         Args:
+#         Parameters:
 #             Signal (neo.AnalogSignal): Multi-channel signal to plot.
 #             Units (quantities.Quantity, optional): Units for signal scaling.
 #             Position (int, optional): Subplot position for this slot.
@@ -312,7 +312,6 @@ class SpecSlot(SlotBase):
         Returns
         -------
         None
-            Not implemented.
         """
         pass
 
@@ -940,11 +939,13 @@ class ControlFigure():
         Creates sliders and text input controls for navigating time windows,
         setting animation parameters, and controlling visualization updates.
 
-        Args:
+        Parameters
+        ----------
             pltSL (PlotSlots): PlotSlots instance to control.
             AxsAnimationLines (list, optional): Axes where to draw time indicator lines
                                                during animation.
             figsize (tuple, optional): Figure size in inches (default: (7.87, 1.97)).
+
         """
         self.pltSL = pltSL
 

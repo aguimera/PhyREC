@@ -10,6 +10,44 @@ Installation
 
     pip install phyrec
 
+Using PhyREC Matplotlib Style
+------------------------------
+
+The PhyREC style applies optimized matplotlib settings for electrophysiology data visualization:
+
+- **Minimal visual clutter**: Removes unnecessary axis spines (borders) for cleaner plots
+- **Readable labels**: Uses appropriately sized tick labels for multi-channel displays
+- **Clean legends**: Removes legend frames for a more professional appearance
+- **Consistent formatting**: Ensures uniform styling across all your visualizations
+
+**PhyREC.mplstyle contents:**
+
+.. code-block:: ini
+
+    xtick.labelsize : xx-small
+    ytick.labelsize : xx-small
+    legend.frameon : False
+    legend.loc : lower left
+
+    axes.spines.left   : False
+    axes.spines.bottom : False
+    axes.spines.top    : False
+    axes.spines.right  : False
+
+**To use the style:**
+
+.. code-block:: python
+
+    import matplotlib.pyplot as plt
+
+    # Apply the PhyREC matplotlib style
+    plt.style.use('PhyREC.mplstyle')
+
+    # Now create your plots with consistent PhyREC styling
+    # ... rest of your plotting code ...
+
+The style can also be applied system-wide by copying ``PhyREC.mplstyle`` to your matplotlib configuration directory.
+
 Generating Dummy Signals
 ------------------------
 
@@ -52,7 +90,7 @@ and phase shifts. This signal generation can be reused across different plotting
     # 2. GENERATE SYNTHETIC SIGNALS WITH PHASE SHIFTS
     # ============================================================================
     # Number of channels to simulate
-    nSigs = 5
+    nSigs = 16
     Sigs = []
 
     for i in range(nSigs):

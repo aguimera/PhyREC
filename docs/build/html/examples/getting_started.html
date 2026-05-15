@@ -46,8 +46,11 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#basic-example">Basic Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#explanation">Explanation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-phyrec-matplotlib-style">Using PhyREC Matplotlib Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generating-dummy-signals">Generating Dummy Signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-plotting-example">Basic Plotting Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#understanding-the-two-block-approach">Understanding the Two-Block Approach</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#key-classes">Key Classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
 </ul>
 </li>
@@ -80,31 +83,232 @@
              
   <section id="getting-started">
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h1>
-<p>This tutorial introduces basic usage of PhyREC for signal visualization.</p>
+<p>This tutorial introduces basic usage of PhyREC for signal visualization and analysis.</p>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>phyrec
 </pre></div>
 </div>
 </section>
-<section id="basic-example">
-<h2>Basic Example<a class="headerlink" href="#basic-example" title="Link to this heading"></a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">PhyREC</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pr</span>
+<section id="using-phyrec-matplotlib-style">
+<h2>Using PhyREC Matplotlib Style<a class="headerlink" href="#using-phyrec-matplotlib-style" title="Link to this heading"></a></h2>
+<p>The PhyREC style applies optimized matplotlib settings for electrophysiology data visualization:</p>
+<ul class="simple">
+<li><p><strong>Minimal visual clutter</strong>: Removes unnecessary axis spines (borders) for cleaner plots</p></li>
+<li><p><strong>Readable labels</strong>: Uses appropriately sized tick labels for multi-channel displays</p></li>
+<li><p><strong>Clean legends</strong>: Removes legend frames for a more professional appearance</p></li>
+<li><p><strong>Consistent formatting</strong>: Ensures uniform styling across all your visualizations</p></li>
+</ul>
+<p><strong>PhyREC.mplstyle contents:</strong></p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">xtick.labelsize</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">xx-small</span>
+<span class="na">ytick.labelsize</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">xx-small</span>
+<span class="na">legend.frameon</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">False</span>
+<span class="na">legend.loc</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">lower left</span>
 
-<span class="n">slot</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">PlotWaves</span><span class="o">.</span><span class="n">WaveSlot</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-<span class="n">slot</span><span class="o">.</span><span class="n">PlotSignal</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="na">axes.spines.left</span><span class="w">   </span><span class="o">:</span><span class="w"> </span><span class="s">False</span>
+<span class="na">axes.spines.bottom</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">False</span>
+<span class="na">axes.spines.top</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="s">False</span>
+<span class="na">axes.spines.right</span><span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="s">False</span>
+</pre></div>
+</div>
+<p><strong>To use the style:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="c1"># Apply the PhyREC matplotlib style</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;PhyREC.mplstyle&#39;</span><span class="p">)</span>
+
+<span class="c1"># Now create your plots with consistent PhyREC styling</span>
+<span class="c1"># ... rest of your plotting code ...</span>
+</pre></div>
+</div>
+<p>The style can also be applied system-wide by copying <code class="docutils literal notranslate"><span class="pre">PhyREC.mplstyle</span></code> to your matplotlib configuration directory.</p>
+</section>
+<section id="generating-dummy-signals">
+<h2>Generating Dummy Signals<a class="headerlink" href="#generating-dummy-signals" title="Link to this heading"></a></h2>
+<p>This reusable code block creates synthetic electrophysiology signals with realistic noise
+and phase shifts. This signal generation can be reused across different plotting examples.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neo</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnalogSignal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">quantities</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pq</span>
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># SIGNAL GENERATION BLOCK (Reusable)</span>
+<span class="c1"># ============================================================================</span>
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># 1. DEFINE SIGNAL PARAMETERS</span>
+<span class="c1"># ============================================================================</span>
+<span class="c1"># Sampling rate (Hz) - typical for electrophysiology recordings</span>
+<span class="n">Fs</span> <span class="o">=</span> <span class="mi">30000</span>  <span class="c1"># 30 kHz sampling rate</span>
+
+<span class="c1"># Signal duration (seconds)</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mi">300</span>  <span class="c1"># 300 seconds of data</span>
+
+<span class="c1"># Frequency of the sinusoidal component we&#39;re simulating (Hz)</span>
+<span class="n">f0</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># 10 Hz oscillation</span>
+
+<span class="c1"># Amplitude of the sinusoidal signal (volts)</span>
+<span class="n">A</span> <span class="o">=</span> <span class="mf">250e-6</span>  <span class="c1"># 250 µV (micro-volts converted to volts)</span>
+
+<span class="c1"># Gaussian noise standard deviation (volts) - simulates background noise</span>
+<span class="n">noise_rms</span> <span class="o">=</span> <span class="mf">20e-6</span>  <span class="c1"># 20 µV RMS noise level</span>
+
+<span class="c1"># Create time vector in seconds</span>
+<span class="c1"># This defines the time points at which we&#39;ll sample our signal</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">Fs</span><span class="p">)</span>
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># 2. GENERATE SYNTHETIC SIGNALS WITH PHASE SHIFTS</span>
+<span class="c1"># ============================================================================</span>
+<span class="c1"># Number of channels to simulate</span>
+<span class="n">nSigs</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">Sigs</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nSigs</span><span class="p">):</span>
+    <span class="c1"># Define phase shift for each channel (in radians)</span>
+    <span class="c1"># Each channel has a different phase to simulate multi-electrode recordings</span>
+    <span class="c1"># with temporal relationships</span>
+    <span class="n">phase_shift</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">/</span> <span class="n">nSigs</span>  <span class="c1"># Linear phase distribution across channels</span>
+
+    <span class="c1"># Create clean sinusoidal component with phase shift</span>
+    <span class="c1"># This simulates periodic neural oscillations with phase differences</span>
+    <span class="c1"># between channels (e.g., from waves propagating across the tissue)</span>
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">f0</span> <span class="o">*</span> <span class="n">t</span> <span class="o">+</span> <span class="n">phase_shift</span><span class="p">)</span>
+
+    <span class="c1"># Generate Gaussian noise to simulate real electrophysiology recording noise</span>
+    <span class="c1"># Noise is Gaussian-distributed with specified RMS value</span>
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">noise_rms</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="c1"># Combine signal and noise to create realistic synthetic data</span>
+    <span class="n">sig</span> <span class="o">=</span> <span class="n">signal</span> <span class="o">+</span> <span class="n">noise</span>
+
+    <span class="c1"># Create neo.AnalogSignal object</span>
+    <span class="c1"># AnalogSignal is the standard container for continuous electrophysiology data</span>
+    <span class="c1"># It includes both data and metadata (sampling rate, units, channel name)</span>
+    <span class="n">Sigs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">AnalogSignal</span><span class="p">(</span>
+        <span class="n">sig</span><span class="p">,</span>                           <span class="c1"># Signal data array</span>
+        <span class="n">samplerate</span><span class="o">=</span><span class="n">Fs</span><span class="p">,</span>                 <span class="c1"># Sampling rate</span>
+        <span class="n">units</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">,</span>                     <span class="c1"># Physical units (volts)</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">Fs</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">Hz</span><span class="p">,</span>        <span class="c1"># Sampling rate with quantities units</span>
+        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;signal_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>       <span class="c1"># Channel identifier</span>
+        <span class="n">channel_index</span><span class="o">=</span><span class="n">i</span>                <span class="c1"># Channel number</span>
+    <span class="p">))</span>
 </pre></div>
 </div>
 </section>
-<section id="explanation">
-<h2>Explanation<a class="headerlink" href="#explanation" title="Link to this heading"></a></h2>
-<p>This example creates a waveform visualization slot and plots the signal
-between 0 and 5 seconds.</p>
+<section id="basic-plotting-example">
+<h2>Basic Plotting Example<a class="headerlink" href="#basic-plotting-example" title="Link to this heading"></a></h2>
+<p>This example demonstrates visualizing the generated signals using PhyREC’s
+multi-channel plotting capabilities with interactive controls.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">PhyREC.PlotWaves</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">PltW</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">quantities</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pq</span>
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># PLOTTING BLOCK</span>
+<span class="c1"># ============================================================================</span>
+<span class="c1"># Note: This block uses Sigs from the signal generation block above</span>
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># 1. LOAD PHYREC STYLING</span>
+<span class="c1"># ============================================================================</span>
+<span class="c1"># Apply the PhyREC matplotlib style for professional-looking plots</span>
+<span class="c1"># This style includes optimized colors, fonts, and figure layout</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;PhyREC.mplstyle&#39;</span><span class="p">)</span>
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># 2. CREATE MATPLOTLIB FIGURE WITH SUBPLOTS</span>
+<span class="c1"># ============================================================================</span>
+<span class="c1"># Create figure with one subplot per channel, sharing the same x-axis</span>
+<span class="c1"># This allows synchronized zooming/panning across all channels</span>
+<span class="n">pltFig</span><span class="p">,</span> <span class="n">pltAxes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Sigs</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># 3. CREATE WAVESLOT OBJECTS FOR EACH CHANNEL</span>
+<span class="c1"># ============================================================================</span>
+<span class="c1"># WaveSlot is PhyREC&#39;s main visualization class for waveforms</span>
+<span class="c1"># It handles plot rendering, time navigation, and signal display</span>
+<span class="n">Slots</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sig</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">Sigs</span><span class="p">):</span>
+    <span class="c1"># Create a WaveSlot for each signal channel</span>
+    <span class="n">Slots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PltW</span><span class="o">.</span><span class="n">WaveSlot</span><span class="p">(</span>
+        <span class="n">sig</span><span class="p">,</span>                    <span class="c1"># neo.AnalogSignal object containing the data</span>
+        <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span>           <span class="c1"># Line color for the waveform</span>
+        <span class="n">Units</span><span class="o">=</span><span class="s1">&#39;mV&#39;</span><span class="p">,</span>             <span class="c1"># Display units (data will be converted from V to mV)</span>
+        <span class="n">label</span><span class="o">=</span><span class="n">sig</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>         <span class="c1"># Legend label for this channel</span>
+        <span class="n">Ax</span><span class="o">=</span><span class="n">pltAxes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>           <span class="c1"># Matplotlib axes to plot on</span>
+    <span class="p">))</span>
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># 4. CREATE PLOTSLOTS CONTAINER WITH INTERACTIVE CONTROLS</span>
+<span class="c1"># ============================================================================</span>
+<span class="c1"># PlotSlots manages multiple WaveSlot instances as a group</span>
+<span class="c1"># It provides unified controls for visualization, formatting, and time navigation</span>
+<span class="n">Splt</span> <span class="o">=</span> <span class="n">PltW</span><span class="o">.</span><span class="n">PlotSlots</span><span class="p">(</span>
+    <span class="n">Slots</span><span class="p">,</span>              <span class="c1"># List of WaveSlot objects to manage</span>
+    <span class="n">Fig</span><span class="o">=</span><span class="n">pltFig</span><span class="p">,</span>         <span class="c1"># Matplotlib figure containing all axes</span>
+    <span class="n">LiveControl</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>   <span class="c1"># Enable interactive controls (time slider, buttons)</span>
+<span class="p">)</span>
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># 5. ADD LEGEND AND PLOT DATA</span>
+<span class="c1"># ============================================================================</span>
+<span class="c1"># Add legend to the figure</span>
+<span class="c1"># Shows the channel names and colors for easy identification</span>
+<span class="n">Splt</span><span class="o">.</span><span class="n">AddLegend</span><span class="p">()</span>
+
+<span class="c1"># Plot the signals in the time window from 0 to 10 seconds</span>
+<span class="c1"># Quantities with units (pq.s = seconds) ensure proper time handling</span>
+<span class="n">Splt</span><span class="o">.</span><span class="n">PlotChannels</span><span class="p">((</span><span class="mi">0</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="mi">10</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">s</span><span class="p">))</span>
+
+<span class="c1"># ============================================================================</span>
+<span class="c1"># 6. INTERACTIVE FEATURES</span>
+<span class="c1"># ============================================================================</span>
+<span class="c1"># With LiveControl=True enabled, the figure now includes:</span>
+<span class="c1">#   - Time slider for navigating through the signal</span>
+<span class="c1">#   - Zoom and pan tools via matplotlib toolbar</span>
+<span class="c1">#   - Synchronized viewing across all channels</span>
+<span class="c1">#   - Legend display with channel information</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="understanding-the-two-block-approach">
+<h2>Understanding the Two-Block Approach<a class="headerlink" href="#understanding-the-two-block-approach" title="Link to this heading"></a></h2>
+<p>The examples are split into two reusable blocks for flexibility in your analysis workflow:</p>
+<dl class="simple">
+<dt><strong>Signal Generation Block</strong> (Reusable Base):</dt><dd><p>Creates synthetic electrophysiology data with:
+- Configurable sampling rates, durations, and signal frequencies
+- Realistic Gaussian noise at specified RMS levels
+- <strong>Phase shifts</strong> between channels to simulate multi-electrode recordings with temporal relationships
+- neo.AnalogSignal containers with proper metadata (units, sampling rate, channel information)</p>
+</dd>
+<dt><strong>Plotting Block</strong> (Uses Generated Signals):</dt><dd><p>Visualizes the generated signals with:
+- PhyREC’s WaveSlot class for individual channel display
+- PlotSlots container for unified multi-channel management
+- Interactive controls (LiveControl) for time navigation and zooming
+- Legend and formatting for professional visualization
+- Synchronized axes for cross-channel comparison</p>
+</dd>
+</dl>
+<p><strong>Reusability</strong>: You can reuse the signal generation block with different plotting approaches,
+or implement your own data loading and reuse the plotting block with real experimental data.</p>
+</section>
+<section id="key-classes">
+<h2>Key Classes<a class="headerlink" href="#key-classes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../api/PhyREC.html#PhyREC.PlotWaves.WaveSlot" title="PhyREC.PlotWaves.WaveSlot"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhyREC.PlotWaves.WaveSlot</span></code></a>: Handles visualization of a single signal channel</p></li>
+<li><p><a class="reference internal" href="../api/PhyREC.html#PhyREC.PlotWaves.PlotSlots" title="PhyREC.PlotWaves.PlotSlots"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhyREC.PlotWaves.PlotSlots</span></code></a>: Manages collections of WaveSlot instances with unified controls</p></li>
+</ul>
 </section>
 <section id="next-steps">
 <h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
-<p>See <a class="reference internal" href="../api/PhyREC.html#PhyREC.PlotWaves.WaveSlot.CalcAvarage" title="PhyREC.PlotWaves.WaveSlot.CalcAvarage"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PhyREC.PlotWaves.WaveSlot.CalcAvarage()</span></code></a> for averaging signals.
-``</p>
+<ul class="simple">
+<li><p>See <a class="reference internal" href="../api/PhyREC.html#PhyREC.PlotWaves.WaveSlot.CalcAvarage" title="PhyREC.PlotWaves.WaveSlot.CalcAvarage"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PhyREC.PlotWaves.WaveSlot.CalcAvarage()</span></code></a> for event-locked signal averaging</p></li>
+<li><p>See <a class="reference internal" href="../api/PhyREC.html#module-PhyREC.SignalAnalysis" title="PhyREC.SignalAnalysis"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhyREC.SignalAnalysis</span></code></a> for spectral analysis and signal processing</p></li>
+<li><p>See <a class="reference internal" href="../api/PhyREC.html#module-PhyREC.SignalProcess" title="PhyREC.SignalProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhyREC.SignalProcess</span></code></a> for filtering and noise reduction techniques</p></li>
+</ul>
 </section>
 </section>
 

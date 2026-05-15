@@ -104,7 +104,9 @@ class ColorBarPlot():
         is the image object from matplotlib.
     Fig : matplotlib.figure.Figure or None
         Matplotlib figure for colorbars, None until GenColorBars is called.
+
     """
+
     ImgDicts = {}
 
     def __init__(self):

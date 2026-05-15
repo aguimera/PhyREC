@@ -280,7 +280,7 @@
 <span class="c1">#         &quot;&quot;&quot;</span>
 <span class="c1">#         Initialize a color-mapped waveform slot.</span>
 <span class="c1">#</span>
-<span class="c1">#         Args:</span>
+<span class="c1">#         Parameters:</span>
 <span class="c1">#             Signal (neo.AnalogSignal): Multi-channel signal to plot.</span>
 <span class="c1">#             Units (quantities.Quantity, optional): Units for signal scaling.</span>
 <span class="c1">#             Position (int, optional): Subplot position for this slot.</span>
@@ -403,7 +403,6 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
-<span class="sd">            Not implemented.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
@@ -1071,11 +1070,13 @@
 <span class="sd">        Creates sliders and text input controls for navigating time windows,</span>
 <span class="sd">        setting animation parameters, and controlling visualization updates.</span>
 
-<span class="sd">        Args:</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 <span class="sd">            pltSL (PlotSlots): PlotSlots instance to control.</span>
 <span class="sd">            AxsAnimationLines (list, optional): Axes where to draw time indicator lines</span>
 <span class="sd">                                               during animation.</span>
 <span class="sd">            figsize (tuple, optional): Figure size in inches (default: (7.87, 1.97)).</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pltSL</span> <span class="o">=</span> <span class="n">pltSL</span>
 
