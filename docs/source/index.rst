@@ -18,5 +18,6 @@ documentation for details.
    :caption: Contents:
 
    examples/getting_started
+   examples/signals_processing
    api/PhyREC
 
