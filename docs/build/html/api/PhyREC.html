@@ -9,6 +9,7 @@
   <title>PhyREC package &mdash; PhyREC  documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
@@ -125,11 +126,15 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#PhyREC.PlotWaves.UpdateTreeDictProp"><code class="docutils literal notranslate"><span class="pre">UpdateTreeDictProp()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot"><code class="docutils literal notranslate"><span class="pre">WaveSlot</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.CalcAvarage"><code class="docutils literal notranslate"><span class="pre">WaveSlot.CalcAvarage()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.DefAxKwargs"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefAxKwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.DefLineKwargs"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefLineKwargs</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.DefTrialLineKwargs"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefTrialLineKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.DefLineKwargs"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefLineKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.DefAxKwargs"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefAxKwargs</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.MaxPlotPoints"><code class="docutils literal notranslate"><span class="pre">WaveSlot.MaxPlotPoints</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.CalcAvarage"><code class="docutils literal notranslate"><span class="pre">WaveSlot.CalcAvarage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefAxKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefLineKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">WaveSlot.DefTrialLineKwargs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">WaveSlot.MaxPlotPoints</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.PlotSignal"><code class="docutils literal notranslate"><span class="pre">WaveSlot.PlotSignal()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#PhyREC.PlotWaves.WaveSlot.UpdateLineKwargs"><code class="docutils literal notranslate"><span class="pre">WaveSlot.UpdateLineKwargs()</span></code></a></li>
 </ul>
@@ -177,7 +182,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#PhyREC.SupportFunctions.ColorBarPlot.ImgDicts"><code class="docutils literal notranslate"><span class="pre">ColorBarPlot.ImgDicts</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#PhyREC.SupportFunctions.ColorBarPlot.Fig"><code class="docutils literal notranslate"><span class="pre">ColorBarPlot.Fig</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#PhyREC.SupportFunctions.ColorBarPlot.GenColorBars"><code class="docutils literal notranslate"><span class="pre">ColorBarPlot.GenColorBars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">ColorBarPlot.ImgDicts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">ColorBarPlot.ImgDicts</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#PhyREC.SupportFunctions.DebugFilterPlot"><code class="docutils literal notranslate"><span class="pre">DebugFilterPlot</span></code></a><ul>
@@ -187,7 +192,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#PhyREC.SupportFunctions.DebugFilterPlot.AxP"><code class="docutils literal notranslate"><span class="pre">DebugFilterPlot.AxP</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#PhyREC.SupportFunctions.DebugFilterPlot.InitFigure"><code class="docutils literal notranslate"><span class="pre">DebugFilterPlot.InitFigure()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#PhyREC.SupportFunctions.DebugFilterPlot.PlotResponse"><code class="docutils literal notranslate"><span class="pre">DebugFilterPlot.PlotResponse()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">DebugFilterPlot.nFFT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">DebugFilterPlot.nFFT</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#PhyREC.SupportFunctions.DrawBarScale"><code class="docutils literal notranslate"><span class="pre">DrawBarScale()</span></code></a></li>
@@ -1249,13 +1254,30 @@ and values are either property values or dicts for nested updates.</p></li>
 visualization, averaged waveforms, standard deviation bands, and automatic
 downsampling for large datasets. The primary class for visualizing continuous
 electrophysiology recordings.</p>
-<dl class="simple">
-<dt>Attributes:</dt><dd><p>DefTrialLineKwargs (dict): Default line style for individual trial plotting.
-DefLineKwargs (dict): Default line style for main signal plotting.
-DefAxKwargs (dict): Default axis property settings.
-MaxPlotPoints (int): Maximum data points to plot before downsampling (100000).</p>
-</dd>
-</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PhyREC.PlotWaves.WaveSlot.DefTrialLineKwargs">
+<span class="sig-name descname"><span class="pre">DefTrialLineKwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhyREC.PlotWaves.WaveSlot.DefTrialLineKwargs" title="Link to this definition"></a></dt>
+<dd><p>Default line style for individual trial plotting.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PhyREC.PlotWaves.WaveSlot.DefLineKwargs">
+<span class="sig-name descname"><span class="pre">DefLineKwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhyREC.PlotWaves.WaveSlot.DefLineKwargs" title="Link to this definition"></a></dt>
+<dd><p>Default line style arguments passed to <code class="xref py py-func docutils literal notranslate"><span class="pre">matplotlib.pyplot.plot()</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PhyREC.PlotWaves.WaveSlot.DefAxKwargs">
+<span class="sig-name descname"><span class="pre">DefAxKwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhyREC.PlotWaves.WaveSlot.DefAxKwargs" title="Link to this definition"></a></dt>
+<dd><p>Default axis property settings.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PhyREC.PlotWaves.WaveSlot.MaxPlotPoints">
+<span class="sig-name descname"><span class="pre">MaxPlotPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhyREC.PlotWaves.WaveSlot.MaxPlotPoints" title="Link to this definition"></a></dt>
+<dd><p>Maximum data points to plot before downsampling (100000).</p>
+</dd></dl>
+
 <p>Initialize a time-series waveform visualization slot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1269,7 +1291,10 @@ MaxPlotPoints (int): Maximum data points to plot before downsampling (100000).</
 <li><p><strong>TrialProcessChain</strong> (<em>list</em><em>, </em><em>optional</em>) – Processing functions to apply to trials during averaged waveform calculation.</p></li>
 <li><p><strong>DownSampling</strong> (<em>bool</em><em>, </em><em>optional</em>) – Enable automatic downsampling (default: True).</p></li>
 <li><p><strong>Sampler</strong> (<em>object</em><em>, </em><em>optional</em>) – Custom downsampler instance. Uses MinMaxLTTBDownsampler if None.</p></li>
-<li><p><strong>**LineKwargs</strong> – Additional line style keyword arguments.</p></li>
+<li><p><strong>**LineKwargs</strong> – Additional keyword arguments passed to
+<code class="xref py py-func docutils literal notranslate"><span class="pre">matplotlib.pyplot.plot()</span></code>.
+See the Matplotlib documentation for the full list of supported
+parameters (e.g., <code class="docutils literal notranslate"><span class="pre">color</span></code>, <code class="docutils literal notranslate"><span class="pre">linewidth</span></code>, <code class="docutils literal notranslate"><span class="pre">linestyle</span></code>, etc.).</p></li>
 </ul>
 </dd>
 </dl>
@@ -1306,23 +1331,23 @@ trials before averaging through a processing chain.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="PhyREC.PlotWaves.WaveSlot.DefAxKwargs">
-<span class="sig-name descname"><span class="pre">DefAxKwargs</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#PhyREC.PlotWaves.WaveSlot.DefAxKwargs" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">DefAxKwargs</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="PhyREC.PlotWaves.WaveSlot.DefLineKwargs">
-<span class="sig-name descname"><span class="pre">DefLineKwargs</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'alpha':</span> <span class="pre">1,</span> <span class="pre">'clip_on':</span> <span class="pre">True,</span> <span class="pre">'color':</span> <span class="pre">'k',</span> <span class="pre">'linestyle':</span> <span class="pre">'-',</span> <span class="pre">'linewidth':</span> <span class="pre">0.5}</span></span><a class="headerlink" href="#PhyREC.PlotWaves.WaveSlot.DefLineKwargs" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">DefLineKwargs</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'alpha':</span> <span class="pre">1,</span> <span class="pre">'clip_on':</span> <span class="pre">True,</span> <span class="pre">'color':</span> <span class="pre">'k',</span> <span class="pre">'linestyle':</span> <span class="pre">'-',</span> <span class="pre">'linewidth':</span> <span class="pre">0.5}</span></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="PhyREC.PlotWaves.WaveSlot.DefTrialLineKwargs">
-<span class="sig-name descname"><span class="pre">DefTrialLineKwargs</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'alpha':</span> <span class="pre">0.05,</span> <span class="pre">'clip_on':</span> <span class="pre">True,</span> <span class="pre">'color':</span> <span class="pre">'k',</span> <span class="pre">'linestyle':</span> <span class="pre">'-',</span> <span class="pre">'linewidth':</span> <span class="pre">0.5}</span></span><a class="headerlink" href="#PhyREC.PlotWaves.WaveSlot.DefTrialLineKwargs" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">DefTrialLineKwargs</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'alpha':</span> <span class="pre">0.05,</span> <span class="pre">'clip_on':</span> <span class="pre">True,</span> <span class="pre">'color':</span> <span class="pre">'k',</span> <span class="pre">'linestyle':</span> <span class="pre">'-',</span> <span class="pre">'linewidth':</span> <span class="pre">0.5}</span></span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="PhyREC.PlotWaves.WaveSlot.MaxPlotPoints">
-<span class="sig-name descname"><span class="pre">MaxPlotPoints</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100000</span></span><a class="headerlink" href="#PhyREC.PlotWaves.WaveSlot.MaxPlotPoints" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">MaxPlotPoints</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100000</span></span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2200,8 +2225,8 @@ the colorbar for each.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">ImgDicts</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">ImgDicts</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2304,8 +2329,8 @@ designs to aid in filter development and debugging.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">nFFT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">32768</span></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">nFFT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">32768</span></span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

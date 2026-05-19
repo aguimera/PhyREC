@@ -8,6 +8,7 @@
   <title>PhyREC.PlotWaves &mdash; PhyREC  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css?v=7f9a90b1" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
@@ -679,11 +680,16 @@
 <span class="sd">    downsampling for large datasets. The primary class for visualizing continuous</span>
 <span class="sd">    electrophysiology recordings.</span>
 
-<span class="sd">    Attributes:</span>
-<span class="sd">        DefTrialLineKwargs (dict): Default line style for individual trial plotting.</span>
-<span class="sd">        DefLineKwargs (dict): Default line style for main signal plotting.</span>
-<span class="sd">        DefAxKwargs (dict): Default axis property settings.</span>
-<span class="sd">        MaxPlotPoints (int): Maximum data points to plot before downsampling (100000).</span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    DefTrialLineKwargs (dict):</span>
+<span class="sd">        Default line style for individual trial plotting.</span>
+<span class="sd">    DefLineKwargs (dict):</span>
+<span class="sd">        Default line style arguments passed to :py:func:`matplotlib.pyplot.plot`</span>
+<span class="sd">    DefAxKwargs (dict):</span>
+<span class="sd">        Default axis property settings.</span>
+<span class="sd">    MaxPlotPoints (int):</span>
+<span class="sd">        Maximum data points to plot before downsampling (100000).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">DefTrialLineKwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span>
                           <span class="s1">&#39;linestyle&#39;</span><span class="p">:</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span>
@@ -749,7 +755,11 @@
 <span class="sd">        Sampler : object, optional</span>
 <span class="sd">            Custom downsampler instance. Uses MinMaxLTTBDownsampler if None.</span>
 <span class="sd">        **LineKwargs</span>
-<span class="sd">            Additional line style keyword arguments.</span>
+<span class="sd">            Additional keyword arguments passed to</span>
+<span class="sd">            :py:func:`matplotlib.pyplot.plot`.</span>
+<span class="sd">            See the Matplotlib documentation for the full list of supported</span>
+<span class="sd">            parameters (e.g., ``color``, ``linewidth``, ``linestyle``, etc.).</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">DownSampling</span> <span class="o">=</span> <span class="n">DownSampling</span>

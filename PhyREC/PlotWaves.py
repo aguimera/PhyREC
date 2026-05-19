@@ -569,11 +569,16 @@ class WaveSlot(SlotBase):
     downsampling for large datasets. The primary class for visualizing continuous
     electrophysiology recordings.
 
-    Attributes:
-        DefTrialLineKwargs (dict): Default line style for individual trial plotting.
-        DefLineKwargs (dict): Default line style for main signal plotting.
-        DefAxKwargs (dict): Default axis property settings.
-        MaxPlotPoints (int): Maximum data points to plot before downsampling (100000).
+    Attributes
+    ----------
+    DefTrialLineKwargs (dict):
+        Default line style for individual trial plotting.
+    DefLineKwargs (dict):
+        Default line style arguments passed to :py:func:`matplotlib.pyplot.plot`
+    DefAxKwargs (dict):
+        Default axis property settings.
+    MaxPlotPoints (int):
+        Maximum data points to plot before downsampling (100000).
     """
     DefTrialLineKwargs = {'color': 'k',
                           'linestyle': '-',
@@ -636,7 +641,11 @@ class WaveSlot(SlotBase):
         Sampler : object, optional
             Custom downsampler instance. Uses MinMaxLTTBDownsampler if None.
         **LineKwargs
-            Additional line style keyword arguments.
+            Additional keyword arguments passed to
+            :py:func:`matplotlib.pyplot.plot`.
+            See the Matplotlib documentation for the full list of supported
+            parameters (e.g., ``color``, ``linewidth``, ``linestyle``, etc.).
+
         """
 
         self.DownSampling = DownSampling

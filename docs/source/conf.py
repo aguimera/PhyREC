@@ -24,6 +24,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.autosummary",
     "myst_parser",
+    "matplotlib.sphinxext.plot_directive",
 ]
 
 autosummary_generate = True
